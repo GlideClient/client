@@ -4,17 +4,12 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import me.eldodebug.soar.gui.modmenu.category.impl.*;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.GuiEditHUD;
 import me.eldodebug.soar.gui.modmenu.category.Category;
-import me.eldodebug.soar.gui.modmenu.category.impl.CosmeticsCategory;
-import me.eldodebug.soar.gui.modmenu.category.impl.HomeCategory;
-import me.eldodebug.soar.gui.modmenu.category.impl.ModuleCategory;
-import me.eldodebug.soar.gui.modmenu.category.impl.ProfileCategory;
-import me.eldodebug.soar.gui.modmenu.category.impl.ScreenshotCategory;
-import me.eldodebug.soar.gui.modmenu.category.impl.SettingCategory;
 import me.eldodebug.soar.management.color.AccentColor;
 import me.eldodebug.soar.management.color.ColorManager;
 import me.eldodebug.soar.management.color.palette.ColorPalette;
@@ -59,6 +54,7 @@ public class GuiModMenu extends GuiScreen {
 		categories.add(new HomeCategory(this));
 		categories.add(new ModuleCategory(this));
 		categories.add(new CosmeticsCategory(this));
+		categories.add(new SpotifyCategory(this));
 		categories.add(new ProfileCategory(this));
 		categories.add(new ScreenshotCategory(this));
 		categories.add(new SettingCategory(this));

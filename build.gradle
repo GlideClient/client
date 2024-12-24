@@ -69,6 +69,11 @@ dependencies {
     }
     embed(files('libs/lwjgl-soar.jar'))
     embed(files('libs/lwjgl-soar-natives.jar'))
+    compile('se.michaelthelin.spotify:spotify-web-api-java:6.5.4') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    compile 'com.google.code.gson:gson:2.8.6'
+    compileOnly 'com.google.code.gson:gson:2.2.4'
 }
 
 mixin {

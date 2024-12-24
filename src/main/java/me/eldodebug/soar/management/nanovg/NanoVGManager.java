@@ -459,6 +459,7 @@ public class NanoVGManager {
 		NanoVG.nvgRotate(nvg, angle);
 		NanoVG.nvgTranslate(nvg, -(x + (x + width)) / 2, -(y + (y + height)) / 2);
 	}
+
 	
 	public void translate(float x, float y) {
 		NanoVG.nvgTranslate(nvg, x, y);

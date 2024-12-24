@@ -9,18 +9,20 @@ import net.minecraft.client.Minecraft;
 
 public class FileManager {
 
-	private File soarDir, profileDir, cacheDir, screenshotDir;
+	private File soarDir, profileDir, cacheDir, screenshotDir, musicDir;
 	
 	public FileManager() {
 		
 		soarDir = new File(Minecraft.getMinecraft().mcDataDir, "glide");
 		profileDir = new File(soarDir, "profile");
 		cacheDir = new File(soarDir, "cache");
+		musicDir = new File(soarDir, "music");
 		screenshotDir = new File(soarDir, "screenshots");
 		
 		createDir(soarDir);
 		createDir(profileDir);
 		createDir(cacheDir);
+		createDir(musicDir);
 		createDir(screenshotDir);
 		
 		createVersionFile();
@@ -62,4 +64,7 @@ public class FileManager {
 		return cacheDir;
 	}
 
+	public File getMusicDir() {
+		return musicDir;
+	}
 }

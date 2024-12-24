@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import me.eldodebug.soar.gui.mainmenu.GuiGlideMainMenu;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
+import me.eldodebug.soar.management.music.MusicManager;
 import me.eldodebug.soar.management.remote.discord.DiscordStats;
 import me.eldodebug.soar.management.remote.discord.DiscordManager;
 import me.eldodebug.soar.management.remote.update.Update;
@@ -54,6 +55,7 @@ public class Glide {
 	private ScreenshotManager screenshotManager;
 	private NotificationManager notificationManager;
 	private SecurityFeatureManager securityFeatureManager;
+	private MusicManager musicManager;
 	private QuickPlayManager quickPlayManager;
 	private ChangelogManager changelogManager;
 	private DiscordStats discordStats;
@@ -103,6 +105,7 @@ public class Glide {
 		discordStats = new DiscordStats();
 		new DiscordManager();
 		waypointManager = new WaypointManager();
+		musicManager = new MusicManager(fileManager);
 
 		eventManager.register(new GlideHandler());
 
@@ -228,6 +231,10 @@ public class Glide {
 	}
 
 	public boolean isFirstLogin() {return !firstLoginFile.exists();}
+
+	public MusicManager getMusicManager() {
+		return musicManager;
+	}
 
 	public Update getUpdateInstance(){
 		return update;
