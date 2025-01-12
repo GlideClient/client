@@ -8,7 +8,7 @@ import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import net.minecraft.util.MovingObjectPosition;
 
 public class ReachDisplayMod extends SimpleHUDMod {
@@ -53,6 +53,6 @@ public class ReachDisplayMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.ACTIVITY : null;
+		return iconSetting.isToggled() ? LegacyIcon.ACTIVITY : null;
 	}
 }

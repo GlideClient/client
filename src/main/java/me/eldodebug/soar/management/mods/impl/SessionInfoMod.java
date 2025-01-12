@@ -11,7 +11,7 @@ import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.ServerUtils;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.StringUtils;
@@ -53,13 +53,13 @@ public class SessionInfoMod extends HUDMod {
 		this.drawText("Session Info", 5.5F, 6F, 10.5F, Fonts.REGULAR);
 		this.drawRect(0, 17.5F, 140, 1);
 		
-		this.drawText(Icon.CLOCK, 5.5F, 22.5F, 10F, Fonts.ICON);
+		this.drawText(LegacyIcon.CLOCK, 5.5F, 22.5F, 10F, Fonts.LEGACYICON);
 		this.drawText(time, 18, 24, 9, Fonts.REGULAR);
 		
-		this.drawText(Icon.SERVER, 5.5F, 22.5F + 13, 10F, Fonts.ICON);
+		this.drawText(LegacyIcon.SERVER, 5.5F, 22.5F + 13, 10F, Fonts.LEGACYICON);
 		this.drawText(ServerUtils.getServerIP(), 18, 24 + 12, 9, Fonts.REGULAR);
 		
-		this.drawText(Icon.USER, 5.5F, 22.5F + 26, 10F, Fonts.ICON);
+		this.drawText(LegacyIcon.USER, 5.5F, 22.5F + 26, 10F, Fonts.LEGACYICON);
 		this.drawText(killCount + " kill", 18, 24 + 26.5F, 9, Fonts.REGULAR);
 		
 		this.setWidth(140);

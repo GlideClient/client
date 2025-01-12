@@ -13,7 +13,7 @@ import me.eldodebug.soar.management.mods.settings.impl.ComboSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.animation.simple.SimpleAnimation;
 
 public class MemoryUsageMod extends SimpleHUDMod {
@@ -66,7 +66,7 @@ public class MemoryUsageMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.SERVER : null;
+		return iconSetting.isToggled() ? LegacyIcon.SERVER : null;
 	}
 	
 	private long getUsingMemory() {

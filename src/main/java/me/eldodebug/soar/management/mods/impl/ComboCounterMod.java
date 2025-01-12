@@ -8,7 +8,7 @@ import me.eldodebug.soar.management.event.impl.EventTick;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 
 public class ComboCounterMod extends SimpleHUDMod {
 
@@ -60,6 +60,6 @@ public class ComboCounterMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.BAR_CHERT : null;
+		return iconSetting.isToggled() ? LegacyIcon.BAR_CHERT : null;
 	}
 }

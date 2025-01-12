@@ -10,6 +10,7 @@ import me.eldodebug.soar.management.remote.discord.DiscordStats;
 import me.eldodebug.soar.management.remote.discord.DiscordManager;
 import me.eldodebug.soar.management.remote.update.Update;
 import me.eldodebug.soar.management.remote.update.UpdateManager;
+import me.eldodebug.soar.ui.ClickEffects;
 import org.apache.commons.lang3.ArrayUtils;
 
 import me.eldodebug.soar.injection.mixin.GlideTweaker;
@@ -22,7 +23,7 @@ import me.eldodebug.soar.management.event.EventManager;
 import me.eldodebug.soar.management.file.FileManager;
 import me.eldodebug.soar.management.language.LanguageManager;
 import me.eldodebug.soar.management.mods.ModManager;
-import me.eldodebug.soar.management.mods.impl.GlobalSettingsMod;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.notification.NotificationManager;
 import me.eldodebug.soar.management.profile.ProfileManager;
@@ -65,6 +66,7 @@ public class Glide {
 	private long launchTime;
 	private File firstLoginFile;
 	private Update update;
+	private ClickEffects clickEffects;
 	
 	public Glide() {
 		name = "Glide";
@@ -109,7 +111,8 @@ public class Glide {
 
 		eventManager.register(new GlideHandler());
 
-		GlobalSettingsMod.getInstance().setToggled(true);
+		InternalSettingsMod.getInstance().setToggled(true);
+		clickEffects = new ClickEffects();
 		mc.updateDisplay();
 	}
 	
@@ -241,4 +244,5 @@ public class Glide {
 	}
 	public void setUpdateNeeded(boolean in) {updateNeeded = in;}
 	public boolean getUpdateNeeded() {return updateNeeded;}
+	public ClickEffects getClickEffects() {return clickEffects;}
 }

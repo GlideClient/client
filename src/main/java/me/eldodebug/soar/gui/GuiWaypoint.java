@@ -11,7 +11,7 @@ import me.eldodebug.soar.management.color.palette.ColorPalette;
 import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.management.waypoint.Waypoint;
 import me.eldodebug.soar.management.waypoint.WaypointManager;
 import me.eldodebug.soar.ui.comp.impl.field.CompTextBox;
@@ -92,7 +92,7 @@ public class GuiWaypoint extends GuiScreen {
 		nvg.drawShadow(x, y, width, height, 10);
 		nvg.drawRoundedRect(x, y, width, height, 10, palette.getBackgroundColor(ColorType.NORMAL));
 		nvg.drawText("Waypoint", x + 8, y + 8, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
-		nvg.drawRect(x, y + 24, width, 1, palette.getBackgroundColor(ColorType.DARK));
+		//nvg.drawRect(x, y + 24, width, 1, palette.getBackgroundColor(ColorType.DARK));
 		
 		for(Waypoint waypoint : waypointManager.getWaypoints()) {
 			
@@ -102,7 +102,7 @@ public class GuiWaypoint extends GuiScreen {
 				nvg.drawRoundedRect(x + 16, y + 14 + offsetY + 26, 18, 18, 4, waypoint.getColor());
 				nvg.drawText(waypoint.getName(), x + 40, y + 45.5F + offsetY, palette.getFontColor(ColorType.DARK), 9.5F, Fonts.REGULAR);
 				
-				nvg.drawText(Icon.TRASH, x + 162, y + 44 + offsetY, palette.getMaterialRed(), 11, Fonts.ICON);
+				nvg.drawText(LegacyIcon.TRASH, x + 162, y + 44 + offsetY, palette.getMaterialRed(), 11, Fonts.LEGACYICON);
 				
 				offsetY+=38;
 				index++;
@@ -125,7 +125,7 @@ public class GuiWaypoint extends GuiScreen {
 			nvg.drawRoundedRect(x + width - 120 + offsetX, y + 84 + offsetY, 13, 13, 2, c);
 			
 			if(currentColor.equals(c)) {
-				nvg.drawText(Icon.CHECK, x + width - 118 + offsetX, y + 86.5F + offsetY, Color.WHITE, 9, Fonts.ICON);
+				nvg.drawText(LegacyIcon.CHECK, x + width - 118 + offsetX, y + 86.5F + offsetY, Color.WHITE, 9, Fonts.LEGACYICON);
 			}
 			
 			offsetX+=17;

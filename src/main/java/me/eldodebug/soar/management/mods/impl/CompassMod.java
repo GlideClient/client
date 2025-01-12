@@ -18,7 +18,7 @@ import me.eldodebug.soar.management.mods.settings.impl.NumberSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.buffer.ScreenStencil;
 import net.minecraft.util.MathHelper;
 
@@ -257,6 +257,6 @@ public class CompassMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.COMPASS : null;
+		return iconSetting.isToggled() ? LegacyIcon.COMPASS : null;
 	}
 }

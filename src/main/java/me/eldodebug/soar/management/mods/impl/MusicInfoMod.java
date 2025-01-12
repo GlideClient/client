@@ -14,6 +14,7 @@ import me.eldodebug.soar.management.music.MusicManager;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
 import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.TimerUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -187,7 +188,7 @@ public class MusicInfoMod extends SimpleHUDMod implements MusicManager.TrackInfo
 
     @Override
     public String getIcon() {
-        return iconSetting.isToggled() ? Icon.MUSIC : null;
+        return iconSetting.isToggled() ? LegacyIcon.MUSIC : null;
     }
 
     @Override

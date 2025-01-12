@@ -2,6 +2,8 @@ package me.eldodebug.soar.management.mods.impl;
 
 import java.awt.Color;
 
+import me.eldodebug.soar.management.mods.settings.impl.ColorSetting;
+import net.minecraft.entity.item.EntityArmorStand;
 import org.lwjgl.opengl.GL11;
 
 import me.eldodebug.soar.management.event.EventTarget;
@@ -22,10 +24,11 @@ import net.minecraft.util.Vec3;
 
 public class HitBoxMod extends Mod {
 
-	private Color boundingBoxColor = Color.WHITE;
 	private Color eyeHeightColor = Color.RED;
 	private Color lookVectorColor = Color.BLUE;
-	
+
+	private ColorSetting colorSetting = new ColorSetting(TranslateText.COLOR, this, new Color(255, 255, 255), false);
+	private NumberSetting alphaSetting = new NumberSetting(TranslateText.ALPHA, this, 1, 0, 1.0, false);
 	private BooleanSetting boundingBoxSetting = new BooleanSetting(TranslateText.BOUNDING_BOX, this, true);
 	private BooleanSetting eyeHeightSetting = new BooleanSetting(TranslateText.EYE_HEIGHT, this, true);
 	private BooleanSetting lookVectorSetting = new BooleanSetting(TranslateText.LOOK_VECTOR, this, true);
@@ -38,11 +41,15 @@ public class HitBoxMod extends Mod {
 
 	@EventTarget
 	public void onRenderHitbox(EventRenderHitbox event) {
-		
+
 		float half = event.getEntity().width / 2.0F;
 		
 		event.setCancelled(true);
-		
+
+		if(event.getEntity() instanceof EntityArmorStand){
+			return;
+		}
+
 		GlStateManager.depthMask(false);
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
@@ -56,8 +63,8 @@ public class HitBoxMod extends Mod {
 					box.minY - event.getEntity().posY + event.getY(), box.minZ - event.getEntity().posZ + event.getZ(),
 					box.maxX - event.getEntity().posX + event.getX(), box.maxY - event.getEntity().posY + event.getY(),
 					box.maxZ - event.getEntity().posZ + event.getZ());
-			
-			RenderGlobal.drawOutlinedBoundingBox(offsetBox, boundingBoxColor.getRed(), boundingBoxColor.getGreen(), boundingBoxColor.getBlue(), boundingBoxColor.getAlpha());
+			Color boundingBoxColor = colorSetting.getColor();
+			RenderGlobal.drawOutlinedBoundingBox(offsetBox, boundingBoxColor.getRed(), boundingBoxColor.getGreen(), boundingBoxColor.getBlue(), (int) (alphaSetting.getValue() * 255));
 		}
 		
 		if(eyeHeightSetting.isToggled() && event.getEntity() instanceof EntityLivingBase) {
@@ -66,7 +73,7 @@ public class HitBoxMod extends Mod {
 							event.getZ() - half, event.getX() + half,
 							event.getY() + event.getEntity().getEyeHeight() + 0.009999999776482582D, event.getZ() + half),
 					eyeHeightColor.getRed(), eyeHeightColor.getGreen(), eyeHeightColor.getBlue(),
-					eyeHeightColor.getAlpha());
+					(int) (alphaSetting.getValue() * 255));
 		}
 		
 		if(lookVectorSetting.isToggled()) {
@@ -80,7 +87,7 @@ public class HitBoxMod extends Mod {
 					.endVertex();
 			worldrenderer.pos(event.getX() + look.xCoord * 2,
 					event.getY() + event.getEntity().getEyeHeight() + look.yCoord * 2, event.getZ() + look.zCoord * 2)
-					.color(lookVectorColor.getRed(), lookVectorColor.getGreen(), lookVectorColor.getBlue(), lookVectorColor.getAlpha()).endVertex();
+					.color(lookVectorColor.getRed(), lookVectorColor.getGreen(), lookVectorColor.getBlue(), (int) (alphaSetting.getValue() * 255)).endVertex();
 			tessellator.draw();
 		}
 		

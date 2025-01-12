@@ -18,11 +18,9 @@ import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.animation.simple.SimpleAnimation;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -123,6 +121,7 @@ public class ModernHotbarMod extends HUDMod {
 		ScaledResolution sr = new ScaledResolution(mc);
 		Option option = designSetting.getOption();
 		AccentColor currentColor = Glide.getInstance().getColorManager().getCurrentColor();
+		boolean isText = InternalSettingsMod.getInstance().getModThemeSetting().getOption().getTranslate().equals(TranslateText.TEXT);
 		
         if (mc.getRenderViewEntity() instanceof EntityPlayer) {
         	
@@ -137,7 +136,9 @@ public class ModernHotbarMod extends HUDMod {
     				nvg.drawShadow(barX, barY, barWidth, barHeight, 6);
     				nvg.drawGradientRoundedRect(barX, barY, barWidth, barHeight, 6, ColorUtils.applyAlpha(currentColor.getColor1(), 190), ColorUtils.applyAlpha(currentColor.getColor2(), 190));
     			} else if(option.getTranslate().equals(TranslateText.CLIENT)){
-					// todo: fix glow mode
+					if(isText){
+						nvg.drawShadow(barX, barY, barWidth, barHeight, 6);
+					}
 					this.setScale(1f);
 					this.setX((int) barX);
 					this.setY((int) barY);

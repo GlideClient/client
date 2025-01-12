@@ -1,4 +1,4 @@
-package me.eldodebug.soar.management.mods.impl;
+package me.eldodebug.soar.ui;
 
 import java.util.ArrayList;
 
@@ -13,16 +13,14 @@ import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
 import me.eldodebug.soar.utils.animation.normal.easing.EaseBackIn;
 
-public class ClickEffectMod extends Mod {
+public class ClickEffects {
 
-	private static ClickEffectMod instance;
+	private static ClickEffects instance;
 	
 	private ArrayList<ClickEffect> effects = new ArrayList<ClickEffect>();
 	private ArrayList<ClickEffect> removeEffects = new ArrayList<ClickEffect>();
 	
-	public ClickEffectMod() {
-		super(TranslateText.CLICK_EFFECT, TranslateText.CLICK_EFFECT_DESCRIPTION, ModCategory.RENDER);
-		
+	public ClickEffects() {
 		instance = this;
 	}
 	
@@ -44,7 +42,7 @@ public class ClickEffectMod extends Mod {
 		effects.add(new ClickEffect(mouseX, mouseY));
 	}
 	
-	public static ClickEffectMod getInstance() {
+	public static ClickEffects getInstance() {
 		return instance;
 	}
 

@@ -11,11 +11,12 @@ import me.eldodebug.soar.management.color.ColorManager;
 import me.eldodebug.soar.management.color.palette.ColorPalette;
 import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.language.TranslateText;
-import me.eldodebug.soar.management.mods.impl.GlobalSettingsMod;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.music.MusicManager;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
 import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.management.notification.NotificationType;
 import me.eldodebug.soar.ui.comp.impl.CompSlider;
 import me.eldodebug.soar.ui.comp.impl.field.CompTextBox;
@@ -59,9 +60,9 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private boolean showConnectButton = true;
 
     public SpotifyCategory(GuiModMenu parent) {
-        super(parent, TranslateText.MUSIC, Icon.MUSIC, true, true);
+        super(parent, TranslateText.MUSIC, LegacyIcon.MUSIC, true, true);
         this.parentRef = new WeakReference<>(parent);
-        this.volumeSlider = new CompSlider(GlobalSettingsMod.getInstance().getVolumeSetting());
+        this.volumeSlider = new CompSlider(InternalSettingsMod.getInstance().getVolumeSetting());
         this.textBox = new CompTextBox();
 
         this.searchDebouncer = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -266,12 +267,12 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         );
 
         nvg.drawText(
-                Icon.PLUS_SQUARE,
+                LegacyIcon.PLUS_SQUARE,
                 this.getX() + this.getWidth() - 60,
                 this.getY() + offsetY + 15,
                 palette.getFontColor(ColorType.NORMAL),
                 16,
-                Fonts.ICON
+                Fonts.LEGACYICON
         );
     }
 
@@ -460,30 +461,30 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
 
         // Draw the control icons
         nvg.drawText(
-                Icon.BACK,
+                LegacyIcon.BACK,
                 centerX - 32,
                 centerY,
                 normalColor,
                 16,
-                Fonts.ICON
+                Fonts.LEGACYICON
         );
 
         nvg.drawText(
-                musicManager.isPlaying() ? Icon.PAUSE : Icon.PLAY,
+                musicManager.isPlaying() ? LegacyIcon.PAUSE : LegacyIcon.PLAY,
                 centerX - 8,
                 centerY,
                 normalColor,
                 16,
-                Fonts.ICON
+                Fonts.LEGACYICON
         );
 
         nvg.drawText(
-                Icon.FORWARD,
+                LegacyIcon.FORWARD,
                 centerX + 16,
                 centerY,
                 normalColor,
                 16,
-                Fonts.ICON
+                Fonts.LEGACYICON
         );
 
         if (DEBUG_HITBOXES) {
@@ -513,15 +514,15 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                 this.getY() + this.getHeight() - 26,
                 palette.getFontColor(ColorType.NORMAL),
                 16,
-                Fonts.ICON
+                Fonts.LEGACYICON
         );
     }
 
     private String getVolumeIcon(int volume) {
-        if (volume == 0) return Icon.VOLUME_X;
-        if (volume > 80) return Icon.VOLUME_2;
-        if (volume > 40) return Icon.VOLUME_1;
-        return Icon.VOLUME;
+        if (volume == 0) return LegacyIcon.VOLUME_X;
+        if (volume > 80) return LegacyIcon.VOLUME_2;
+        if (volume > 40) return LegacyIcon.VOLUME_1;
+        return LegacyIcon.VOLUME;
     }
 
     private void drawProgressBar(NanoVGManager nvg, AccentColor accentColor, ColorPalette palette) {
@@ -817,12 +818,12 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         
         // Draw Spotify icon
         nvg.drawText(
-            Icon.MUSIC,
+            LegacyIcon.MUSIC,
             startX,
             iconY,
             isHovered ? Color.WHITE : palette.getFontColor(ColorType.DARK),
             16,
-            Fonts.ICON
+            Fonts.LEGACYICON
         );
         
         // Draw text - keeping original position

@@ -13,14 +13,17 @@ import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.management.screenshot.Screenshot;
 import me.eldodebug.soar.management.screenshot.ScreenshotManager;
 import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.animation.simple.SimpleAnimation;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
+import org.lwjgl.input.Keyboard;
 
 public class ScreenshotCategory extends Category {
+
+	// todo: add delete confirm dialog
 
 	private Screenshot currentScreenshot;
 	
@@ -29,7 +32,7 @@ public class ScreenshotCategory extends Category {
 	private SimpleAnimation trashAnimation = new SimpleAnimation();
 	
 	public ScreenshotCategory(GuiModMenu parent) {
-		super(parent, TranslateText.SCREENSHOT, Icon.CAMERA, false, true);
+		super(parent, TranslateText.SCREENSHOT, LegacyIcon.CAMERA, false, true);
 	}
 	
 	@Override
@@ -76,7 +79,7 @@ public class ScreenshotCategory extends Category {
 			trashAnimation.setAnimation(MouseUtils.isInside(mouseX, mouseY, this.getX() + addX, this.getY() + addY, this.getWidth() - (addX * 2), this.getHeight() - (addY * 2) - 38) ? 1.0F : 0.0F, 16);
 			
 			nvg.drawRoundedImage(currentScreenshot.getImage(), this.getX() + addX, this.getY() + addY, this.getWidth() - (addX * 2), this.getHeight() - (addY * 2) - 38, 6);
-			nvg.drawText(Icon.TRASH, this.getX() + this.getWidth() - 59, this.getY() + addY + 6, palette.getMaterialRed((int) (trashAnimation.getValue() * 255)), 12, Fonts.ICON);
+			nvg.drawText(LegacyIcon.TRASH, this.getX() + this.getWidth() - 59, this.getY() + addY + 6, palette.getMaterialRed((int) (trashAnimation.getValue() * 255)), 12, Fonts.LEGACYICON);
 			
 			addX = 58;
 			
@@ -120,7 +123,7 @@ public class ScreenshotCategory extends Category {
 			nvg.translate(10 - (leftValue * 10), 0);
 			
 			nvg.drawRoundedRect(this.getX() + 20, this.getY() + (this.getHeight() / 2) - 30.5F, 12, 24, 4, palette.getBackgroundColor(ColorType.DARK, (int) (leftValue * 255)));
-			nvg.drawText("<", this.getX() + 23F, this.getY() + (this.getHeight() / 2) - 22F, palette.getFontColor(ColorType.DARK, (int) (leftValue * 255)), 9, Fonts.DEMIBOLD);
+			nvg.drawText("<", this.getX() + 23F, this.getY() + (this.getHeight() / 2) - 22F, palette.getFontColor(ColorType.DARK, (int) (leftValue * 255)), 9, Fonts.SEMIBOLD);
 			
 			nvg.restore();
 			
@@ -128,13 +131,13 @@ public class ScreenshotCategory extends Category {
 			nvg.translate(-10 + (rightValue * 10), 0);
 			
 			nvg.drawRoundedRect(this.getX() + this.getWidth() - 32, this.getY() + (this.getHeight() / 2) - 30.5F, 12, 24, 4, palette.getBackgroundColor(ColorType.DARK, (int) (rightValue * 255)));
-			nvg.drawText(">", this.getX() + this.getWidth() - 29, this.getY() + (this.getHeight() / 2) - 22F, palette.getFontColor(ColorType.DARK, (int) (rightValue * 255)), 9, Fonts.DEMIBOLD);
+			nvg.drawText(">", this.getX() + this.getWidth() - 29, this.getY() + (this.getHeight() / 2) - 22F, palette.getFontColor(ColorType.DARK, (int) (rightValue * 255)), 9, Fonts.SEMIBOLD);
 			
 			nvg.restore();
 		}else {
 			
 			nvg.drawRoundedRect(this.getX() + addX, this.getY() + addY, this.getWidth() - (addX * 2), this.getHeight() - (addY * 2) - 38, 6, palette.getBackgroundColor(ColorType.DARK));
-			nvg.drawCenteredText(Icon.CAMERA, this.getX() + addX + ((this.getWidth() - (addX * 2)) / 2), this.getY() + 68, palette.getFontColor(ColorType.NORMAL), 64, Fonts.ICON);
+			nvg.drawCenteredText(LegacyIcon.CAMERA, this.getX() + addX + ((this.getWidth() - (addX * 2)) / 2), this.getY() + 68, palette.getFontColor(ColorType.NORMAL), 64, Fonts.LEGACYICON);
 			
 			addX = 58;
 			
@@ -202,6 +205,18 @@ public class ScreenshotCategory extends Category {
 			if(MouseUtils.isInside(mouseX, mouseY, this.getX() + this.getWidth() - 32, this.getY() + (this.getHeight() / 2) - 30.5F, 12, 24)) {
 				currentScreenshot = screenshotManager.getNextScreenshot(currentScreenshot);
 			}
+		}
+	}
+
+	@Override
+	public void keyTyped(char typedChar, int keyCode) {
+		ScreenshotManager screenshotManager = Glide.getInstance().getScreenshotManager();
+		if(currentScreenshot == null) return;
+		if(keyCode == Keyboard.KEY_LEFT) {
+			currentScreenshot = screenshotManager.getBackScreenshot(currentScreenshot);
+		}
+		if(keyCode == Keyboard.KEY_RIGHT) {
+			currentScreenshot = screenshotManager.getNextScreenshot(currentScreenshot);
 		}
 	}
 }

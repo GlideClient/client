@@ -31,6 +31,7 @@ public class GuiEditHUD extends GuiScreen {
 	private boolean fromModMenu;
 	private boolean snapping, canSnap;
 	private ArrayList<HUDMod> mods;
+	int localMouseX = -1, localMouseY = -1;
 	
 	public GuiEditHUD(boolean fromModMenu) {
 		this.fromModMenu = fromModMenu;
@@ -58,6 +59,8 @@ public class GuiEditHUD extends GuiScreen {
 		NanoVGManager nvg = instance.getNanoVGManager();
 		ColorPalette palette = instance.getColorManager().getPalette();
 		boolean shift = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+		localMouseX = mouseX;
+		localMouseY = mouseY;
 
 	    snapping = false;
 	    
@@ -213,11 +216,16 @@ public class GuiEditHUD extends GuiScreen {
 				if(mouseButton == 0) {
 					canSnap = true;
 				}
-				
+
+				// right click to remove
 				if(mouseButton == 1) {
-					canSnap = false;
+					if(isInside) {
+						m.toggle();
+						initGui();
+						return;
+					}
 				}
-				
+				// middle click resets scale
 				if(mouseButton == 2 && isInside) {
 					m.setScale(1.0F);
 				}
@@ -252,6 +260,22 @@ public class GuiEditHUD extends GuiScreen {
 				mc.displayGuiScreen(Glide.getInstance().getModMenu());
 			}else {
 				introAnimation.setDirection(Direction.BACKWARDS);
+			}
+		}
+		for(HUDMod m : mods) {
+			if(m.isToggled() && !m.isHide()) {
+
+				boolean isInside = MouseUtils.isInside(localMouseX, localMouseY, m.getX(), m.getY(), m.getWidth(), m.getHeight()) && mods.stream().filter(m2 -> m2.isToggled() &&
+						MouseUtils.isInside(localMouseX, localMouseY, m2.getX(), m2.getY(), m2.getWidth(), m2.getHeight())).findFirst().get().equals(m);
+
+				// backspace to remove
+				if(keyCode == Keyboard.KEY_BACK || keyCode == Keyboard.KEY_DELETE) {
+					if(isInside) {
+						m.toggle();
+						initGui();
+						return;
+					}
+				}
 			}
 		}
 	}

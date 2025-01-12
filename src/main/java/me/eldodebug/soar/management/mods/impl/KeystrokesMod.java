@@ -108,7 +108,7 @@ public class KeystrokesMod extends HUDMod {
 		this.setHeight(spaceSetting.isToggled() ? 64 + 22 : 32 + 28);
 	}
 	private void drawHighlight(float addX, float addY, float width, float height, float radius, Color color){
-		boolean rect = GlobalSettingsMod.getInstance().getModThemeSetting().getOption().getTranslate().equals(TranslateText.RECT);
+		boolean rect = InternalSettingsMod.getInstance().getModThemeSetting().getOption().getTranslate().equals(TranslateText.RECT);
 		if (!rect) this.drawRoundedRect(addX, addY, width, height, radius, color); else  this.drawRect(addX, addY, width, height, color);
 	}
 }

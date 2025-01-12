@@ -20,7 +20,7 @@ import me.eldodebug.soar.management.mods.settings.impl.ComboSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 
 public class ClockMod extends SimpleHUDMod {
 
@@ -52,7 +52,7 @@ public class ClockMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.CLOCK : null;
+		return iconSetting.isToggled() ? LegacyIcon.CLOCK : null;
 	}
 	
 	private void drawNanoVG() {

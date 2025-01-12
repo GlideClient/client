@@ -2,14 +2,13 @@ package me.eldodebug.soar.management.remote.changelog;
 
 import java.awt.Color;
 
-import me.eldodebug.soar.management.language.TranslateText;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 
 public enum ChangelogType {
-	ADDED(0, Icon.PLUS, new Color(0, 142, 65)),
-	FIXED(1, Icon.REFRESH, new Color(207, 112, 3)),
-	REMOVED(2, Icon.MINUS, new Color(209, 34, 34)),
-	ERROR(999, Icon.PROHIBITED, new Color(143, 0, 0));
+	ADDED(0, LegacyIcon.PLUS, new Color(0, 142, 65)),
+	FIXED(1, LegacyIcon.REFRESH, new Color(207, 112, 3)),
+	REMOVED(2, LegacyIcon.MINUS, new Color(209, 34, 34)),
+	ERROR(999, LegacyIcon.PROHIBITED, new Color(143, 0, 0));
 	
 	private int id;
 	private String string;

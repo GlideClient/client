@@ -8,7 +8,7 @@ import me.eldodebug.soar.gui.GuiEditHUD;
 import me.eldodebug.soar.management.color.AccentColor;
 import me.eldodebug.soar.management.color.ColorManager;
 import me.eldodebug.soar.management.language.TranslateText;
-import me.eldodebug.soar.management.mods.impl.GlobalSettingsMod;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.mods.settings.impl.ComboSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
@@ -173,7 +173,7 @@ public class HUDMod extends Mod {
 		NanoVGManager nvg = instance.getNanoVGManager();
 		ColorManager colorManager = instance.getColorManager();
 		AccentColor currentColor = colorManager.getCurrentColor();
-		ComboSetting setting = GlobalSettingsMod.getInstance().getModThemeSetting();
+		ComboSetting setting = InternalSettingsMod.getInstance().getModThemeSetting();
 		Option theme = setting.getOption();
 		
 		boolean isNormal = theme.getTranslate().equals(TranslateText.NORMAL);
@@ -187,6 +187,7 @@ public class HUDMod extends Mod {
 		boolean isLight = theme.getTranslate().equals(TranslateText.LIGHT);
 		boolean isRect = theme.getTranslate().equals(TranslateText.RECT);
 		boolean isModern = theme.getTranslate().equals(TranslateText.MODERN);
+		boolean isSimpGrad = theme.getTranslate().equals(TranslateText.GRADIENT_SIMPLE);
 
 		
 		float lastWidth = width * scale;
@@ -219,12 +220,15 @@ public class HUDMod extends Mod {
 		} else if(isDark) {
 			nvg.drawRoundedRect(x, y, lastWidth, lastHeight, radius, new Color(20, 20, 20, 220));
 		}
-		if(isRect) {
+		if(isRect || isSimpGrad) {
 			nvg.drawRect(x, y, lastWidth, lastHeight, new Color(20, 20, 20, 165));
 		}
+		if(isSimpGrad){
+			nvg.drawHorizontalGradientRect(x, y - (2 * scale), lastWidth, (2* scale),  ColorUtils.interpolateColors(8, 0, currentColor.getColor1(), currentColor.getColor2()), ColorUtils.interpolateColors(10, 20, currentColor.getColor1(), currentColor.getColor2()));
+		}
 		if(isModern) {
-			nvg.drawRoundedRect(x, y, lastWidth, lastHeight, radius, new Color(0, 0, 0, 150));
-			nvg.drawOutlineRoundedRect(x - 0.5F, y - 0.5F, lastWidth + 1, lastHeight + 1, radius + 0.5F, 0.5F,  new Color(255,255,255,150));
+			nvg.drawRoundedRect(x, y, lastWidth, lastHeight, radius, new Color(0, 0, 0, 110));
+			nvg.drawOutlineRoundedRect(x - 0.5F, y - 0.5F, lastWidth + 1, lastHeight + 1, radius + 0.5F, 0.5F,  new Color(255,255,255,110));
 
 		}
 
@@ -246,7 +250,7 @@ public class HUDMod extends Mod {
 		
 		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
 		float lastSize = size * scale;
-		Option theme = GlobalSettingsMod.getInstance().getModThemeSetting().getOption();
+		Option theme = InternalSettingsMod.getInstance().getModThemeSetting().getOption();
 		boolean isText = theme.getTranslate().equals(TranslateText.TEXT);
 
 		if(isText){
@@ -291,7 +295,7 @@ public class HUDMod extends Mod {
 	
 	public Color getFontColor(int alpha) {
 		
-		ComboSetting setting = GlobalSettingsMod.getInstance().getModThemeSetting();
+		ComboSetting setting = InternalSettingsMod.getInstance().getModThemeSetting();
 		Option theme = setting.getOption();
 		
 		boolean isDark = theme.getTranslate().equals(TranslateText.DARK);

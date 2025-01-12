@@ -33,7 +33,6 @@ public class ModManager {
 		mods.add(new ChunkBordersMod());
 		mods.add(new ClearGlassMod());
 		mods.add(new ClearWaterMod());
-		mods.add(new ClickEffectMod());
 		mods.add(new ClientSpooferMod());
 		mods.add(new ClockMod());
 		mods.add(new ColorSaturationMod());
@@ -61,7 +60,7 @@ public class ModManager {
 		mods.add(new FullbrightMod());
 		mods.add(new GameModeDisplayMod());
 		mods.add(new GlintColorMod());
-		mods.add(new GlobalSettingsMod());
+		mods.add(new InternalSettingsMod());
 		mods.add(new GodbridgeAssistMod());
 		mods.add(new HealthDisplayMod());
 		mods.add(new HitBoxMod());
@@ -220,6 +219,6 @@ public class ModManager {
 		for(Mod m : mods) {
 			m.setToggled(false);
 		}
-		GlobalSettingsMod.getInstance().setToggled(true);
+		InternalSettingsMod.getInstance().setToggled(true);
 	}
 }

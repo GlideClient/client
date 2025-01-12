@@ -13,7 +13,7 @@ import me.eldodebug.soar.management.cape.impl.Cape;
 import me.eldodebug.soar.management.cape.impl.CustomCape;
 import me.eldodebug.soar.management.cape.impl.NormalCape;
 import me.eldodebug.soar.management.file.FileManager;
-import me.eldodebug.soar.management.mods.impl.GlobalSettingsMod;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.utils.ImageUtils;
 import me.eldodebug.soar.utils.file.FileUtils;
 import net.minecraft.client.Minecraft;
@@ -100,7 +100,7 @@ public class CapeManager {
 		add("Horse", "misc/horse-sample.png", "misc/horse.png", CapeCategory.MISC);
 		add("Trans Arch", "misc/transarch-sample.png", "misc/transarch.png", CapeCategory.MISC);
 
-		currentCape = getCapeByName(GlobalSettingsMod.getInstance().getCapeConfigName());
+		currentCape = getCapeByName(InternalSettingsMod.getInstance().getCapeConfigName());
 
 		for(File f : customCapeDir.listFiles()) {
 			
@@ -184,7 +184,7 @@ public class CapeManager {
 
 	public void setCurrentCape(Cape currentCape) {
 		this.currentCape = currentCape;
-		GlobalSettingsMod.getInstance().setCapeConfigName(currentCape.getName());
+		InternalSettingsMod.getInstance().setCapeConfigName(currentCape.getName());
 	}
 
 	public Cape getCapeByName(String name) {

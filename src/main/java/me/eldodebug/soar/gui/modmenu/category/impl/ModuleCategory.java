@@ -27,7 +27,7 @@ import me.eldodebug.soar.management.mods.settings.impl.SoundSetting;
 import me.eldodebug.soar.management.mods.settings.impl.TextSetting;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.ui.comp.Comp;
 import me.eldodebug.soar.ui.comp.impl.CompColorPicker;
 import me.eldodebug.soar.ui.comp.impl.CompComboBox;
@@ -55,11 +55,12 @@ public class ModuleCategory extends Category {
 	private boolean openSetting;
 	private Animation settingAnimation;
 	private Mod currentMod;
+	Color noColour = new Color(0, 0, 0, 0);
 	
 	private ArrayList<ModuleSetting> comps = new ArrayList<ModuleSetting>();
 	
 	public ModuleCategory(GuiModMenu parent) {
-		super(parent, TranslateText.MODULE, Icon.ARCHIVE, true, true);
+		super(parent, TranslateText.MODULE, LegacyIcon.ARCHIVE, true, true);
 	}
 	
 	@Override
@@ -143,8 +144,8 @@ public class ModuleCategory extends Category {
 				if(m.isBanable()){
 					nvg.drawText(m.getName(), this.getX() + 56, this.getY() + offsetY + 9F, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
 					nvg.drawText(m.getDescription(), this.getX() + 56 + (nvg.getTextWidth(m.getName(), 13, Fonts.MEDIUM)) + 5, this.getY() + offsetY + 12, palette.getFontColor(ColorType.NORMAL), 9, Fonts.REGULAR);
-					nvg.drawText(Icon.INFO, this.getX() + 56, this.getY() + offsetY + 23, new Color(255, 145, 0), 9, Fonts.ICON);
-					nvg.drawText("This mod may be banable on some servers", this.getX() + 57 + (nvg.getTextWidth(Icon.INFO, 9, Fonts.ICON)) , this.getY() + offsetY + 24, new Color(255, 145, 0), 9, Fonts.REGULAR);
+					nvg.drawText(LegacyIcon.INFO, this.getX() + 56, this.getY() + offsetY + 23, new Color(255, 145, 0), 9, Fonts.LEGACYICON);
+					nvg.drawText("This mod may be banable on some servers", this.getX() + 57 + (nvg.getTextWidth(LegacyIcon.INFO, 9, Fonts.LEGACYICON)) , this.getY() + offsetY + 24, new Color(255, 145, 0), 9, Fonts.REGULAR);
 				} else {
 					nvg.drawText(m.getName(), this.getX() + 56, this.getY() + offsetY + 15F, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
 					nvg.drawText(m.getDescription(), this.getX() + 56 + (nvg.getTextWidth(m.getName(), 13, Fonts.MEDIUM)) + 5, this.getY() + offsetY + 17, palette.getFontColor(ColorType.NORMAL), 9, Fonts.REGULAR);
@@ -160,7 +161,7 @@ public class ModuleCategory extends Category {
 				nvg.restore();
 				
 				if(modManager.getSettingsByMod(m) != null) {
-					nvg.drawText(Icon.SETTINGS, this.getX() + this.getWidth() - 39, this.getY() + offsetY + 13.5F, palette.getFontColor(ColorType.NORMAL), 13, Fonts.ICON);
+					nvg.drawText(LegacyIcon.SETTINGS, this.getX() + this.getWidth() - 39, this.getY() + offsetY + 13.5F, palette.getFontColor(ColorType.NORMAL), 13, Fonts.LEGACYICON);
 				}
 			}
 			
@@ -169,7 +170,11 @@ public class ModuleCategory extends Category {
 		}
 		
 		nvg.restore();
+		nvg.drawVerticalGradientRect(getX() + 15,  this.getY(), getWidth() - 30, 12,  palette.getBackgroundColor(ColorType.NORMAL), noColour); //top
+		nvg.drawVerticalGradientRect(getX() + 15,  this.getY()+ this.getHeight() - 12, getWidth() - 30, 12, noColour, palette.getBackgroundColor(ColorType.NORMAL)); // bottom
 		nvg.restore();
+
+
 		
 		//Draw mod setting scene
 		
@@ -191,9 +196,9 @@ public class ModuleCategory extends Category {
 			nvg.save();
 			
 			nvg.drawRoundedRect(this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, this.getHeight() - 30, 10, palette.getBackgroundColor(ColorType.DARK));
-			nvg.drawText(Icon.CHEVRON_LEFT, this.getX() + 25, this.getY() + offsetY + 8, palette.getFontColor(ColorType.DARK), 13, Fonts.ICON);
+			nvg.drawText(LegacyIcon.CHEVRON_LEFT, this.getX() + 25, this.getY() + offsetY + 8, palette.getFontColor(ColorType.DARK), 13, Fonts.LEGACYICON);
 			nvg.drawText(currentMod.getName(), this.getX() + 42, this.getY() + offsetY + 9, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
-			nvg.drawText(Icon.REFRESH, this.getX() + this.getWidth() - 39, this.getY() + offsetY + 7.5F, palette.getFontColor(ColorType.DARK), 13, Fonts.ICON);
+			nvg.drawText(LegacyIcon.REFRESH, this.getX() + this.getWidth() - 39, this.getY() + offsetY + 7.5F, palette.getFontColor(ColorType.DARK), 13, Fonts.LEGACYICON);
 			
 			offsetY = 44;
 			
@@ -313,6 +318,7 @@ public class ModuleCategory extends Category {
 				
 				if(MouseUtils.isInside(mouseX, mouseY, this.getX() + 15 + offsetX, this.getY() + offsetY - 3, textWidth + 20, 16) && mouseButton == 0) {
 					currentCategory = c;
+					scroll.reset();
 				}
 				
 				offsetX+=textWidth + 28;
@@ -550,8 +556,12 @@ public class ModuleCategory extends Category {
 			return;
 		}
 
-		if(openSetting && keyCode == Keyboard.KEY_ESCAPE  && !binding) {
+		if(openSetting && keyCode == Keyboard.KEY_ESCAPE) {
 			openSetting = false;
+		}
+		if(!openSetting) {
+			scroll.onKey(keyCode);
+			if(keyCode != 0xD0 && keyCode != 0xC8 && keyCode != Keyboard.KEY_ESCAPE) this.getSearchBox().setFocused(true);
 		}
 	}
 	

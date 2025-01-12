@@ -1,6 +1,9 @@
-# Glide Client | An updated version of [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient)
+<p align="center">
+  <img src="/.github/assets/GlideClientLogo.png" alt="Glide Client. An updated version of Soar client" title="GlideClient">
+</p>
+
 ## More features, fixes and quality of life.
-### Join our discord! https://discord.gg/42PXqKvwxq
+### Join our discord! https://glideclient.github.io/discord
 <br>
 
 

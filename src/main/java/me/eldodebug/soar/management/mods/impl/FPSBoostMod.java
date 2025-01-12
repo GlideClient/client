@@ -18,7 +18,6 @@ public class FPSBoostMod extends Mod {
 
 	private BooleanSetting chunkDelaySetting = new BooleanSetting(TranslateText.CHUNK_DELAY, this, false);
 	private NumberSetting delaySetting = new NumberSetting(TranslateText.DELAY, this, 5, 1, 12, true);
-	private BooleanSetting hideArmorStandSetting = new BooleanSetting(TranslateText.HIDE_ARMOR_STAND, this, false);
 	private BooleanSetting removeBotSetting = new BooleanSetting(TranslateText.REMOVE_BOT, this, false);
 	
 	public FPSBoostMod() {
@@ -38,19 +37,6 @@ public class FPSBoostMod extends Mod {
 			}
 		}
 	}
-	
-    @EventTarget
-    public void onRendererLivingEntity(EventRendererLivingEntity event) {
-    	
-    	if(hideArmorStandSetting.isToggled()) {
-    		
-        	Entity entity = event.getEntity();
-        	
-        	if(entity instanceof EntityArmorStand) {
-        		event.setCancelled(true);
-        	}
-    	}
-    }
     
 	public static FPSBoostMod getInstance() {
 		return instance;

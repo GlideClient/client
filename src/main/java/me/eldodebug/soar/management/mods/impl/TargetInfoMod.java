@@ -5,7 +5,7 @@ import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.TargetUtils;
 import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
@@ -75,11 +75,11 @@ public class TargetInfoMod extends HUDMod {
 		this.drawPlayerHead(head, 5, 5, 36, 36, 6);
 		this.drawText(name, 45.5F, 8F, 10.2F, Fonts.MEDIUM);
 		
-		this.drawText(Icon.HEART_FILL, 52, 26.5F, 9, Fonts.ICON);
+		this.drawText(LegacyIcon.HEART_FILL, 52, 26.5F, 9, Fonts.LEGACYICON);
 		this.drawArc(56.5F, 30.5F, 9F, -90F, -90F + 360, 1.6F, this.getFontColor(120));
 		this.drawArc(56.5F, 30.5F, 9F, -90F, -90F + (18 * healthAnimation.getValue()), 1.6F);
 		
-		this.drawText(Icon.SHIELD_FILL, 76F, 26.5F, 9, Fonts.ICON);
+		this.drawText(LegacyIcon.SHIELD_FILL, 76F, 26.5F, 9, Fonts.LEGACYICON);
 		this.drawArc(80.5F, 30.5F, 9F, -90F, -90F + 360, 1.6F, this.getFontColor(120));
 		this.drawArc(80.5F, 30.5F, 9F, -90F, -90F + (18 * armorAnimation.getValue()), 1.6F);
 		

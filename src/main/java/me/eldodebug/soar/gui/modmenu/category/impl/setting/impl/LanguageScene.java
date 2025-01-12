@@ -11,7 +11,7 @@ import me.eldodebug.soar.management.language.LanguageManager;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
 import me.eldodebug.soar.utils.mouse.Scroll;
@@ -19,14 +19,14 @@ import me.eldodebug.soar.utils.mouse.Scroll;
 public class LanguageScene extends SettingScene {
 
 	public LanguageScene(SettingCategory parent) {
-		super(parent, TranslateText.LANGUAGE, TranslateText.LANGUAGE_DESCRIPTION, Icon.TRANSLATE);
+		super(parent, TranslateText.LANGUAGE, TranslateText.LANGUAGE_DESCRIPTION, LegacyIcon.GLOBE);
 	}
 
-	private Scroll categoryScroll = new Scroll();
+	private Scroll languageScroll = new Scroll();
 
 	@Override
 	public void initGui() {
-		categoryScroll.resetAll();
+		languageScroll.resetAll();
 	}
 
 
@@ -42,7 +42,7 @@ public class LanguageScene extends SettingScene {
 		float offsetY = 0;
 
 		nvg.scissor(this.getX(), this.getY() - 15, this.getWidth(), this.getHeight() + 45);
-		nvg.translate(0, categoryScroll.getValue());
+		nvg.translate(0, languageScroll.getValue());
 		
 		for(Language lang : Language.values()) {
 			
@@ -52,17 +52,14 @@ public class LanguageScene extends SettingScene {
 			
 			lang.getAnimation().setAnimation(lang.equals(languageManager.getCurrentLanguage()) ? 1.0F : 0.0F, 16);
 			
-			nvg.drawText(Icon.CHECK, this.getX() + this.getWidth() - 28, this.getY() + 12 + offsetY, ColorUtils.applyAlpha(currentColor.getInterpolateColor(), (int) (lang.getAnimation().getValue() * 255)), 16, Fonts.ICON);
+			nvg.drawText(LegacyIcon.CHECK, this.getX() + this.getWidth() - 28, this.getY() + 12 + offsetY, ColorUtils.applyAlpha(currentColor.getInterpolateColor(), (int) (lang.getAnimation().getValue() * 255)), 16, Fonts.LEGACYICON);
 			
 			offsetY+=50;
 		}
 
-		if(MouseUtils.isInside(mouseX, mouseY, this.getX(), this.getY() - 15, this.getWidth(), this.getHeight() + 45)) {
-			categoryScroll.onScroll();
-		}
-
-		categoryScroll.onAnimation();
-		categoryScroll.setMaxScroll((Language.values().length - 4.5F) * 50);
+		languageScroll.onScroll();
+		languageScroll.onAnimation();
+		languageScroll.setMaxScroll((Language.values().length - 5.25F) * 50);
 	}
 	
 	@Override
@@ -71,7 +68,7 @@ public class LanguageScene extends SettingScene {
 		Glide instance = Glide.getInstance();
 		LanguageManager languageManager = instance.getLanguageManager();
 
-		float offsetY = 0 + categoryScroll.getValue();
+		float offsetY = 0 + languageScroll.getValue();
 		if (!MouseUtils.isInside(mouseX, mouseY, this.getX(), this.getY() - 15,  this.getWidth(), this.getHeight() + 45)) {return;}
 		for(Language lang : Language.values()) {
 			
@@ -81,5 +78,9 @@ public class LanguageScene extends SettingScene {
 			
 			offsetY+=50;
 		}
+	}
+
+	public void keyTyped(char typedChar, int keyCode) {
+		languageScroll.onKey(keyCode);
 	}
 }

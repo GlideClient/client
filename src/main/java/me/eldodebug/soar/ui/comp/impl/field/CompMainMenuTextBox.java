@@ -71,7 +71,7 @@ public class CompMainMenuTextBox extends CompTextBoxBase {
 		
 	    if(icon != null && title != null) {
 	    	
-			nvg.drawText(icon, this.getX() + 5, this.getY() + (this.getHeight() / 2) - (nvg.getTextHeight(text, halfHeight, Fonts.REGULAR) / 2), fontColor, halfHeight, Fonts.ICON);
+			nvg.drawText(icon, this.getX() + 5, this.getY() + (this.getHeight() / 2) - (nvg.getTextHeight(text, halfHeight, Fonts.REGULAR) / 2), fontColor, halfHeight, Fonts.LEGACYICON);
 			
 			if(this.getText().isEmpty()) {
 				nvg.save();

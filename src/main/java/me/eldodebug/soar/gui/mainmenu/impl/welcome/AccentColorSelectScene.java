@@ -9,7 +9,7 @@ import me.eldodebug.soar.management.color.AccentColor;
 import me.eldodebug.soar.management.color.ColorManager;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
@@ -93,7 +93,7 @@ public class AccentColorSelectScene extends MainMenuScene {
 			
 			color.getAnimation().setAnimation(color.equals(currentColor) ? 1.0F : 0.0F, 16);
 			
-			nvg.drawCenteredText(Icon.CHECK, x + offsetX + 10 + (32 / 2), y + offsetY + 40 + 8, new Color(255, 255, 255, (int) (color.getAnimation().getValue() * 255)), 16, Fonts.ICON);
+			nvg.drawCenteredText(LegacyIcon.CHECK, x + offsetX + 10 + (32 / 2), y + offsetY + 40 + 8, new Color(255, 255, 255, (int) (color.getAnimation().getValue() * 255)), 16, Fonts.LEGACYICON);
 			
 			offsetX+=40;
 			

@@ -17,7 +17,7 @@ import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.ModManager;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.management.profile.Profile;
 import me.eldodebug.soar.management.profile.ProfileIcon;
 import me.eldodebug.soar.management.profile.ProfileManager;
@@ -31,7 +31,7 @@ import me.eldodebug.soar.utils.animation.normal.other.SmoothStepAnimation;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
 
 public class ProfileCategory extends Category {
-
+// todo: ADD SCROLL tf why isnt that here xd
 	private ProfileType currentType;
 	private Animation profileAnimation;
 	private boolean openProfile;
@@ -40,7 +40,7 @@ public class ProfileCategory extends Category {
 	private CompTextBox serverIpBox = new CompTextBox();
 	
 	public ProfileCategory(GuiModMenu parent) {
-		super(parent, TranslateText.PROFILE, Icon.EDIT, true, true);
+		super(parent, TranslateText.PROFILE, LegacyIcon.EDIT, true, true);
 	}
 
 	@Override
@@ -126,15 +126,15 @@ public class ProfileCategory extends Category {
 			}
 			
 			if(p.getId() == 999) {
-				nvg.drawCenteredText(Icon.PLUS, this.getX() + offsetX + 14.5F + (123 / 2), this.getY() + offsetY + 13, palette.getFontColor(ColorType.DARK), 20, Fonts.ICON);
+				nvg.drawCenteredText(LegacyIcon.PLUS, this.getX() + offsetX + 14.5F + (123 / 2), this.getY() + offsetY + 13, palette.getFontColor(ColorType.DARK), 20, Fonts.LEGACYICON);
 			}else {
-				nvg.drawText(Icon.STAR, this.getX() + 62 + offsetX, this.getY() + 29 + offsetY, palette.getMaterialYellow(), 11, Fonts.ICON);
+				nvg.drawText(LegacyIcon.STAR, this.getX() + 62 + offsetX, this.getY() + 29 + offsetY, palette.getMaterialYellow(), 11, Fonts.LEGACYICON);
 				
 				p.getStarAnimation().setAnimation(p.getType().equals(ProfileType.FAVORITE) ? 1.0F : 0.0F, 16);
 				
-				nvg.drawText(Icon.STAR_FILL, this.getX() + 62 + offsetX, this.getY() + 29 + offsetY, palette.getMaterialYellow((int) (p.getStarAnimation().getValue() * 255)), 11, Fonts.ICON);
+				nvg.drawText(LegacyIcon.STAR_FILL, this.getX() + 62 + offsetX, this.getY() + 29 + offsetY, palette.getMaterialYellow((int) (p.getStarAnimation().getValue() * 255)), 11, Fonts.LEGACYICON);
 				
-				nvg.drawText(Icon.TRASH, this.getX() + 62 + 14 + offsetX, this.getY() + 29 + offsetY, palette.getMaterialRed(), 11, Fonts.ICON);
+				nvg.drawText(LegacyIcon.TRASH, this.getX() + 62 + 14 + offsetX, this.getY() + 29 + offsetY, palette.getMaterialRed(), 11, Fonts.LEGACYICON);
 			}
 			
 			offsetX+=133;
@@ -328,6 +328,8 @@ public class ProfileCategory extends Category {
 			if(keyCode == Keyboard.KEY_ESCAPE) {
 				openProfile = false;
 			}
+		} else {
+			if(keyCode != 0xD0 && keyCode != 0xC8 && keyCode != Keyboard.KEY_ESCAPE) this.getSearchBox().setFocused(true);
 		}
 	}
 	

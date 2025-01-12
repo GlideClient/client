@@ -12,7 +12,7 @@ import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.GlUtils;
 import me.eldodebug.soar.utils.PlayerUtils;
@@ -90,7 +90,7 @@ public class SpeedometerMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.ACTIVITY : null;
+		return iconSetting.isToggled() ? LegacyIcon.ACTIVITY : null;
 	}
 	
 	private void addSpeed(double speed) {

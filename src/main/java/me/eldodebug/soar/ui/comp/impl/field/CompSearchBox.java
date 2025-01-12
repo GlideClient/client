@@ -8,7 +8,7 @@ import me.eldodebug.soar.management.color.palette.ColorPalette;
 import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.TimerUtils;
 import me.eldodebug.soar.utils.animation.simple.SimpleAnimation;
 
@@ -83,7 +83,7 @@ public class CompSearchBox extends CompTextBoxBase {
 		
 		searchAnimation.setAnimation(!focused && this.getText().isEmpty() ? 1.0F : 0.0F, 16);
 		
-		nvg.drawText(Icon.SEARCH, this.getX() + 5, this.getY() + (this.getHeight() / 2) - (nvg.getTextHeight(text, halfHeight, Fonts.REGULAR) / 2), palette.getFontColor(ColorType.NORMAL), halfHeight, Fonts.ICON);
+		nvg.drawText(LegacyIcon.SEARCH, this.getX() + 5, this.getY() + (this.getHeight() / 2) - (nvg.getTextHeight(text, halfHeight, Fonts.REGULAR) / 2), palette.getFontColor(ColorType.NORMAL), halfHeight, Fonts.LEGACYICON);
 		
 		if(this.getText().isEmpty()) {
 			nvg.save();

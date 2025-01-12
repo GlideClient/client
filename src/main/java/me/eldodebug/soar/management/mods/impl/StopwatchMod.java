@@ -12,7 +12,7 @@ import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
 import me.eldodebug.soar.management.mods.settings.impl.KeybindSetting;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.TimerUtils;
 
 public class StopwatchMod extends SimpleHUDMod {
@@ -66,7 +66,7 @@ public class StopwatchMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.WATCH : null;
+		return iconSetting.isToggled() ? LegacyIcon.WATCH : null;
 	}
 	
 	@Override

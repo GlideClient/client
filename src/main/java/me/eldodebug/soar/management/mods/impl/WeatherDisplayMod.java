@@ -5,7 +5,7 @@ import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 
@@ -52,18 +52,18 @@ public class WeatherDisplayMod extends SimpleHUDMod {
 		Chunk chunk = mc.theWorld.getChunkFromBlockCoords(new BlockPos(mc.thePlayer));
 		biome = chunk.getBiome(new BlockPos(mc.thePlayer), this.mc.theWorld.getWorldChunkManager()).biomeName;
 		
-		String iconFont = Icon.SUN;
+		String iconFont = LegacyIcon.SUN;
 		
 		if(mc.theWorld.isRaining()) {
 			if(biome.contains("Extreme Hills") && mc.thePlayer.posY > 100) {
-				iconFont = Icon.CLOUD_SNOW;
+				iconFont = LegacyIcon.CLOUD_SNOW;
 			}else {
-				iconFont = Icon.CLOUD_RAIN;
+				iconFont = LegacyIcon.CLOUD_RAIN;
 			}
 		}
 		
 		if(mc.theWorld.isThundering()) {
-			iconFont = Icon.CLOUD_LIGHTING;
+			iconFont = LegacyIcon.CLOUD_LIGHTING;
 		}
 		
 		return iconSetting.isToggled() ? iconFont : null;

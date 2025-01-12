@@ -13,7 +13,7 @@ import me.eldodebug.soar.management.mods.settings.impl.ComboSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 
@@ -70,6 +70,6 @@ public class CoordsMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.MAP_PIN : null;
+		return iconSetting.isToggled() ? LegacyIcon.MAP_PIN : null;
 	}
 }

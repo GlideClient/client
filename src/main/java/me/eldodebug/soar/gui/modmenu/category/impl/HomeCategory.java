@@ -7,7 +7,6 @@ import java.net.URL;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
 import me.eldodebug.soar.gui.modmenu.category.Category;
-import me.eldodebug.soar.management.language.Language;
 import me.eldodebug.soar.management.remote.changelog.Changelog;
 import me.eldodebug.soar.management.remote.changelog.ChangelogManager;
 import me.eldodebug.soar.management.color.AccentColor;
@@ -17,8 +16,7 @@ import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
-import me.eldodebug.soar.management.remote.discord.DiscordManager;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.management.remote.discord.DiscordStats;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
 import me.eldodebug.soar.utils.mouse.Scroll;
@@ -26,7 +24,7 @@ import me.eldodebug.soar.utils.mouse.Scroll;
 public class HomeCategory extends Category {
 
 	public HomeCategory(GuiModMenu parent) {
-		super(parent, TranslateText.HOME, Icon.HOME, false, false);
+		super(parent, TranslateText.HOME, LegacyIcon.HOME, false, false);
 	}
 	private Scroll changelogScroll = new Scroll();
 
@@ -57,7 +55,7 @@ public class HomeCategory extends Category {
 		int offsetY = 0;
 
 		nvg.drawRoundedRect(this.getX() + 230, this.getY() + outerPadding, 174, 151, 8, palette.getBackgroundColor(ColorType.DARK));
-		nvg.drawText(TranslateText.CHANGELOG.getText(), this.getX() + 230 + 8, this.getY() + 15 + 8, palette.getFontColor(ColorType.DARK), 11F, Fonts.DEMIBOLD);
+		nvg.drawText(TranslateText.CHANGELOG.getText(), this.getX() + 230 + 8, this.getY() + 15 + 8, palette.getFontColor(ColorType.DARK), 11F, Fonts.SEMIBOLD);
 
 		nvg.save();
 		nvg.scissor(this.getX() + 230, this.getY() + outerPadding + 20, 174, 131);
@@ -66,7 +64,7 @@ public class HomeCategory extends Category {
 		for(Changelog c : changelogManager.getChangelogs()) {
 			float tbSize = nvg.getTextBoxHeight(c.getText(), 8, Fonts.MEDIUM, 174 - 33);
 			nvg.drawRoundedRect(this.getX() + 230 + 8, this.getY() + 40 + offsetY + ((tbSize/2)-4), 13, 13, 7F, c.getType().getColor());
-			nvg.drawCenteredText(c.getType().getText(), this.getX() + 230 + 8 + (13 / 2), this.getY() + 42F + offsetY + ((tbSize/2)-4), Color.WHITE, 9, Fonts.ICON);
+			nvg.drawCenteredText(c.getType().getText(), this.getX() + 230 + 8 + (13 / 2), this.getY() + 42F + offsetY + ((tbSize/2)-4), Color.WHITE, 9, Fonts.LEGACYICON);
 			nvg.drawTextBox(c.getText(), this.getX() + 230 + 25, this.getY() + 43F + offsetY, 174 - 33, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
 			offsetY+= (int) (tbSize + 9);
 		}
@@ -88,9 +86,9 @@ public class HomeCategory extends Category {
 		nvg.drawRoundedRect(discordStartX, discordStartY, discordWidth, 86, 8, palette.getBackgroundColor(ColorType.DARK));
 		// Discord branding
 		nvg.drawRoundedRectVarying(discordStartX + discordWidth - 22, discordStartY, 22, 22, 0, 8, 8, 0, new Color(114, 137, 214));
-		nvg.drawCenteredText(Icon.DISCORD, discordStartX  + discordWidth - 11, discordStartY + 4, Color.WHITE, 14F, Fonts.ICON);
+		nvg.drawCenteredText(LegacyIcon.DISCORD, discordStartX  + discordWidth - 11, discordStartY + 4, Color.WHITE, 14F, Fonts.LEGACYICON);
 		// txt
-		nvg.drawText(TranslateText.JOIN_OUR_DISCORD_SERVER.getText(), discordStartX + standardPadding, discordStartY + standardPadding, palette.getFontColor(ColorType.DARK), 11F, Fonts.DEMIBOLD);
+		nvg.drawText(TranslateText.JOIN_OUR_DISCORD_SERVER.getText(), discordStartX + standardPadding, discordStartY + standardPadding, palette.getFontColor(ColorType.DARK), 11F, Fonts.SEMIBOLD);
 		nvg.drawTextBox(TranslateText.DISCORD_DESCRIPTION.getText(), discordStartX + standardPadding, discordStartY + 26, discordWidth - 16, palette.getFontColor(ColorType.DARK), 8, Fonts.REGULAR);
 		// stats
 		if(discStat.getMemberCount() != -1){

@@ -1,13 +1,13 @@
 package me.eldodebug.soar.management.notification;
 
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 
 public enum NotificationType {
-	INFO(Icon.INFO), 
-	WARNING(Icon.ALERT_TRIANGLE), 
-	ERROR(Icon.X_CIRCLE),
-	SUCCESS(Icon.CHECK),
-	MUSIC(Icon.MUSIC);
+	INFO(LegacyIcon.INFO),
+	WARNING(LegacyIcon.ALERT_TRIANGLE),
+	ERROR(LegacyIcon.X_CIRCLE),
+	SUCCESS(LegacyIcon.CHECK),
+	MUSIC(LegacyIcon.MUSIC);
 	
 	private String icon;
 	

@@ -11,6 +11,7 @@ public class FontManager {
 
 	public void init(long nvg) {
 		loadFont(nvg, Fonts.FALLBACK);
+		loadFont(nvg, Fonts.FLUENT);
 		for(Font f : Fonts.getFonts()) {
 			loadFont(nvg, f);
 		}
@@ -36,7 +37,11 @@ public class FontManager {
 			throw new RuntimeException("Failed to init font " + font.getName());
 		}else {
 			font.setLoaded(true);
-			if(Fonts.FALLBACK.isLoaded()) NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.FALLBACK.getName());
+			if(Fonts.FLUENT.isLoaded() && Fonts.FALLBACK.isLoaded() && font != Fonts.FLUENT && font != Fonts.FALLBACK){
+				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.FLUENT.getName());
+				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.FALLBACK.getName());
+			}
+
 		}
 	}
 }

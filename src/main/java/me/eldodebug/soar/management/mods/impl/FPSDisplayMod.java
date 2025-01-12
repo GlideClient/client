@@ -5,7 +5,7 @@ import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import net.minecraft.client.Minecraft;
 
 public class FPSDisplayMod extends SimpleHUDMod {
@@ -28,6 +28,6 @@ public class FPSDisplayMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.MONITOR : null;
+		return iconSetting.isToggled() ? LegacyIcon.MONITOR : null;
 	}
 }

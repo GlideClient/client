@@ -20,7 +20,7 @@ public class SimpleHUDMod extends HUDMod {
 		Glide instance = Glide.getInstance();
 		NanoVGManager nvg = instance.getNanoVGManager();
 		boolean hasIcon = getIcon() != null;
-		float addX = hasIcon ? this.getTextWidth(getIcon(), 9.5F, Fonts.ICON) + 4 : 0;
+		float addX = hasIcon ? this.getTextWidth(getIcon(), 9.5F, Fonts.LEGACYICON) + 4 : 0;
 		
 		if(getText() != null) {
 			nvg.setupAndDraw(() -> {
@@ -31,7 +31,7 @@ public class SimpleHUDMod extends HUDMod {
 				this.drawText(this.getText(), 5.5F + addX, 5.5F, 9, Fonts.REGULAR);
 				
 				if(hasIcon) {
-					this.drawText(getIcon(), 5.5F, 4F, 10.4F, Fonts.ICON);
+					this.drawText(getIcon(), 5.5F, 4F, 10.4F, Fonts.LEGACYICON);
 				}
 				
 				this.setWidth((int) bgWidth);

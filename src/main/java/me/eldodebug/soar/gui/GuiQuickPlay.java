@@ -90,7 +90,7 @@ public class GuiQuickPlay extends GuiScreen {
 		
 		nvg.drawRoundedRect(x, y, width, height, 12, palette.getBackgroundColor(ColorType.NORMAL));
 		nvg.drawCenteredText("Choose a " + (currentQuickPlay != null ? "Mode" : "Game"), x + (width / 2), y + 10, palette.getFontColor(ColorType.DARK), 15, Fonts.MEDIUM);
-		nvg.drawRect(x, y + 28, width, 1, palette.getBackgroundColor(ColorType.DARK));
+		//nvg.drawRect(x, y + 28, width, 1, palette.getBackgroundColor(ColorType.DARK));
 		
 		nvg.save();
 		nvg.translate((float) -(600 - (sceneChangeAnimation.getValue() * 600)), 0);

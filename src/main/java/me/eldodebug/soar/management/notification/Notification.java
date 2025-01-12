@@ -19,13 +19,19 @@ import net.minecraft.client.gui.ScaledResolution;
 public class Notification {
 
 	private Animation animation;
-	private TranslateText title, message;
+	private String title, message;
 	private NotificationType type;
 	private TimerUtils timer;
 	
 	private ScreenAlpha screenAlpha = new ScreenAlpha();
 	
 	public Notification(TranslateText title, TranslateText message, NotificationType type) {
+		this.title = title.getText();
+		this.message = message.getText();
+		this.type = type;
+		this.timer = new TimerUtils();
+	}
+	public Notification(String title, String message, NotificationType type) {
 		this.title = title;
 		this.message = message;
 		this.type = type;
@@ -46,8 +52,8 @@ public class Notification {
 		AccentColor currentColor = instance.getColorManager().getCurrentColor();
 		
 		float maxWidth;
-		float titleWidth = nvg.getTextWidth(title.getText(), 9.6F, Fonts.MEDIUM);
-		float messageWidth = nvg.getTextWidth(message.getText(), 7.6F, Fonts.REGULAR);
+		float titleWidth = nvg.getTextWidth(title, 9.6F, Fonts.MEDIUM);
+		float messageWidth = nvg.getTextWidth(message, 7.6F, Fonts.REGULAR);
 		
 		if(titleWidth > messageWidth) {
 			maxWidth = titleWidth;
@@ -69,9 +75,9 @@ public class Notification {
 		
 		nvg.drawShadow(x, y, maxWidth, 29, 6);
 		nvg.drawGradientRoundedRect(x, y, maxWidth, 29, 6, ColorUtils.applyAlpha(currentColor.getColor1(), 220), ColorUtils.applyAlpha(currentColor.getColor2(), 220));
-		nvg.drawText(type.getIcon(), x + 5, y + 6F, Color.WHITE, 17, Fonts.ICON);
-		nvg.drawText(title.getText(), x + 26, y + 6F, Color.white, 9.6F, Fonts.MEDIUM);
-		nvg.drawText(message.getText(), x + 26, y + 17.5F, Color.WHITE, 7.5F, Fonts.REGULAR);
+		nvg.drawText(type.getIcon(), x + 5, y + 6F, Color.WHITE, 17, Fonts.LEGACYICON);
+		nvg.drawText(title, x + 26, y + 6F, Color.white, 9.6F, Fonts.MEDIUM);
+		nvg.drawText(message, x + 26, y + 17.5F, Color.WHITE, 7.5F, Fonts.REGULAR);
 		
 		nvg.restore();
 	}

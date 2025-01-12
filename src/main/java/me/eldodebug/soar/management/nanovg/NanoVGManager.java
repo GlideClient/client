@@ -152,6 +152,23 @@ public class NanoVGManager {
 		NanoVG.nvgFill(nvg);
 	}
 
+	public void drawHorizontalGradientRect(float x, float y, float width, float height, Color color1, Color color2) {
+
+		NVGPaint bg = NVGPaint.create();
+
+		NanoVG.nvgBeginPath(nvg);
+		NanoVG.nvgRect(nvg, x, y, width, height);
+
+		NVGColor nvgColor1 = getColor(color1);
+		NVGColor nvgColor2 = getColor(color2);
+
+		NanoVG.nvgFillColor(nvg, nvgColor1);
+		NanoVG.nvgFillColor(nvg, nvgColor2);
+
+		NanoVG.nvgFillPaint(nvg, NanoVG.nvgLinearGradient(nvg, x, y, x+ width, y, nvgColor1, nvgColor2, bg));
+		NanoVG.nvgFill(nvg);
+	}
+
 	public void drawGradientRect(float x, float y, float width, float height, Color color1, Color color2) {
 
 		NVGPaint bg = NVGPaint.create();

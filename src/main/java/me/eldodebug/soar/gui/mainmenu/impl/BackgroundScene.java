@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
+import me.eldodebug.soar.utils.animation.normal.Animation;
+import me.eldodebug.soar.utils.animation.normal.Direction;
+import me.eldodebug.soar.utils.animation.normal.easing.EaseInOutCirc;
+import me.eldodebug.soar.utils.buffer.ScreenAnimation;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.Glide;
@@ -14,8 +18,7 @@ import me.eldodebug.soar.management.file.FileManager;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
-import me.eldodebug.soar.management.notification.NotificationType;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.management.profile.mainmenu.BackgroundManager;
 import me.eldodebug.soar.management.profile.mainmenu.impl.Background;
 import me.eldodebug.soar.management.profile.mainmenu.impl.CustomBackground;
@@ -28,10 +31,16 @@ import net.minecraft.client.gui.ScaledResolution;
 
 public class BackgroundScene extends MainMenuScene {
 
+	private Animation introAnimation;
+	private final ScreenAnimation screenAnimation = new ScreenAnimation();
 	private Scroll scroll = new Scroll();
 
-	public BackgroundScene(GuiGlideMainMenu parent) {
-		super(parent);
+	public BackgroundScene(GuiGlideMainMenu parent) {super(parent);}
+
+	@Override
+	public void initScene() {
+		introAnimation = new EaseInOutCirc(250, 1.0F);
+		introAnimation.setDirection(Direction.FORWARDS);
 	}
 
 	@Override
@@ -39,8 +48,10 @@ public class BackgroundScene extends MainMenuScene {
 		ScaledResolution sr = new ScaledResolution(mc);
 		Glide instance = Glide.getInstance();
 		NanoVGManager nvg = instance.getNanoVGManager();
-
-		nvg.setupAndDraw(() -> drawNanoVG(mouseX, mouseY, sr, instance, nvg));
+		screenAnimation.wrap(() -> drawNanoVG(mouseX, mouseY, sr, instance, nvg), 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), 2 - introAnimation.getValueFloat(), Math.min(introAnimation.getValueFloat(), 1), false);
+		if(introAnimation.isDone(Direction.BACKWARDS)) {
+			this.setCurrentScene(this.getSceneByClass(MainScene.class));
+		}
 	}
 
 	private void drawNanoVG(int mouseX, int mouseY, ScaledResolution sr, Glide instance, NanoVGManager nvg) {
@@ -60,8 +71,7 @@ public class BackgroundScene extends MainMenuScene {
 		scroll.onAnimation();
 
 		nvg.drawRoundedRect(acX, acY, acWidth, acHeight, 8, this.getBackgroundColor());
-		nvg.drawRect(acX, acY + 24, acWidth, 0.8F, Color.WHITE);
-		nvg.drawCenteredText(TranslateText.SELECT_BACKGROUND.getText(), acX + (acWidth / 2), acY + 8, Color.WHITE, 14, Fonts.REGULAR);
+		nvg.drawCenteredText(TranslateText.SELECT_BACKGROUND.getText(), acX + (acWidth / 2), acY + 8, Color.WHITE, 14, Fonts.SEMIBOLD);
 
 		nvg.save();
 		nvg.scissor(acX, acY + 25, acWidth, acHeight - 25);
@@ -77,7 +87,7 @@ public class BackgroundScene extends MainMenuScene {
 			// Draw selection highlight and glow effect
 			if(isSelected) {
 				// Outer glow
-				nvg.drawRoundedRect(itemX - 3, itemY - 3, itemWidth + 6, itemHeight + 6, 8, new Color(255, 255, 255, 40));
+				nvg.drawGradientShadow(itemX - 1, itemY - 1, itemWidth + 2, itemHeight + 2, 7, new Color(255, 255, 255, 180),new Color(255, 255, 255, 180));
 				// Inner highlight
 				nvg.drawRoundedRect(itemX - 1, itemY - 1, itemWidth + 2, itemHeight + 2, 7, new Color(255, 255, 255, 180));
 			}
@@ -92,7 +102,7 @@ public class BackgroundScene extends MainMenuScene {
 
 				if(bg.getId() == 999) {
 					nvg.drawRoundedRect(acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F, 6, Color.BLACK);
-					nvg.drawCenteredText(Icon.PLUS, acX + 10 + offsetX + (102.5F / 2), acY + 42.5F + offsetY, Color.WHITE, 26, Fonts.ICON);
+					nvg.drawCenteredText(LegacyIcon.PLUS, acX + 10 + offsetX + (102.5F / 2), acY + 42.5F + offsetY, Color.WHITE, 26, Fonts.LEGACYICON);
 				} else {
 					nvg.drawRoundedImage(defBackground.getImage(), acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F, 6);
 				}
@@ -104,7 +114,7 @@ public class BackgroundScene extends MainMenuScene {
 				cusBackground.getTrashAnimation().setAnimation(MouseUtils.isInside(mouseX, mouseY, acX + 11 + offsetX, acY + 35 + offsetY + scroll.getValue(), 102.5F, 57.5F) ? 1.0F : 0.0F, 16);
 
 				nvg.drawRoundedImage(cusBackground.getImage(), acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F, 6);
-				nvg.drawText(Icon.TRASH, acX + offsetX + 100, acY + 38 + offsetY, palette.getMaterialRed((int) (cusBackground.getTrashAnimation().getValue() * 255)), 10, Fonts.ICON);
+				nvg.drawText(LegacyIcon.TRASH, acX + offsetX + 100, acY + 38 + offsetY, palette.getMaterialRed((int) (cusBackground.getTrashAnimation().getValue() * 255)), 10, Fonts.LEGACYICON);
 			}
 
 			nvg.drawRoundedRectVarying(acX + offsetX + 11, acY + offsetY + 76.5F, 102.5F, 16, 0, 0, 6, 6, this.getBackgroundColor());
@@ -142,10 +152,13 @@ public class BackgroundScene extends MainMenuScene {
 		int offsetY = (int) (0 + scroll.getValue());
 		int index = 1;
 
+		if(!MouseUtils.isInside(mouseX, mouseY, acX, acY, acWidth, acHeight) && !MouseUtils.isInside(mouseX, mouseY, sr.getScaledWidth() - 28 - 28, 6, 22, 22)){
+			introAnimation.setDirection(Direction.BACKWARDS);
+		}
+
 		for(Background bg : backgroundManager.getBackgrounds()) {
 
 			if(mouseButton == 0) {
-
 				if(MouseUtils.isInside(mouseX, mouseY, acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F)) {
 
 					if(bg.getId() == 999) {
@@ -193,7 +206,7 @@ public class BackgroundScene extends MainMenuScene {
 	@Override
 	public void keyTyped(char typedChar, int keyCode) {
 		if(keyCode == Keyboard.KEY_ESCAPE) {
-			this.setCurrentScene(this.getSceneByClass(MainScene.class));
+			introAnimation.setDirection(Direction.BACKWARDS);
 		}
 	}
 }

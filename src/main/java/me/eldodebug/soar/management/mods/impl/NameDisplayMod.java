@@ -8,7 +8,7 @@ import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
 import me.eldodebug.soar.management.mods.settings.impl.ComboSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 
 public class NameDisplayMod extends SimpleHUDMod {
 
@@ -40,6 +40,6 @@ public class NameDisplayMod extends SimpleHUDMod {
 	
 	@Override
 	public String getIcon() {
-		return iconSetting.isToggled() ? Icon.USER : null;
+		return iconSetting.isToggled() ? LegacyIcon.USER : null;
 	}
 }

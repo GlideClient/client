@@ -11,10 +11,10 @@ import me.eldodebug.soar.management.color.Theme;
 import me.eldodebug.soar.management.color.palette.ColorPalette;
 import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.language.TranslateText;
-import me.eldodebug.soar.management.mods.impl.GlobalSettingsMod;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
-import me.eldodebug.soar.management.nanovg.font.Icon;
+import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.ui.comp.impl.CompComboBox;
 import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
@@ -27,12 +27,12 @@ public class AppearanceScene extends SettingScene {
 	private CompComboBox modTheme;
 	
 	public AppearanceScene(SettingCategory parent) {
-		super(parent, TranslateText.APPEARANCE, TranslateText.APPEARANCE_DESCRIPTION, Icon.MONITOR);
+		super(parent, TranslateText.APPEARANCE, TranslateText.APPEARANCE_DESCRIPTION, LegacyIcon.MONITOR);
 	}
 
 	@Override
 	public void initGui() {
-		modTheme = new CompComboBox(75, GlobalSettingsMod.getInstance().getModThemeSetting());
+		modTheme = new CompComboBox(75, InternalSettingsMod.getInstance().getModThemeSetting());
 	}
 	
 	@Override
@@ -98,7 +98,7 @@ public class AppearanceScene extends SettingScene {
 			
 			c.getAnimation().setAnimation(c.equals(currentColor) ? 1.0F : 0.0F, 16);
 			
-			nvg.drawCenteredText(Icon.CHECK, this.getX() + offsetX + 12 + (32 / 2), this.getY() + 28 + 99, new Color(255, 255, 255, (int) (c.getAnimation().getValue() * 255)), 16, Fonts.ICON);
+			nvg.drawCenteredText(LegacyIcon.CHECK, this.getX() + offsetX + 12 + (32 / 2), this.getY() + 28 + 99, new Color(255, 255, 255, (int) (c.getAnimation().getValue() * 255)), 16, Fonts.LEGACYICON);
 			
 			offsetX+=40F;
 			Index2++;
