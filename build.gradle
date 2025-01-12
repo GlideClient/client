@@ -74,6 +74,7 @@ dependencies {
     }
     compile 'com.google.code.gson:gson:2.8.6'
     compileOnly 'com.google.code.gson:gson:2.2.4'
+    compile 'com.neovisionaries:nv-i18n:1.29'
 }
 
 mixin {

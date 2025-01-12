@@ -31,33 +31,61 @@ import net.minecraft.scoreboard.Scoreboard;
 public class HypixelMod extends Mod {
 
 	private static HypixelMod instance;
+	private final Pattern[] TRIGGER_PATTERNS = new Pattern[]{
+			Pattern.compile("^ +1st Killer - ?\\[?\\w*\\+*\\]? \\w+ - \\d+(?: Kills?)?$"),
+			Pattern.compile("^ *1st (?:Place ?)?(?:-|:)? ?\\[?\\w*\\+*\\]? \\w+(?: : \\d+| - \\d+(?: Points?)?| - \\d+(?: x .)?| \\(\\w+ .{1,6}\\) - \\d+ Kills?|: \\d+:\\d+| - \\d+ (?:Zombie )?(?:Kills?|Blocks? Destroyed)| - \\[LINK\\])?$"),
+			Pattern.compile("^ +Winn(?:er #1 \\(\\d+ Kills\\): \\w+ \\(\\w+\\)|er(?::| - )(?:Hiders|Seekers|Defenders|Attackers|PLAYERS?|MURDERERS?|Red|Blue|RED|BLU|\\w+)(?: Team)?|ers?: ?\\[?\\w*\\+*\\]? \\w+(?:, ?\\[?\\w*\\+*\\]? \\w+)?|ing Team ?[\\:-] (?:Animals|Hunters|Red|Green|Blue|Yellow|RED|BLU|Survivors|Vampires))$"),
+			Pattern.compile("^ +Alpha Infected: \\w+ \\(\\d+ infections?\\)$"),
+			Pattern.compile("^ +Murderer: \\w+ \\(\\d+ Kills?\\)$"),
+			Pattern.compile("^ +You survived \\d+ rounds!$"),
+			Pattern.compile("^ +(?:UHC|SkyWars|Bridge|Sumo|Classic|OP|MegaWalls|Bow|NoDebuff|Blitz|Combo|Bow Spleef) (?:Duel|Doubles|3v3|4v4|Teams|Deathmatch|2v2v2v2|3v3v3v3)? ?- \\d+:\\d+$"),
+			Pattern.compile("^ +They captured all wools!$"),
+			Pattern.compile("^ +Game over!$"),
+			Pattern.compile("^ +[\\d\\.]+k?/[\\d\\.]+k? \\w+$"),
+			Pattern.compile("^ +(?:Criminal|Cop)s won the game!$"),
+			Pattern.compile("^ +\\[?\\w*\\+*\\]? \\w+ - \\d+ Final Kills$"),
+			Pattern.compile("^ +Zombies - \\d*:?\\d+:\\d+ \\(Round \\d+\\)$"),
+			Pattern.compile("^ +. YOUR STATISTICS .$"),
+			Pattern.compile("^ {36}Winner(s?)$"),
+			Pattern.compile("^ {21}Bridge CTF [a-zA-Z]+ - \\d\\d:\\d\\d$")
+	};
+
+	private final Pattern[] EVENT_PATTERNS = new Pattern[]{
+			Pattern.compile("^MINOR EVENT! .+ in .+ ended$"),
+			Pattern.compile("^DRAGON EGG OVER! Earned [\\d,]+XP [\\d,]g clicking the egg \\d+ times$"),
+			Pattern.compile("^GIANT CAKE! Event ended! Cake's gone!$"),
+			Pattern.compile("^PIT EVENT ENDED: .+ \\[INFO\\]$")
+	};
 
 	private BooleanSetting autoggSetting = new BooleanSetting(TranslateText.AUTO_GG, this, false);
 	private NumberSetting autoggDelaySetting = new NumberSetting(TranslateText.AUTO_GG_DELAY, this, 3, 0, 5, true);
-
 	private BooleanSetting autoglSetting = new BooleanSetting(TranslateText.AUTO_GL, this, false);
 	private NumberSetting autoglDelaySetting = new NumberSetting(TranslateText.AUTO_GL_DELAY, this, 1, 0, 5, true);
-
 	private BooleanSetting autoPlaySetting = new BooleanSetting(TranslateText.AUTO_PLAY, this, false);
 	private NumberSetting autoPlayDelaySetting = new NumberSetting(TranslateText.AUTO_PLAY_DELAY, this, 3, 0, 5, true);
-
 	private BooleanSetting autoTipSetting = new BooleanSetting(TranslateText.AUTO_TIP, this, true);
-
 	private BooleanSetting antiLSetting = new BooleanSetting(TranslateText.ANTI_L, this, false);
 
 	private TimerUtils tipTimer = new TimerUtils();
-
 	private HypixelGameMode currentMode;
 
 	public HypixelMod() {
 		super(TranslateText.HYPIXEL, TranslateText.HYPIXEL_DESCRIPTION, ModCategory.OTHER, "hytill");
-
 		instance = this;
 	}
 
 	@Override
 	public void setup() {
 		currentMode = HypixelGameMode.SKYWARS_SOLO_NORMAL;
+	}
+
+	private boolean matchesAnyPattern(String message, Pattern[] patterns) {
+		for (Pattern pattern : patterns) {
+			if (pattern.matcher(message).matches()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@EventTarget
@@ -70,7 +98,6 @@ public class HypixelMod extends Mod {
 		Scoreboard scoreboard = mc.theWorld.getScoreboard();
 
 		if (scoreboard != null && scoreboard.getObjectiveInDisplaySlot(1) != null) {
-
 			String title = ColorUtils.removeColorCode(scoreboard.getObjectiveInDisplaySlot(1).getDisplayName());
 
 			if(title.contains("TNT RUN")) {
@@ -105,7 +132,7 @@ public class HypixelMod extends Mod {
 	}
 
 	@EventTarget
-	public void onSentChat(EventSendChat event) {
+	public void onSendChat(EventSendChat event) {
 		if(!ServerUtils.isHypixel()) {
 			return;
 		}
@@ -123,52 +150,55 @@ public class HypixelMod extends Mod {
 
 	@EventTarget
 	public void onReceivePacket(EventReceivePacket event) {
-		if(!ServerUtils.isHypixel()) {
+		if (!ServerUtils.isHypixel()) {
 			return;
 		}
 
-		if(event.getPacket() instanceof S2FPacketSetSlot) {
-			S2FPacketSetSlot slotPacket = (S2FPacketSetSlot) event.getPacket();
-			ItemStack stack = slotPacket.func_149174_e();
-
-			if(stack != null && stack.getItem().equals(Items.paper) &&
-					(HypixelGameMode.isBedwars(currentMode) || HypixelGameMode.isTntGames(currentMode))) {
-				sendNextGame();
-				return;
-			}
-		}
-
-		if(event.getPacket() instanceof S02PacketChat) {
+		if (event.getPacket() instanceof S02PacketChat) {
 			S02PacketChat chatPacket = (S02PacketChat) event.getPacket();
 			String chatMessage = chatPacket.getChatComponent().getUnformattedText();
 
+			// Anti-L filter
 			if (antiLSetting.isToggled()) {
 				Pattern regex = Pattern.compile(".*\\b[Ll]+\\b.*");
 				Matcher matcher = regex.matcher(chatMessage);
-
 				event.setCancelled(matcher.find());
 			}
 
+			// Auto-GL trigger
 			if (autoglSetting.isToggled() && chatMessage.contains("The game starts in 5")) {
 				Multithreading.schedule(() -> {
 					mc.thePlayer.sendChatMessage("/achat gl");
 				}, autoglDelaySetting.getValueInt(), TimeUnit.SECONDS);
 			}
+
+			// Auto-GG triggers
+			if (autoggSetting.isToggled() &&
+					(matchesAnyPattern(chatMessage, TRIGGER_PATTERNS) ||
+							matchesAnyPattern(chatMessage, EVENT_PATTERNS))) {
+				Multithreading.schedule(() -> {
+					mc.thePlayer.sendChatMessage("/achat gg");
+				}, autoggDelaySetting.getValueInt(), TimeUnit.SECONDS);
+				sendNextGame();
+			}
 		}
 
-		if(event.getPacket() instanceof S45PacketTitle) {
+		if (event.getPacket() instanceof S2FPacketSetSlot) {
+			S2FPacketSetSlot slotPacket = (S2FPacketSetSlot) event.getPacket();
+			ItemStack stack = slotPacket.func_149174_e();
+
+			if (stack != null && stack.getItem().equals(Items.paper) &&
+					(HypixelGameMode.isBedwars(currentMode) || HypixelGameMode.isTntGames(currentMode))) {
+				sendNextGame();
+			}
+		}
+
+		if (event.getPacket() instanceof S45PacketTitle) {
 			S45PacketTitle titlePacket = (S45PacketTitle) event.getPacket();
-
-			if(titlePacket.getMessage() != null) {
+			if (titlePacket.getMessage() != null) {
 				String title = titlePacket.getMessage().getFormattedText();
-
-				if (autoggSetting.isToggled() && title.startsWith("\2476\247l") && title.endsWith("\247r")) {
-					Multithreading.schedule(() -> {
-						mc.thePlayer.sendChatMessage("/achat gg");
-					}, autoggDelaySetting.getValueInt(), TimeUnit.SECONDS);
-				}
-
-				if(title.startsWith("\2476\247l") && title.endsWith("\247r") || title.startsWith("\247c\247lY") && title.endsWith("\247r")) {
+				if (title.startsWith("\2476\247l") && title.endsWith("\247r") ||
+						title.startsWith("\247c\247lY") && title.endsWith("\247r")) {
 					sendNextGame();
 				}
 			}
@@ -241,7 +271,7 @@ public class HypixelMod extends Mod {
 
 	private void sendNextGame() {
 		if(autoPlaySetting.isToggled()) {
-			Multithreading.schedule(()-> {
+			Multithreading.schedule(() -> {
 				mc.thePlayer.sendChatMessage(currentMode.getCommand());
 			}, autoPlayDelaySetting.getValueInt(), TimeUnit.SECONDS);
 		}

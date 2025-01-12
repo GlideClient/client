@@ -90,6 +90,7 @@ public class ModManager {
 		mods.add(new ModernHotbarMod());
 		mods.add(new MotionBlurMod());
 		mods.add(new MouseStrokesMod());
+		mods.add(new MusicInfoMod());
 		mods.add(new NameDisplayMod());
 		mods.add(new NameProtectMod());
 		mods.add(new NametagMod());

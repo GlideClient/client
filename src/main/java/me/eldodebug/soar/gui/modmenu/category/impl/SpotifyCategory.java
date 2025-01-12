@@ -39,6 +39,9 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private static final long SEARCH_DEBOUNCE_DELAY = 300;
     private static final ResourceLocation PLACEHOLDER_IMAGE = new ResourceLocation("soar/music.png");
 
+    private static final boolean DEBUG_HITBOXES = true; // Set to true to show hitboxes
+    private static final Color DEBUG_COLOR = new Color(255, 0, 0, 100);
+
     private final CompSlider volumeSlider;
     private final CompTextBox textBox;
     private final WeakReference<GuiModMenu> parentRef;
@@ -62,8 +65,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         this.textBox = new CompTextBox();
 
         this.searchDebouncer = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "Search-Debouncer");
-            t.setDaemon(true);
+            Thread t = new Thread(r, "Search-Debouncer");t.setDaemon(true);
             return t;
         });
 
@@ -191,6 +193,35 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
 
         drawTrackImage(nvg, track, offsetY);
         drawTrackInfo(nvg, palette, track, offsetY);
+
+        if (DEBUG_HITBOXES) {
+            // Track entry hitbox
+            nvg.drawRect(
+                this.getX() + 15,
+                this.getY() + offsetY,
+                this.getWidth() - 30,
+                46,
+                DEBUG_COLOR
+            );
+            
+            // Album art hitbox
+            nvg.drawRect(
+                this.getX() + 20,
+                this.getY() + offsetY + 5,
+                36,
+                36,
+                DEBUG_COLOR
+            );
+            
+            // Add to queue button hitbox
+            nvg.drawRect(
+                this.getX() + this.getWidth() - 60,
+                this.getY() + offsetY + 15,
+                16,
+                16,
+                DEBUG_COLOR
+            );
+        }
     }
 
     private void drawTrackImage(NanoVGManager nvg, Track track, float offsetY) {
@@ -333,6 +364,24 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                 Fonts.MEDIUM
             );
 
+            if (DEBUG_HITBOXES) {
+                nvg.drawRect(
+                    this.getX() + 15,
+                    this.getY() + offsetY,
+                    this.getWidth() - 30,
+                    46,
+                    DEBUG_COLOR
+                );
+                
+                nvg.drawRect(
+                    this.getX() + 20,
+                    this.getY() + offsetY + 5,
+                    36,
+                    36,
+                    DEBUG_COLOR
+                );
+            }
+
             offsetY += 56;
         }
     }
@@ -409,6 +458,16 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         float centerY = this.getY() + this.getHeight() - 32F;
         Color normalColor = palette.getFontColor(ColorType.NORMAL);
 
+        // Draw the control icons
+        nvg.drawText(
+                Icon.BACK,
+                centerX - 32,
+                centerY,
+                normalColor,
+                16,
+                Fonts.ICON
+        );
+
         nvg.drawText(
                 musicManager.isPlaying() ? Icon.PAUSE : Icon.PLAY,
                 centerX - 8,
@@ -419,29 +478,31 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         );
 
         nvg.drawText(
-                Icon.BACK,
-                centerX - 33,
+                Icon.FORWARD,
+                centerX + 16,
                 centerY,
                 normalColor,
                 16,
                 Fonts.ICON
         );
 
-        nvg.drawText(
-                Icon.FORWARD,
-                centerX + 17,
-                centerY,
-                normalColor,
-                16,
-                Fonts.ICON
-        );
+        if (DEBUG_HITBOXES) {
+            // Previous track button
+            nvg.drawRect(centerX - 40, centerY - 8, 16, 16, DEBUG_COLOR);
+            
+            // Play/Pause button
+            nvg.drawRect(centerX - 16, centerY - 8, 16, 16, DEBUG_COLOR);
+            
+            // Next track button
+            nvg.drawRect(centerX + 8, centerY - 8, 16, 16, DEBUG_COLOR);
+        }
     }
 
     private void drawVolumeSlider(NanoVGManager nvg, ColorPalette palette, int mouseX, int mouseY, float partialTicks) {
         volumeSlider.setX(this.getX() + this.getWidth() - 72);
         volumeSlider.setY(this.getY() + this.getHeight() - 20);
         volumeSlider.setWidth(62);
-        volumeSlider.setHeight(4.5);
+        volumeSlider.setHeight(4.5f); // Add 'f' suffix to make it a float literal
         volumeSlider.draw(mouseX, mouseY, partialTicks);
 
         int volume = (int)(volumeSlider.getSetting().getValueFloat() * 100);
@@ -568,9 +629,16 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private void handleControlBarClick(int mouseX, int mouseY) {
         MusicManager musicManager = Glide.getInstance().getMusicManager();
         float centerX = this.getX() + ((float) this.getWidth() / 2);
+        float centerY = this.getY() + this.getHeight() - 32F;
+
+        // Previous track button
+        if (MouseUtils.isInside(mouseX, mouseY, centerX - 40, centerY - 8, 16, 16)) {
+            musicManager.previousTrack();
+            return;
+        }
 
         // Play/Pause button
-        if (MouseUtils.isInside(mouseX, mouseY, centerX - 9, this.getY() + this.getHeight() - 21.5F, 17, 17)) {
+        if (MouseUtils.isInside(mouseX, mouseY, centerX - 16, centerY - 8, 16, 16)) {
             if (musicManager.isPlaying()) {
                 musicManager.pause();
             } else {
@@ -579,20 +647,14 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
             return;
         }
 
-        // Previous track button
-        if (MouseUtils.isInside(mouseX, mouseY, centerX - 34, this.getY() + this.getHeight() - 22.5F, 18, 18)) {
-            musicManager.previousTrack();
-            return;
-        }
-
         // Next track button
-        if (MouseUtils.isInside(mouseX, mouseY, centerX + 16, this.getY() + this.getHeight() - 22.5F, 18, 18)) {
+        if (MouseUtils.isInside(mouseX, mouseY, centerX + 8, centerY - 8, 16, 16)) {
             musicManager.nextTrack();
             return;
         }
 
-        // Volume slider
-        if (MouseUtils.isInside(mouseX, mouseY, this.getX() + this.getWidth() - 72, this.getY() + this.getHeight() - 20, 62, 4.5)) {
+        // Volume slider - update the value here too
+        if (MouseUtils.isInside(mouseX, mouseY, this.getX() + this.getWidth() - 72, this.getY() + this.getHeight() - 20, 62, 4.5f)) {
             volumeSlider.mouseClicked(mouseX, mouseY, 0);
             return;
         }
@@ -776,6 +838,16 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         if (isHovered && org.lwjgl.input.Mouse.isButtonDown(0)) {
             openConfirmDialog(Glide.getInstance().getMusicManager().getAuthorizationCodeUri());
             showConnectButton = false;
+        }
+
+        if (DEBUG_HITBOXES) {
+            nvg.drawRect(
+                centerX - 75,
+                centerY - 20,
+                150,
+                40,
+                DEBUG_COLOR
+            );
         }
     }
 }

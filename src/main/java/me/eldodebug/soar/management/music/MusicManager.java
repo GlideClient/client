@@ -33,6 +33,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class MusicManager implements AutoCloseable {
@@ -57,7 +58,32 @@ public class MusicManager implements AutoCloseable {
     private long trackPosition = 0;
     private long trackDuration = 0;
     private ScheduledExecutorService tokenRefreshScheduler = Executors.newSingleThreadScheduledExecutor();
-    private static final long PLAYBACK_UPDATE_INTERVAL = 5000; // 5 seconds
+    private static final long PLAYBACK_UPDATE_INTERVAL = 1000; // Reduced from 5000ms to 1000ms
+    private static final int BATCH_SIZE = 20;
+    private static final long THROTTLE_DELAY = 50; // 50ms between requests
+
+    private static final class SimpleRateLimiter {
+        private final long minTimeBetweenRequests;
+        private long lastRequestTime;
+        
+        SimpleRateLimiter(double requestsPerSecond) {
+            this.minTimeBetweenRequests = (long)(1000.0 / requestsPerSecond);
+            this.lastRequestTime = 0;
+        }
+        
+        synchronized boolean tryAcquire() {
+            long now = System.currentTimeMillis();
+            if (now - lastRequestTime >= minTimeBetweenRequests) {
+                lastRequestTime = now;
+                return true;
+            }
+            return false;
+        }
+    }
+    
+    // Replace the Guava RateLimiter with our custom implementation
+    private final SimpleRateLimiter rateLimiter = new SimpleRateLimiter(20.0); // 20 requests per second max
+    private final Map<String, Long> lastRequestTime = new ConcurrentHashMap<>();
 
     // Cache for avoiding duplicate API calls
     private final Map<String, CompletableFuture<List<Track>>> searchCache = new ConcurrentHashMap<>();
@@ -200,21 +226,50 @@ public class MusicManager implements AutoCloseable {
 
     // Replace search method with cached version
     public CompletableFuture<List<Track>> searchTracks(String query) {
-        return searchCache.computeIfAbsent(query, q -> CompletableFuture.supplyAsync(() -> {
-            try {
-                final SearchTracksRequest request = spotifyApi.searchTracks(q)
-                        .limit(SEARCH_LIMIT)
-                        .build();
-                List<Track> tracks = Arrays.asList(request.execute().getItems());
-                cacheSearchResultsAlbumArt(tracks);
-                return tracks;
-            } catch (Exception e) {
-                GlideLogger.error("Search failed", e);
-                throw new CompletionException(e);
-            } finally {
-                searchCache.remove(query); // Remove from cache after completion
-            }
-        }));
+        return searchCache.computeIfAbsent(query, q -> 
+            throttleRequest("search", () -> CompletableFuture.supplyAsync(() -> {
+                try {
+                    final SearchTracksRequest request = spotifyApi.searchTracks(q)
+                            .limit(SEARCH_LIMIT)
+                            .build();
+                    List<Track> tracks = Arrays.asList(request.execute().getItems());
+                    
+                    // Batch process album art prefetching
+                    CompletableFuture.runAsync(() -> {
+                        for (int i = 0; i < tracks.size(); i += BATCH_SIZE) {
+                            int end = Math.min(i + BATCH_SIZE, tracks.size());
+                            List<Track> batch = tracks.subList(i, end);
+                            batch.forEach(this::prefetchAlbumArt);
+                            try {
+                                Thread.sleep(THROTTLE_DELAY);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                    });
+                    
+                    return tracks;
+                } catch (Exception e) {
+                    GlideLogger.error("Search failed", e);
+                    throw new CompletionException(e);
+                } finally {
+                    searchCache.remove(query);
+                }
+            }))
+        );
+    }
+
+    private void prefetchAlbumArt(Track track) {
+        if (track != null && track.getAlbum() != null && 
+            track.getAlbum().getImages() != null && 
+            track.getAlbum().getImages().length > 0) {
+            String imageUrl = track.getAlbum().getImages()[0].getUrl();
+            albumArtCache.getCachedAlbumArtUrlAsync(track.getId(), imageUrl)
+                .exceptionally(ex -> {
+                    GlideLogger.warn("Failed to prefetch album art: " + ex.getMessage());
+                    return null;
+                });
+        }
     }
 
     public CompletableFuture<Void> addToQueue(String trackUri) {
@@ -451,7 +506,11 @@ public class MusicManager implements AutoCloseable {
     }
 
     private void startPlaybackStateUpdater() {
-        scheduler.scheduleAtFixedRate(this::fetchCurrentPlaybackState, 0, PLAYBACK_UPDATE_INTERVAL, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(() -> {
+            if (rateLimiter.tryAcquire()) {
+                fetchCurrentPlaybackState();
+            }
+        }, 0, PLAYBACK_UPDATE_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     private TrackInfoCallback trackInfoCallback;
@@ -542,34 +601,77 @@ public class MusicManager implements AutoCloseable {
     // Replace playlist fetch with cached version
     public CompletableFuture<List<PlaylistSimplified>> getUserPlaylists() {
         String cacheKey = "userPlaylists";
-        return playlistCache.computeIfAbsent(cacheKey, k -> CompletableFuture.supplyAsync(() -> {
-            try {
-                GetListOfCurrentUsersPlaylistsRequest request = spotifyApi.getListOfCurrentUsersPlaylists()
-                        .limit(PLAYLIST_LIMIT)
-                        .build();
-                return Arrays.asList(request.execute().getItems());
-            } catch (Exception e) {
-                GlideLogger.error("Failed to fetch playlists", e);
-                return Collections.emptyList();
-            } finally {
-                playlistCache.remove(cacheKey);
-            }
-        }));
+        return playlistCache.computeIfAbsent(cacheKey, k -> 
+            throttleRequest("playlists", () -> CompletableFuture.supplyAsync(() -> {
+                try {
+                    List<PlaylistSimplified> allPlaylists = new ArrayList<>();
+                    int offset = 0;
+                    boolean hasMore = true;
+
+                    while (hasMore && offset < 200) { // Limit to 200 playlists max
+                        GetListOfCurrentUsersPlaylistsRequest request = spotifyApi.getListOfCurrentUsersPlaylists()
+                                .limit(PLAYLIST_LIMIT)
+                                .offset(offset)
+                                .build();
+                        
+                        PlaylistSimplified[] batch = request.execute().getItems();
+                        if (batch.length == 0) {
+                            hasMore = false;
+                        } else {
+                            allPlaylists.addAll(Arrays.asList(batch));
+                            offset += batch.length;
+                            Thread.sleep(THROTTLE_DELAY);
+                        }
+                    }
+                    
+                    // Prefetch playlist images in background
+                    CompletableFuture.runAsync(() -> 
+                        prefetchPlaylistImages(allPlaylists));
+                    
+                    return allPlaylists;
+                } catch (Exception e) {
+                    GlideLogger.error("Failed to fetch playlists", e);
+                    return Collections.emptyList();
+                } finally {
+                    playlistCache.remove(cacheKey);
+                }
+            }))
+        );
     }
 
-    public CompletableFuture<List<Track>> getPlaylistTracks(String playlistId) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                GetPlaylistsItemsRequest request = spotifyApi.getPlaylistsItems(playlistId)
-                        .build();
-                PlaylistTrack[] items = request.execute().getItems();
-                return Arrays.stream(items)
-                        .map(item -> (Track) item.getTrack())
-                        .collect(Collectors.toList());
-            } catch (Exception e) {
-                GlideLogger.error("Failed to fetch playlist tracks", e);
-                return Collections.emptyList();
+    private void prefetchPlaylistImages(List<PlaylistSimplified> playlists) {
+        try {
+            for (int i = 0; i < playlists.size(); i += BATCH_SIZE) {
+                int end = Math.min(i + BATCH_SIZE, playlists.size());
+                List<PlaylistSimplified> batch = playlists.subList(i, end);
+                
+                batch.parallelStream()
+                     .filter(p -> p != null && p.getImages() != null && p.getImages().length > 0)
+                     .forEach(p -> getPlaylistImageUrl(p));
+                
+                Thread.sleep(THROTTLE_DELAY);
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private <T> CompletableFuture<T> throttleRequest(String key, Supplier<CompletableFuture<T>> request) {
+        return CompletableFuture.supplyAsync(() -> {
+            long lastTime = lastRequestTime.getOrDefault(key, 0L);
+            long now = System.currentTimeMillis();
+            long timeSinceLastRequest = now - lastTime;
+            
+            if (timeSinceLastRequest < THROTTLE_DELAY) {
+                try {
+                    Thread.sleep(THROTTLE_DELAY - timeSinceLastRequest);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            
+            lastRequestTime.put(key, System.currentTimeMillis());
+            return request.get().join();
         });
     }
 
