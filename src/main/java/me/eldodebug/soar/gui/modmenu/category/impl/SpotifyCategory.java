@@ -39,7 +39,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private static final long SEARCH_DEBOUNCE_DELAY = 300;
     private static final ResourceLocation PLACEHOLDER_IMAGE = new ResourceLocation("soar/music.png");
 
-    private static final boolean DEBUG_HITBOXES = true; // Set to true to show hitboxes
+    private static final boolean DEBUG_HITBOXES = false; // Set to true to show hitboxes
     private static final Color DEBUG_COLOR = new Color(255, 0, 0, 100);
 
     private final CompSlider volumeSlider;
