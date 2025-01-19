@@ -3,14 +3,17 @@ package me.eldodebug.soar.management.mods;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.logging.LogManager;
 
 import me.eldodebug.soar.management.mods.impl.*;
 import me.eldodebug.soar.management.mods.settings.Setting;
+import me.eldodebug.soar.utils.Sound;
 
 public class ModManager {
 
 	private ArrayList<Mod> mods = new ArrayList<Mod>();
 	private ArrayList<Setting> settings = new ArrayList<Setting>();
+	public boolean canPlaySound = false;
 	
 	public void init() {
 		mods.add(new AnimationsMod());
@@ -216,9 +219,23 @@ public class ModManager {
 	}
 	
 	public void disableAll() {
+		canPlaySound = false;
 		for(Mod m : mods) {
 			m.setToggled(false);
 		}
 		InternalSettingsMod.getInstance().setToggled(true);
+		canPlaySound = true;
 	}
+
+	public void playToggleSound(boolean toggled, Mod m){
+		if (!canPlaySound) return;
+		if(toggled){
+			Sound.play("soar/audio/positive.wav", true);
+		} else {
+			Sound.play("soar/audio/negative.wav", true);
+		}
+
+	}
+
 }
+

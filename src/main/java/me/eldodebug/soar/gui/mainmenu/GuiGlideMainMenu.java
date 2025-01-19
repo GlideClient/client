@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import me.eldodebug.soar.gui.mainmenu.impl.UpdateScene;
 import me.eldodebug.soar.gui.mainmenu.impl.welcome.*;
+import me.eldodebug.soar.utils.Sound;
 import org.lwjgl.input.Mouse;
 
 import me.eldodebug.soar.Glide;
@@ -41,9 +42,12 @@ public class GuiGlideMainMenu extends GuiScreen {
 	private SimpleAnimation musicControlsAnimation = new SimpleAnimation();
 	private float lastTrackPosition = 0;
 
-	private ArrayList<MainMenuScene> scenes = new ArrayList<MainMenuScene>();
-	private Animation fadeIconAnimation, fadeBackgroundAnimation;
+    private ArrayList<MainMenuScene> scenes = new ArrayList<MainMenuScene>();
+	boolean soundPlayed = false;
 
+    
+    private Animation fadeIconAnimation, fadeBackgroundAnimation;
+    
 	public GuiGlideMainMenu() {
 		Glide instance = Glide.getInstance();
 
@@ -101,6 +105,10 @@ public class GuiGlideMainMenu extends GuiScreen {
 
 		if(fadeBackgroundAnimation == null || (fadeBackgroundAnimation != null && !fadeBackgroundAnimation.isDone(Direction.FORWARDS))) {
 			nvg.setupAndDraw(() -> drawSplashScreen(sr, nvg));
+			if(!soundPlayed) {
+				Sound.play("soar/audio/start.wav", true);
+				soundPlayed = true;
+			}
 		}
 
 		nvg.setupAndDraw(() -> {

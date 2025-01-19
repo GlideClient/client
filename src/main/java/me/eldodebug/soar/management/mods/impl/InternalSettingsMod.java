@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.eldodebug.soar.management.mods.settings.impl.*;
+import me.eldodebug.soar.utils.mouse.MouseUtils;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.Glide;
@@ -50,6 +51,19 @@ public class InternalSettingsMod extends Mod {
 		if(event.getKeyCode() == modMenuKeybindSetting.getKeyCode()) {
 			mc.displayGuiScreen(Glide.getInstance().getModMenu());
 		}
+//		if (event.getKeyCode() == Keyboard.KEY_DOWN) {
+//			int max = modThemeSetting.getOptions().size();
+//			int modeIndex = modThemeSetting.getOptions().indexOf(modThemeSetting.getOption());
+//
+//			if (modeIndex > 0) {
+//				modeIndex--;
+//			} else {
+//				modeIndex = max - 1;
+//			}
+//
+//			modThemeSetting.setOption(modThemeSetting.getOptions().get(modeIndex));
+//
+//		}
 	}
 
 	public static InternalSettingsMod getInstance() {

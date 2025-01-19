@@ -8,6 +8,7 @@ import me.eldodebug.soar.gui.mainmenu.MainMenuScene;
 import me.eldodebug.soar.gui.mainmenu.impl.MainScene;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
+import me.eldodebug.soar.utils.Sound;
 import me.eldodebug.soar.utils.TimerUtils;
 import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
@@ -20,16 +21,17 @@ public class LastMessageScene extends MainMenuScene {
 	private Animation fadeAnimation, blurAnimation;
 	private int step;
 	private String message;
+	private boolean soundPlayed = false;
 	
 	private TimerUtils timer = new TimerUtils();
 	
 	public LastMessageScene(GuiGlideMainMenu parent) {
 		super(parent);
-		
 		step = 0;
 		blurAnimation = new DecelerateAnimation(800, 13);
 		blurAnimation.setValue(13);
 	}
+
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -63,7 +65,10 @@ public class LastMessageScene extends MainMenuScene {
 					message = welcomeMessage;
 					break;
 			}
-			
+			if(!soundPlayed) {
+				Sound.play("soar/audio/success.wav", true);
+				soundPlayed = true;
+			}
 			nvg.setupAndDraw(() -> {
 				nvg.drawCenteredText(message, sr.getScaledWidth() / 2, 
 						(sr.getScaledHeight() / 2) - (nvg.getTextHeight(message, 26, Fonts.REGULAR) / 2), 

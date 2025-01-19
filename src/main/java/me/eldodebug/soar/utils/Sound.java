@@ -2,10 +2,9 @@ package me.eldodebug.soar.utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.net.URL;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.*;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -47,5 +46,24 @@ public class Sound {
 	
 	public Clip getClip() {
 		return clip;
+	}
+
+	public static void play(String location, boolean uiSound) {
+		URL diskPath = Sound.class.getClassLoader().getResource("assets/minecraft/" + location);
+		if (diskPath != null) {
+			try {
+				Clip clip = AudioSystem.getClip();
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(diskPath);
+				clip.open(audioInputStream);
+				clip.start();
+
+				clip.addLineListener(event -> {
+					if (event.getType() == LineEvent.Type.STOP) {
+						clip.close();
+						try { audioInputStream.close(); } catch (Exception ignored) {}
+					}
+				});
+			} catch (Exception ignored) {}
+		}
 	}
 }

@@ -225,7 +225,9 @@ public class ProfileManager {
 		ModManager modManager = instance.getModManager();
 		ColorManager colorManager = instance.getColorManager();
 		FileManager fileManager = instance.getFileManager();
-		
+
+		modManager.canPlaySound = false;
+
 		if(file == null) {
 			return;
 		}
@@ -240,7 +242,7 @@ public class ProfileManager {
 			colorManager.setCurrentColor(colorManager.getColorByName(JsonUtils.getStringProperty(appJsonObject, "Accent Color", "Teal Love")));
 			colorManager.setTheme(Theme.getThemeById(JsonUtils.getIntProperty(appJsonObject, "Theme", Theme.LIGHT.getId())));
 			backgroundManager.setCurrentBackground(backgroundManager.getBackgroundById(JsonUtils.getIntProperty(appJsonObject, "Background", 0)));
-			instance.getLanguageManager().setCurrentLanguage(Language.getLanguageById(JsonUtils.getStringProperty(appJsonObject, "Language", Language.ENGLISH.getId())));
+			instance.getLanguageManager().setCurrentLanguage(Language.getLanguageById(JsonUtils.getStringProperty(appJsonObject, "Language", Language.ENGLISHGB.getId())));
 			
 			for(Mod m : modManager.getMods()) {
 				
@@ -349,6 +351,7 @@ public class ProfileManager {
 		} catch (Exception e) {
 			GlideLogger.error("Failed to load profile", e);
 		}
+		modManager.canPlaySound = true;
 	}
 	
 	public void delete(Profile profile) {

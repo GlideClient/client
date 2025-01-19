@@ -9,8 +9,8 @@ import me.eldodebug.soar.management.music.MusicManager;
 import me.eldodebug.soar.management.remote.discord.DiscordStats;
 import me.eldodebug.soar.management.remote.discord.DiscordManager;
 import me.eldodebug.soar.management.remote.update.Update;
-import me.eldodebug.soar.management.remote.update.UpdateManager;
 import me.eldodebug.soar.ui.ClickEffects;
+import me.eldodebug.soar.utils.Sound;
 import org.apache.commons.lang3.ArrayUtils;
 
 import me.eldodebug.soar.injection.mixin.GlideTweaker;
@@ -79,16 +79,13 @@ public class Glide {
 			OptifineUtils.disableFastRender();
 			this.removeOptifineZoom();
 		} catch(Exception ignored) {}
-		
 		fileManager = new FileManager();
-		update = new Update();
 		firstLoginFile = new File(fileManager.getCacheDir(), "first.tmp");
 		languageManager = new LanguageManager();
 		eventManager = new EventManager();
 		modManager = new ModManager();
 		
 		modManager.init();
-		new UpdateManager();
 		
 		capeManager = new CapeManager();
 		colorManager = new ColorManager();
@@ -106,6 +103,8 @@ public class Glide {
 		changelogManager = new ChangelogManager();
 		discordStats = new DiscordStats();
 		new DiscordManager();
+		update = new Update();
+		update.check();
 		waypointManager = new WaypointManager();
 		musicManager = new MusicManager(fileManager);
 
@@ -118,6 +117,8 @@ public class Glide {
 	
 	public void stop() {
 		profileManager.save();
+		Sound.play("soar/audio/close.wav", true);
+
 	}
 	
 	private void removeOptifineZoom() {

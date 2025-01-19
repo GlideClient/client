@@ -89,7 +89,7 @@ public class KillSoundsMod extends Mod {
 	public void onEnable() {
 		super.onEnable();
 		try {
-			oofSound.loadClip(new ResourceLocation("soar/oof.wav"));
+			oofSound.loadClip(new ResourceLocation("soar/audio/oof.wav"));
 		} catch (Exception e) {}
 	}
 }

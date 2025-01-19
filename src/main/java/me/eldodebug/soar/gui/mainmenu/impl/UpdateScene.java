@@ -44,6 +44,7 @@ public class UpdateScene extends MainMenuScene {
 		nvg.drawCenteredText("Update Available", acX + (acWidth / 2), acY + 12, Color.WHITE, 14, Fonts.MEDIUM);
 		nvg.drawCenteredText("Would you like to update?", acX + (acWidth / 2), acY + 30, Color.WHITE, 9, Fonts.REGULAR);
 		nvg.drawCenteredText(instance.getVersion() + " -> " + u.getVersionString(), acX + (acWidth / 2), acY + 48, Color.WHITE, 9, Fonts.REGULAR);
+		nvg.drawCenteredText(instance.getVersionIdentifier() + " -> " + u.getBuildID(), acX + (acWidth / 2), acY + 60, Color.WHITE, 5, Fonts.REGULAR);
 		nvg.drawRoundedRect(acX + acWidth/2 - 90, acY + acHeight - 64, 180, 20, 4.5F, this.getBackgroundColor());
 		nvg.drawCenteredText("Go to update", acX + acWidth/2, acY + acHeight - 54 - (nvg.getTextHeight("Go to update", 9.5F, Fonts.REGULAR)/2), Color.WHITE, 9.5F, Fonts.REGULAR);
 		nvg.drawRoundedRect(acX + acWidth/2 - 90, acY + acHeight - 32, 180, 20, 4.5F, this.getBackgroundColor());

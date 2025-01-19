@@ -2,6 +2,7 @@ package me.eldodebug.soar.management.mods;
 
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.language.TranslateText;
+import me.eldodebug.soar.utils.Sound;
 import me.eldodebug.soar.utils.animation.simple.SimpleAnimation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -67,8 +68,10 @@ public class Mod {
 		
 		if(toggled) {
 			onEnable();
+			Glide.getInstance().getModManager().playToggleSound(true, this);
 		}else {
 			onDisable();
+			Glide.getInstance().getModManager().playToggleSound(false, this);
 		}
 	}
 	

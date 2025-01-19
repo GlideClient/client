@@ -161,6 +161,17 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
     public void preShutdown(CallbackInfo ci) {
     	Glide.getInstance().stop();
     }
+
+	/**
+	 * @reason : let the shutdown sound play before killing the process
+	 * @param i : exit code
+	 */
+	@Redirect(method = "shutdownMinecraftApplet", at = @At(value = "INVOKE", target = "Ljava/lang/System;exit(I)V", remap = false))
+	private void ignoreGcCall(int i) {
+		try{Thread.sleep(2530);} catch (Exception ignored) {}
+		System.exit(i);
+	}
+
     
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;dispatchKeypresses()V", shift = At.Shift.AFTER))
     private void onKey(CallbackInfo ci) {
@@ -237,7 +248,7 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
     
 	@Redirect(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V"))
 	public void overrideTitle(String title) {
-		Display.setTitle("Glide Client v" + Glide.getInstance().getVersion() + " for " + title);
+		Display.setTitle("Glide Client v" + Glide.getInstance().getVersion() + " (" + Glide.getInstance().getVersionIdentifier() + ") for " + title);
 	}
 	
     @Inject(method = "updateFramebufferSize", at = @At("HEAD"))

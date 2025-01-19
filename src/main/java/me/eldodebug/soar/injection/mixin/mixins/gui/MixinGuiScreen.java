@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
+import me.eldodebug.soar.utils.Sound;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -36,6 +37,7 @@ public abstract class MixinGuiScreen {
 		if(InternalSettingsMod.getInstance().getClickEffectsSetting().isToggled()) {
 			Glide.getInstance().getClickEffects().addClickEffect(mouseX, mouseY);
 		}
+		Sound.play("soar/audio/click.wav", true);
 	}
 	
 	@Overwrite

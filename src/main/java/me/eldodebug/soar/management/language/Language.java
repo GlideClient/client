@@ -55,6 +55,6 @@ public enum Language {
 			}
 		}
 		
-		return Language.ENGLISH;
+		return Language.ENGLISHGB;
 	}
 }
