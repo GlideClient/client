@@ -28,7 +28,7 @@ public class InternalSettingsMod extends Mod {
 
 	private final BooleanSetting blurSetting = new BooleanSetting(TranslateText.UI_BLUR, this, true);
 
-	private final BooleanSetting mcFontSetting = new BooleanSetting(TranslateText.MC_FONT, this, true);
+	private final BooleanSetting mcFontSetting = new BooleanSetting(TranslateText.MC_FONT, this, false);
 
 	private final NumberSetting volumeSetting = new NumberSetting(TranslateText.VOLUME, this, 0.8, 0, 1, false);
 

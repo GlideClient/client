@@ -1,5 +1,6 @@
 package me.eldodebug.soar.gui.modmenu.category.impl.game.impl;
 
+import eu.shoroa.contrib.render.ShBlur;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.modmenu.category.impl.GamesCategory;
 import me.eldodebug.soar.gui.modmenu.category.impl.game.GameScene;
@@ -8,6 +9,7 @@ import me.eldodebug.soar.management.color.ColorManager;
 import me.eldodebug.soar.management.color.palette.ColorPalette;
 import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.language.TranslateText;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
 import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
@@ -62,7 +64,13 @@ public class BirdScene extends GameScene {
 
 		nvg.save();
 		nvg.scissor(x, y, width, height);
-		nvg.drawRect(x, y, width, height,  palette.getBackgroundColor(ColorType.DARK));
+		if (InternalSettingsMod.getInstance().getBlurSetting().isToggled()) {
+			ShBlur.getInstance().drawBlur(() -> nvg.drawRect(x, y, width, height,  palette.getBackgroundColor(ColorType.DARK)));
+			Color colsidebar = palette.getBackgroundColor(ColorType.DARK);
+			nvg.drawRect(x, y, width, height,  new Color(colsidebar.getRed(), colsidebar.getGreen(), colsidebar.getBlue(), 210));
+		} else {
+			nvg.drawRect(x, y, width, height,  palette.getBackgroundColor(ColorType.DARK));
+		}
 		if(gameStarted){
 			nvg.drawText(score + "", x + 10, y + 10, currentColor.getColor1(), 8, Fonts.MEDIUM);
 			drawPlayer(nvg, currentColor);

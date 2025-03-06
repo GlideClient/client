@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import eu.shoroa.contrib.render.ShBlur;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -24,6 +26,7 @@ import me.eldodebug.soar.utils.mouse.MouseUtils;
 import me.eldodebug.soar.utils.render.BlurUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.nanovg.NanoVG;
 
 public class GuiEditHUD extends GuiScreen {
 
@@ -47,7 +50,7 @@ public class GuiEditHUD extends GuiScreen {
 			m.getAnimation().setValue(0.0F);
 		}
 		
-		introAnimation = new EaseBackIn(320, 1.0F, 2.0F);
+		introAnimation = new EaseBackIn(500, 1.0F, 0F);
 		introAnimation.setDirection(Direction.FORWARDS);
 	}
 	
@@ -67,16 +70,26 @@ public class GuiEditHUD extends GuiScreen {
 		if(introAnimation.isDone(Direction.BACKWARDS)) {
 			mc.displayGuiScreen(null);
 		}
-		
-		BlurUtils.drawBlurScreen((float) (Math.min(introAnimation.getValue(), 1) * 20) + 1F);
+		if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) {
+			BlurUtils.drawBlurScreen((float) (Math.min(introAnimation.getValue(), 1) * 20) + 1F);
+		}
 		
 		nvg.setupAndDraw(() -> {
-			
+
+			nvg.save();
+			NanoVG.nvgGlobalAlpha(nvg.getContext(), (float) introAnimation.getValue());
+			if (InternalSettingsMod.getInstance().getBlurSetting().isToggled()) {
+				ShBlur.getInstance().drawBlur(() -> nvg.drawRect(0,0, sr.getScaledWidth(), sr.getScaledHeight(), Color.WHITE));
+			}
+			nvg.restore();
+			nvg.drawRect(0,0, sr.getScaledWidth(), sr.getScaledHeight(), new Color(0,0,0, (int) (introAnimation.getValue() * 100)));
 			int halfScreenWidth = sr.getScaledWidth() / 2;
 			int halfScreenHeight = sr.getScaledHeight() / 2;
-			
+
+			// guide lines
 			nvg.drawRect(0, halfScreenHeight, sr.getScaledWidth(), 0.5F, palette.getBackgroundColor(ColorType.DARK));
 			nvg.drawRect(halfScreenWidth, 0, 0.5F, sr.getScaledHeight(), palette.getBackgroundColor(ColorType.DARK));
+			// todo add more splashers
 			nvg.drawCenteredText("You can resize elements by scrolling over them. Use shift for more control.", sr.getScaledWidth() / 2F, sr.getScaledHeight() - 15, new Color(255,255,255, 200), 8F, Fonts.REGULAR);
 
 			for(HUDMod m : mods) {

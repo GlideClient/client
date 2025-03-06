@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import eu.shoroa.contrib.render.ShBlur;
 import me.eldodebug.soar.gui.modmenu.category.impl.*;
@@ -186,7 +187,7 @@ public class GuiModMenu extends GuiScreen {
 					searchBox.draw(mouseX, mouseY, partialTicks);
 				}
 				int yOff = (currentCategory.isShowTitle()) ? 31 : 0;
-				if(currentCategory.getNameKey() == TranslateText.COSMETICS.getKey()){
+				if(Objects.equals(currentCategory.getNameKey(), TranslateText.COSMETICS.getKey())){
 					float folderButtonX = x + width - 198;
 					float folderButtonY = y + 6.5F;
 					nvg.drawRoundedRect(folderButtonX, folderButtonY, 18,18, 6, palette.getBackgroundColor(ColorType.DARK));
@@ -241,7 +242,7 @@ public class GuiModMenu extends GuiScreen {
 		currentCategory.mouseClicked(mouseX, mouseY, mouseButton);
 		searchBox.mouseClicked(mouseX, mouseY, mouseButton);
 
-		if(currentCategory.getNameKey() == TranslateText.COSMETICS.getKey()){
+		if(Objects.equals(currentCategory.getNameKey(), TranslateText.COSMETICS.getKey())){
 			float folderButtonX = x + width - 198;
 			float folderButtonY = y + 6.5F;
 			if (MouseUtils.isInside(mouseX, mouseY, folderButtonX, folderButtonY, 18, 18)){

@@ -92,12 +92,12 @@ public class ShBlur {
     }
 
     public void render() {
+        if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) return;
         if (nvgImage == -1) {
             nvgImage = nvgImageFromHandle(
                     framebuffer3.framebufferTexture, mc.displayWidth, mc.displayHeight, NanoVG.NVG_IMAGE_FLIPY
             );
         }
-
         ScaledResolution sr = new ScaledResolution(mc);
         if (System.currentTimeMillis() - lastUpdate > 15) {
             lastUpdate = System.currentTimeMillis();
@@ -113,6 +113,7 @@ public class ShBlur {
                     1f / mc.getFramebuffer().framebufferHeight
             ));
             shader.uniform(Uniform.makeFloatBuffer("kernels", weightBuffer));
+            shader.uniform(Uniform.makeInt("ignoreAlpha", 1));
             shader.rect(0f, 0f, sr.getScaledWidth(), sr.getScaledHeight());
 
             framebuffer1.bindFramebuffer(true);
@@ -154,6 +155,7 @@ public class ShBlur {
     }
 
     public void drawBlur(float x, float y, float w, float h, float radius) {
+        if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) return;
         long ctx = Glide.getInstance().getNanoVGManager().getContext();
         ScaledResolution sr = new ScaledResolution(mc);
 
@@ -178,6 +180,7 @@ public class ShBlur {
     }
 
     public void drawBlur(Runnable r) {
+        if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) return;
         long ctx = Glide.getInstance().getNanoVGManager().getContext();
         ScaledResolution sr = new ScaledResolution(mc);
         NVGPaint paint = NVGPaint.calloc();
