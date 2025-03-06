@@ -47,17 +47,17 @@ public class CoordsMod extends SimpleHUDMod {
 		int maxWidth = 100;
 		biome = chunk.getBiome(new BlockPos(mc.thePlayer), this.mc.theWorld.getWorldChunkManager()).biomeName;
 		
-		if(maxWidth < (this.getTextWidth("Biome: " + biome, 9, Fonts.REGULAR))) {
-			maxWidth = (int) (this.getTextWidth("Biome: " + biome, 9, Fonts.REGULAR) + 12);
+		if(maxWidth < (this.getTextWidth("Biome: " + biome, 9, getHudFont(1)))) {
+			maxWidth = (int) (this.getTextWidth("Biome: " + biome, 9, getHudFont(1)) + 12);
 		}else {
 			maxWidth = 107;
 		}
 		
 		this.drawBackground(maxWidth, 48);
-		this.drawText("X: " + (int) mc.thePlayer.posX, 5.5F, 5.5F, 9, Fonts.REGULAR);
-		this.drawText("Y: " + (int) mc.thePlayer.posY, 5.5F, 15.5F, 9, Fonts.REGULAR);
-		this.drawText("Z: " + (int) mc.thePlayer.posZ, 5.5F, 25.5F, 9, Fonts.REGULAR);
-		this.drawText("Biome: " + biome, 5.5F, 35.5F, 9, Fonts.REGULAR);
+		this.drawText("X: " + (int) mc.thePlayer.posX, 5.5F, 5.5F, 9, getHudFont(1));
+		this.drawText("Y: " + (int) mc.thePlayer.posY, 5.5F, 15.5F, 9, getHudFont(1));
+		this.drawText("Z: " + (int) mc.thePlayer.posZ, 5.5F, 25.5F, 9, getHudFont(1));
+		this.drawText("Biome: " + biome, 5.5F, 35.5F, 9, getHudFont(1));
 		
 		this.setWidth(maxWidth);
 		this.setHeight(48);

@@ -80,7 +80,7 @@ public class SpeedometerMod extends SimpleHUDMod {
 	private void drawNanoVG() {
 		this.drawBackground(155, 100);
 		this.drawRect(0, 17.5F, 155, 1);
-		this.drawText("Speed: " + speedFormat.format(PlayerUtils.getSpeed()) + " m/s", 5.5F, 6F, 10.5F, Fonts.MEDIUM);
+		this.drawText("Speed: " + speedFormat.format(PlayerUtils.getSpeed()) + " m/s", 5.5F, 6F, 10.5F, getHudFont(2));
 	}
 	
 	@Override

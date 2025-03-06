@@ -6,11 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.swing.JFileChooser;
 
+import net.minecraft.util.Util;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -20,6 +22,7 @@ import org.apache.http.impl.client.HttpClients;
 import me.eldodebug.soar.logger.GlideLogger;
 import me.eldodebug.soar.utils.file.filter.PngFileFilter;
 import me.eldodebug.soar.utils.file.filter.SoundFileFilter;
+import org.lwjgl.Sys;
 
 public class FileUtils {
 
@@ -242,4 +245,35 @@ public class FileUtils {
 	public static boolean isImageFile(File file) {
 		return isImageFile(file.getName());
 	}
+
+    /*
+     * This is from the GuiScreenResourcePacks class
+     * Copyright mojang
+     *
+     * This code accepts a path and tries to open it in the file browser
+     */
+    public static void openFolderAtPath(File folder) {
+            String absolutePath = folder.getAbsolutePath();
+
+            if (Util.getOSType() == Util.EnumOS.OSX) {
+                try {
+                    Runtime.getRuntime().exec(new String[] {"/usr/bin/open", absolutePath}); return;
+                } catch (IOException ignored) {}
+            }
+            else if (Util.getOSType() == Util.EnumOS.WINDOWS) {
+                try {
+                    Runtime.getRuntime().exec(String.format("cmd.exe /C start \"Open file\" \"%s\"", absolutePath)); return;
+                } catch (IOException ignored) {}
+            }
+
+            try {
+                Class<?> oclass = Class.forName("java.awt.Desktop");
+                Object object = oclass.getMethod("getDesktop", new Class[0]).invoke(null);
+                oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, folder.toURI());
+            } catch (Throwable throwable) {
+                 Sys.openURL("file://" + absolutePath);
+            }
+
+        }
+
 }

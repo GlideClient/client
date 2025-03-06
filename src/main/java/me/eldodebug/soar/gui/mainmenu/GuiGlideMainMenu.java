@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import me.eldodebug.soar.gui.mainmenu.impl.DiscontinuedSoar8;
 import me.eldodebug.soar.gui.mainmenu.impl.UpdateScene;
 import me.eldodebug.soar.gui.mainmenu.impl.welcome.*;
 import me.eldodebug.soar.utils.Sound;
@@ -63,13 +64,16 @@ public class GuiGlideMainMenu extends GuiScreen {
 		scenes.add(new AccentColorSelectScene(this));
 		scenes.add(new LastMessageScene(this));
 		scenes.add(new UpdateScene(this));
+		scenes.add(new DiscontinuedSoar8(this));
 
 		if (instance.isFirstLogin()) {
 			currentScene = getSceneByClass(WelcomeMessageScene.class);
 		} else {
-			if (instance.getUpdateNeeded()) {
+			if (instance.getSoar8Released()) {
+				currentScene = getSceneByClass(DiscontinuedSoar8.class);
+			} else if (instance.getUpdateNeeded()) {
 				currentScene = getSceneByClass(UpdateScene.class);
-			} else {
+			} else  {
 				currentScene = getSceneByClass(MainScene.class);
 			}
 		}

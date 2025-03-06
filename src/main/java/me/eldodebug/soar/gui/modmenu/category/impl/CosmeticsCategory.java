@@ -51,6 +51,7 @@ public class CosmeticsCategory extends Category {
 		AccentColor accentColor = colorManager.getCurrentColor();
 		ColorPalette palette = colorManager.getPalette();
 		CapeManager capeManager = instance.getCapeManager();
+		Color defaultColor = palette.getBackgroundColor(ColorType.DARK);
 
 		int offsetX = 0;
 		float offsetY = 13;
@@ -67,7 +68,6 @@ public class CosmeticsCategory extends Category {
 
 			c.getBackgroundAnimation().setAnimation(isCurrentCategory ? 1.0F : 0.0F, 16);
 
-			Color defaultColor = palette.getBackgroundColor(ColorType.DARK);
 			Color color1 = ColorUtils.applyAlpha(accentColor.getColor1(), (int) (c.getBackgroundAnimation().getValue() * 255));
 			Color color2 = ColorUtils.applyAlpha(accentColor.getColor2(), (int) (c.getBackgroundAnimation().getValue() * 255));
 			Color textColor = c.getTextColorAnimation().getColor(isCurrentCategory ? Color.WHITE : palette.getFontColor(ColorType.DARK), 20);
@@ -131,6 +131,8 @@ public class CosmeticsCategory extends Category {
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+
+		if(!MouseUtils.isInside(mouseX, mouseY, getX(), getY(), getWidth(), getHeight())) return;
 
 		Glide instance = Glide.getInstance();
 		NanoVGManager nvg = instance.getNanoVGManager();

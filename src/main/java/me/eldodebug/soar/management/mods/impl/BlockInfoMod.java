@@ -87,7 +87,7 @@ public class BlockInfoMod extends HUDMod {
 			
 			this.drawBackground(80, 80);
 			
-			this.drawCenteredText(block.getLocalizedName(), 40, 6, 9, Fonts.REGULAR);
+			this.drawCenteredText(block.getLocalizedName(), 40, 6, 9, getHudFont(1));
 		}
 	}
 }

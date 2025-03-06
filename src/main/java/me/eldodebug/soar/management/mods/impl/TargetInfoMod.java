@@ -61,7 +61,7 @@ public class TargetInfoMod extends HUDMod {
 	
 	private void drawNanoVG() {
 		
-		float nameWidth = this.getTextWidth(name, 10.2F, Fonts.MEDIUM);
+		float nameWidth = this.getTextWidth(name, 10.2F, getHudFont(2));
 		int width = 140;
 		
 		if(nameWidth + 48F > width) {
@@ -73,7 +73,7 @@ public class TargetInfoMod extends HUDMod {
 		
 		this.drawBackground(width, 46);
 		this.drawPlayerHead(head, 5, 5, 36, 36, 6);
-		this.drawText(name, 45.5F, 8F, 10.2F, Fonts.MEDIUM);
+		this.drawText(name, 45.5F, 8F, 10.2F, getHudFont(2));
 		
 		this.drawText(LegacyIcon.HEART_FILL, 52, 26.5F, 9, Fonts.LEGACYICON);
 		this.drawArc(56.5F, 30.5F, 9F, -90F, -90F + 360, 1.6F, this.getFontColor(120));

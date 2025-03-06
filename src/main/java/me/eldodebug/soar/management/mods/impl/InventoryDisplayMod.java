@@ -64,7 +64,7 @@ public class InventoryDisplayMod extends HUDMod {
 	private void drawNanoVG() {
 		
 		this.drawBackground(188, 82);
-		this.drawText("Inventory", 5.5F, 6F, 10.5F, Fonts.REGULAR);
+		this.drawText("Inventory", 5.5F, 6F, 10.5F, getHudFont(1));
 		this.drawRect(0, 17.5F, 188, 1);
 		
 		this.setWidth(188);

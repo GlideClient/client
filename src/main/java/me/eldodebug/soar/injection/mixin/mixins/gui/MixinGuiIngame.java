@@ -1,5 +1,8 @@
 package me.eldodebug.soar.injection.mixin.mixins.gui;
 
+import eu.shoroa.contrib.render.ShBlur;
+import me.eldodebug.soar.Glide;
+import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -80,10 +83,11 @@ public abstract class MixinGuiIngame implements IMixinGuiIngame {
         GlStateManager.enableAlpha();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
-	
-	@Inject(method = "renderGameOverlay", at = @At("TAIL"))
+
+	@Inject(method = "renderGameOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;color(FFFF)V", shift = At.Shift.BEFORE, ordinal = 2))
     public void postRenderGameOverlay(float partialTicks, CallbackInfo ci) {
-		
+		ShBlur.getInstance().render();
+
 		new EventRenderDamageTint(partialTicks).call();
 		
 		if(!(mc.currentScreen instanceof GuiEditHUD)) {

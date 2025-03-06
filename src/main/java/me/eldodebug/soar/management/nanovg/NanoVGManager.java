@@ -1,5 +1,23 @@
 package me.eldodebug.soar.management.nanovg;
 
+/*
+* Copyright (C) 2021-2024 Polyfrost Inc. and contributors.
+* <https://polyfrost.org> <https://github.com/Polyfrost>
+*
+*  OneConfig is licensed under the terms of version 3 of the GNU Lesser
+* General Public License as published by the Free Software Foundation, AND
+* under the Additional Terms Applicable to OneConfig, as published by Polyfrost Inc.,
+* either version 1.1 of the Additional Terms, or (at your option) any later
+* version.
+*
+* A copy of version 3 of the GNU Lesser General Public License is
+* found below, along with the Additional Terms Applicable to OneConfig.
+* A copy of version 3 of the GNU General Public License, which supplements
+* version 3 of the GNU Lesser General Public License, is also found below.
+*
+* https://github.com/Polyfrost/OneConfig/blob/develop-v0/LICENSE
+*/
+
 import java.awt.Color;
 import java.io.File;
 import java.util.HashMap;
@@ -399,6 +417,7 @@ public class NanoVGManager {
 		NanoVG.nvgFillColor(nvg, nvgColor);
 		NanoVG.nvgTextBox(nvg, x, y, maxWidth, text);
 	}
+
 	
 	public void drawCenteredText(String text, float x, float y, Color color, float size, Font font) {
 		
@@ -418,6 +437,7 @@ public class NanoVGManager {
 	    
 	    return bounds[2] - bounds[0];
 	}
+
 	
 	public float getTextHeight(String text, float size, Font font) {
 		

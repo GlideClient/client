@@ -56,7 +56,7 @@ public class PackDisplayMod extends HUDMod {
 		
 		String name = ColorUtils.removeColorCode(pack.getPackName()).replace(".zip", "");
 		
-		float stringWidth = this.getTextWidth(name, 9, Fonts.REGULAR);
+		float stringWidth = this.getTextWidth(name, 9, getHudFont(1));
 		boolean compact = compactSetting.isToggled();
 		int imgSize = compact ? 12 : 30;
 		float imgX = compact ? 5F : 4.5F;
@@ -67,7 +67,7 @@ public class PackDisplayMod extends HUDMod {
 		this.drawBackground((compact ? 24 : 44) + stringWidth, compact ? 18 : 39);
 		
 		this.drawRoundedImage(mc.getTextureManager().getTexture(currentPack).getGlTextureId(), imgX, imgY, imgSize, imgSize, compact ? 2 : 4);
-		this.drawText(name, textX, textY, 9, Fonts.REGULAR);
+		this.drawText(name, textX, textY, 9, getHudFont(1));
 		
 		this.setWidth((int) ((compact ? 24 : 44) + stringWidth));
 		this.setHeight(compact ? 18 : 39);

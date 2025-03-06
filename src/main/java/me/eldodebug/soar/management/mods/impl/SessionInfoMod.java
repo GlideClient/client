@@ -50,17 +50,17 @@ public class SessionInfoMod extends HUDMod {
 		}
 		
 		this.drawBackground(140, 64);
-		this.drawText("Session Info", 5.5F, 6F, 10.5F, Fonts.REGULAR);
+		this.drawText("Session Info", 5.5F, 6F, 10.5F, getHudFont(1));
 		this.drawRect(0, 17.5F, 140, 1);
 		
 		this.drawText(LegacyIcon.CLOCK, 5.5F, 22.5F, 10F, Fonts.LEGACYICON);
-		this.drawText(time, 18, 24, 9, Fonts.REGULAR);
+		this.drawText(time, 18, 24, 9, getHudFont(1));
 		
 		this.drawText(LegacyIcon.SERVER, 5.5F, 22.5F + 13, 10F, Fonts.LEGACYICON);
-		this.drawText(ServerUtils.getServerIP(), 18, 24 + 12, 9, Fonts.REGULAR);
+		this.drawText(ServerUtils.getServerIP(), 18, 24 + 12, 9, getHudFont(1));
 		
 		this.drawText(LegacyIcon.USER, 5.5F, 22.5F + 26, 10F, Fonts.LEGACYICON);
-		this.drawText(killCount + " kill", 18, 24 + 26.5F, 9, Fonts.REGULAR);
+		this.drawText(killCount + " kill", 18, 24 + 26.5F, 9, getHudFont(1));
 		
 		this.setWidth(140);
 		this.setHeight(64);

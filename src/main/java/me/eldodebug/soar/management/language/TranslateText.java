@@ -1,7 +1,7 @@
 package me.eldodebug.soar.management.language;
 
 public enum TranslateText {
-	
+
 	FPS_DISPLAY("text.fpsdisplay.name"), FPS_DISPLAY_DESCRIPTION("text.fpsdisplay.description"),
 	CLOCK("text.clock.name"), CLOCK_DESCRIPTION("text.clock.description"),
 	POTION_COUNTER("text.potioncounter.name"), POTION_COUNTER_DESCRIPTION("text.potioncounter.description"),
@@ -49,14 +49,14 @@ public enum TranslateText {
 	DOLPHIN("text.dolphin"), ADD("text.add"), ASYNC_SCREENSHOT("text.asyncscreenshot.name"),
 	ASYNC_SCREENSHOT_DESCRIPTION("text.asyncscreenshot.description"), MESSAGE("text.message"), NOTHING_IS_PLAYING("text.nothingisplaying"),
 	ADD_SONG("text.addsong"), VOLUME("text.volume"), ALL("text.all"), FAVORITE("text.favorite"), FREELOOK("text.freelook.name"),
-	FREELOOK_DESCRIPTION("text.freelook.description"), INVERT_YAW("text.invertyaw"), INVERT_PITCH("text.invertpitch"), TOGGLE("text.toggle"), 
+	FREELOOK_DESCRIPTION("text.freelook.description"), INVERT_YAW("text.invertyaw"), INVERT_PITCH("text.invertpitch"), TOGGLE("text.toggle"),
 	KEYDOWN("text.keydown"), BLOCK_INFO("text.blockinfo.name"), BLOCK_INFO_DESCRIPTION("text.blockinfo.description"), HYPIXEL("text.hypixel.name"),
 	HYPIXEL_DESCRIPTION("text.hypixel.description"), LEVEL_HEAD("text.levelhead"), AUTO_GG("text.autogg"), AUTO_GG_DELAY("text.autoggdelay"),
-	AUTO_PLAY("text.autoplay"), AUTO_PLAY_DELAY("text.autoplaydelay"), AUTO_TIP("text.autotip"), ANTI_L("text.antil"), 
+	AUTO_PLAY("text.autoplay"), AUTO_PLAY_DELAY("text.autoplaydelay"), AUTO_TIP("text.autotip"), ANTI_L("text.antil"),
 	BEDWARS_STATS_OVERLAY("text.bedwarsstatsoverlay.name"), BEDWARS_STATS_OVERLAY_DESCRIPTION("text.bedwarsstatsoverlay.description"),
 	MAX("text.max"), BOW_ZOOM("text.bowzoom.name"), BOW_ZOOM_DESCRIPTION("text.bowzoom.description"), FACTOR("text.factor"),
 	FOV_MODIFIER("text.fovmodifier.name"), FOV_MODIFIER_DESCRIPTION("text.fovmodifier.description"), SPRINTING("text.sprinting"),
-	SPEED("text.speed"), SLOWNESS("text.slowness"), BORDERLESS_FULSCREEN("text.borderlessfullscreen.name"), 
+	SPEED("text.speed"), SLOWNESS("text.slowness"), BORDERLESS_FULSCREEN("text.borderlessfullscreen.name"),
 	BORDERLESS_FULLSCREEN_DESCRIPTION("text.borderlessfullscreen.description"), CHUNK_ANIMATOR("text.chunkanimator.name"),
 	CHUNK_ANIMATOR_DESCRIPTION("text.chunkanimator.description"), DURATION("text.duration"), CHUNK_BORDERS("text.chunkborders.name"),
 	CHUNK_BORDERS_DESCRIPTION("text.chunkborders.description"), CLEAR_GLASS("text.clearglass.name"), CLEAR_GLASS_DESCRIPTION("text.clearglass.description"),
@@ -84,7 +84,7 @@ public enum TranslateText {
 	FORGE("text.forge"), GLINT_COLOR("text.glintcolor.name"), GLINT_COLOR_DESCRIPTION("text.glintcolor.description"),
 	SYNC("text.sync"), RAINBOW("text.rainbow"), CUSTOM("text.custom"), SHINY_POTS("text.shinypots.name"), SHINY_POTS_DESCRIPTION("text.shinypots.description"),
 	HIT_COLOR("text.hitcolor.name"), HIT_COLOR_DESCRIPTION("text.hitcolor.description"), ITEM_INFO("text.iteminfo.name"),
-	ITEM_INFO_DESCRIPTION("text.iteminfo.description"), POTION_COLOR("text.potioncolor"), INVENTORY_DISPLAY("text.inventorydisplay.name"), 
+	ITEM_INFO_DESCRIPTION("text.iteminfo.description"), POTION_COLOR("text.potioncolor"), INVENTORY_DISPLAY("text.inventorydisplay.name"),
 	INVENTORY_DISPLAY_DESCRIPTION("text.inventorydisplay.description"), ITEM_PHYSICS("text.itemphysics.name"),
 	ITEM_PHYSICS_DESCRIPTION("text.itemphysics.description"), UHC_OVERLAY("text.uhcoverlay.name"), UHC_OVERLAY_DESCRIPTION("text.uhcoverlay.description"),
 	GOLD_INGOT_SCALE("text.goldingotscale"), GOLD_NUGGET_SCALE("text.goldnuggetscale"), GOLD_ORE_SCALE("text.goldorescale"), GOLD_APPLE_SCALE("text.goldapplescale"),
@@ -147,10 +147,11 @@ public enum TranslateText {
 	SPOTIFY_PLAYBACK_PAUSE_FAILED("text.spotify.playback.pause_failed"), SPOTIFY_PLAYBACK_RESUME_FAILED("text.spotify.playback.resume_failed"), SPOTIFY_VOLUME_SET_FAILED("text.spotify.volume.set_failed"), SEARCH_COMPLETE("text.search_complete"),
 	SEARCH_FAILED("text.search_failed"), SPOTIFY_AUTH_MANUAL_REQUIRED("Please authorize in the browser and then click 'Complete Authorization'"), SPOTIFY_AUTH_SUCCESS("Authorization completed successfully"), SPOTIFY_AUTH_TOKEN_RECEIVED("text.spotify.auth.token_received"),
 	SPOTIFY_NO_ACTIVE_DEVICE("text.spotify.no_active_device"), SPOTIFY_PLAYBACK_STARTED("text.spotify.playback.started"), SPOTIFY_FAIL_BROWSER("text.spotify.fail_browser"), SPOTIFY_CONNECT("text.spotify.connect"), AUTO_GL("text.autogl"), AUTO_GL_DELAY("text.autogldelay"), ADVANCED("text.advanced"),
-	EXIT_WORLD_SINGLEPLAYER("text.gamemenu.exitworldsingleplayer"), OPEN_MOD_MENU("text.gamemenu.openglidemenu"), EDIT_HUD("text.gamemenu.edithud"), GRADIENT_SIMPLE("text.gradientsimple"), GENERAL("text.general"),  GENERAL_DESCRIPTION("text.general.description");
-	
+	UI_SOUNDS("text.ui.sounds"), UI_SOUNDS_DESCRIPTION("text.ui.sounds.description") ,EXIT_WORLD_SINGLEPLAYER("text.gamemenu.exitworldsingleplayer"), OPEN_MOD_MENU("text.gamemenu.openglidemenu"), EDIT_HUD("text.gamemenu.edithud"), GRADIENT_SIMPLE("text.gradientsimple"), GENERAL("text.general"),  GENERAL_DESCRIPTION("text.general.description"),
+	UI_BLUR("text.ui.blur"), MC_FONT("text.hud.blur");
+
 	private String key, text;
-	
+
 	private TranslateText(String key) {
 		this.key = key;
 	}

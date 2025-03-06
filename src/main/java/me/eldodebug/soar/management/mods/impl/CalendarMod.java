@@ -49,11 +49,11 @@ public class CalendarMod extends HUDMod {
 		firstDayCalendar.set(year, month, 1);
 		
 		this.drawBackground(100, height);
-		this.drawText(getMonthByNumber(month) + " " + year, 6, 6, 11, Fonts.MEDIUM);
+		this.drawText(getMonthByNumber(month) + " " + year, 6, 6, 11, getHudFont(2));
 		
 		for(String s : dayOfWeek) {
 			
-			this.drawText(s, 6 + offsetX, 22, 6.5F, Fonts.MEDIUM);
+			this.drawText(s, 6 + offsetX, 22, 6.5F, getHudFont(2));
 			
 			offsetX+=13.4;
 		}
@@ -68,7 +68,7 @@ public class CalendarMod extends HUDMod {
 				this.drawRoundedRect(4.5F + offsetX, 30F + offsetY, 10.5F, 10.5F, 10.5F / 2);
 			}
 			
-			this.drawCenteredText(String.valueOf(i), 10 + offsetX, 33 + offsetY, 6, Fonts.REGULAR, i == day ? currentColor.getInterpolateColor() : this.getFontColor());
+			this.drawCenteredText(String.valueOf(i), 10 + offsetX, 33 + offsetY, 6, getHudFont(1), i == day ? currentColor.getInterpolateColor() : this.getFontColor());
 			
 			offsetX+=13.4;
 			

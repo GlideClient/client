@@ -81,7 +81,7 @@ public class ClockMod extends SimpleHUDMod {
 		    float textX = center + ((radius / scale) - 6F) * (float) Math.cos(angle);
 		    float textY = center + ((radius / scale) - 6F) * (float) Math.sin(angle);
 		    
-			this.drawCenteredText(numbers[i], textX + 0.5F, textY - 3, 8, Fonts.MEDIUM);
+			this.drawCenteredText(numbers[i], textX + 0.5F, textY - 3, 8, getHudFont(2));
 		}
 		
 	    NVGColor nvgColor = nvg.getColor(this.getFontColor());

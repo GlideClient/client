@@ -1,5 +1,6 @@
 package me.eldodebug.soar.injection.mixin.mixins.client;
 
+import eu.shoroa.contrib.render.ShBlur;
 import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -121,8 +122,10 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
 	
     @Shadow 
     private boolean enableGLErrorChecking;
-    
-    @Inject(method = "startGame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;ingameGUI:Lnet/minecraft/client/gui/GuiIngame;", shift = At.Shift.AFTER))
+
+	@Shadow protected abstract void resize(int width, int height);
+
+	@Inject(method = "startGame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;ingameGUI:Lnet/minecraft/client/gui/GuiIngame;", shift = At.Shift.AFTER))
     public void preStartGame(CallbackInfo ci) {
     	Glide.getInstance().start();
     }
@@ -428,10 +431,6 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
 	@Accessor
 	public abstract boolean isRunning();
 	
-	@Override
-	@Invoker("resize")
-	public abstract void resizeWindow(int width, int height);
-	
 	@Inject(method = "startGame", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/resources/SkinManager;<init>(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V"))
 	public void splashSkinManager(CallbackInfo callback) {
@@ -531,6 +530,17 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
 	@Inject(method = "startGame", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/gui/GuiIngame;<init>(Lnet/minecraft/client/Minecraft;)V"))
 	public void splashGuiIngame(CallbackInfo callback) {
+		ShBlur.getInstance().init();
 		updateDisplay();
+	}
+
+	@Override
+	public void resizeWindow(int width, int height) {
+		resize(width, height);
+	}
+
+	@Inject(method = "resize", at = @At("TAIL"))
+	public void inject$resize(int width, int height, CallbackInfo ci) {
+		ShBlur.getInstance().resize();
 	}
 }

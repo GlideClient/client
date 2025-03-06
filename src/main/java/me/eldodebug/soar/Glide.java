@@ -7,7 +7,6 @@ import me.eldodebug.soar.gui.mainmenu.GuiGlideMainMenu;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
 import me.eldodebug.soar.management.music.MusicManager;
 import me.eldodebug.soar.management.remote.discord.DiscordStats;
-import me.eldodebug.soar.management.remote.discord.DiscordManager;
 import me.eldodebug.soar.management.remote.update.Update;
 import me.eldodebug.soar.ui.ClickEffects;
 import me.eldodebug.soar.utils.Sound;
@@ -40,7 +39,7 @@ public class Glide {
 
 	private static Glide instance = new Glide();
 	private Minecraft mc = Minecraft.getMinecraft();
-	private boolean updateNeeded;
+	private boolean updateNeeded, soar8Released;
 	private String name, version;
 	private int verIdentifier;
 	
@@ -102,7 +101,7 @@ public class Glide {
 		quickPlayManager = new QuickPlayManager();
 		changelogManager = new ChangelogManager();
 		discordStats = new DiscordStats();
-		new DiscordManager();
+		discordStats.check();
 		update = new Update();
 		update.check();
 		waypointManager = new WaypointManager();
@@ -243,7 +242,12 @@ public class Glide {
 	public Update getUpdateInstance(){
 		return update;
 	}
+
 	public void setUpdateNeeded(boolean in) {updateNeeded = in;}
 	public boolean getUpdateNeeded() {return updateNeeded;}
+
+	public void setSoar8Released(boolean in) {soar8Released = in;}
+	public boolean getSoar8Released() {return soar8Released;}
+
 	public ClickEffects getClickEffects() {return clickEffects;}
 }

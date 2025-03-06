@@ -89,7 +89,7 @@ public class CompassMod extends SimpleHUDMod {
 				this.drawRect((width / 2) + angle - 16F, 8, 0.8F, 6);
 				this.drawRect((width / 2) + angle - 30F, 8, 0.8F, 6);
 				
-				this.drawCenteredText(s, (width / 2) + angle - 1.5F, 19, 8.5F, Fonts.MEDIUM);
+				this.drawCenteredText(s, (width / 2) + angle - 1.5F, 19, 8.5F, getHudFont(2));
 	            
 				angle+= 90;
 			}
@@ -111,7 +111,7 @@ public class CompassMod extends SimpleHUDMod {
 				}
 				
 				
-				this.drawCenteredText(s, (width / 2) + angle2 + 43F, 8.5F, 6.8F, Fonts.REGULAR);
+				this.drawCenteredText(s, (width / 2) + angle2 + 43F, 8.5F, 6.8F, getHudFont(1));
 				
 				angle2+= 90;
 			}
@@ -132,7 +132,7 @@ public class CompassMod extends SimpleHUDMod {
 					s = "285";
 				}
 				
-				this.drawCenteredText(s, (width / 2) + angle3 + 13F, 17, 5.4F, Fonts.REGULAR);
+				this.drawCenteredText(s, (width / 2) + angle3 + 13F, 17, 5.4F, getHudFont(1));
 				
 				angle3+= 90;
 			}
@@ -153,7 +153,7 @@ public class CompassMod extends SimpleHUDMod {
 					s = "300";
 				}
 				
-				this.drawCenteredText(s, (width / 2) + angle4 + 27F,17, 5.4F, Fonts.REGULAR);
+				this.drawCenteredText(s, (width / 2) + angle4 + 27F,17, 5.4F, getHudFont(1));
 			
 				angle4+= 90;
 			}
@@ -174,7 +174,7 @@ public class CompassMod extends SimpleHUDMod {
 					s = "300";
 				}
 				
-				this.drawCenteredText(s, (width / 2) + angle5 + 60.5F, 17, 5.4F, Fonts.REGULAR);
+				this.drawCenteredText(s, (width / 2) + angle5 + 60.5F, 17, 5.4F, getHudFont(1));
 			
 				angle5+= 90;
 			}
@@ -195,7 +195,7 @@ public class CompassMod extends SimpleHUDMod {
 					s = "345";
 				}
 				
-				this.drawCenteredText(s, (width / 2) + angle6 + 74.5F, 17, 5.4F, Fonts.REGULAR);
+				this.drawCenteredText(s, (width / 2) + angle6 + 74.5F, 17, 5.4F, getHudFont(1));
 				
 				angle6+= 90;
 			}

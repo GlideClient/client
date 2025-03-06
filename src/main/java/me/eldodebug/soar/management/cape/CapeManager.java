@@ -31,16 +31,8 @@ public class CapeManager {
 		
 		Glide instance = Glide.getInstance();
 		FileManager fileManager = instance.getFileManager();
-		File customCapeDir = new File(fileManager.getGlideDir(), "custom-cape");
-		File cacheDir = new File(fileManager.getCacheDir(), "cape");
-		
-		if(!customCapeDir.exists()) {
-			fileManager.createDir(customCapeDir);
-		}
-		
-		if(!cacheDir.exists()) {
-			fileManager.createDir(cacheDir);
-		}
+		File customCapeDir = fileManager.getCustomCapeDir();
+		File cacheDir = fileManager.getCapeCacheDir();
 		
 		capes.add(new NormalCape("None", null, null, CapeCategory.ALL));
 		

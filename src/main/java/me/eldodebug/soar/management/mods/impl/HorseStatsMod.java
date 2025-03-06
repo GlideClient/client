@@ -45,8 +45,8 @@ public class HorseStatsMod extends HUDMod {
 		
 		this.drawBackground(95, 28);
 		
-		this.drawText(speed, 5.5F, 5.5F, 9, Fonts.REGULAR);
-		this.drawText(jump, 5.5F, 15.5F, 9, Fonts.REGULAR);
+		this.drawText(speed, 5.5F, 5.5F, 9, getHudFont(1));
+		this.drawText(jump, 5.5F, 15.5F, 9, getHudFont(1));
 		
 		this.setWidth(95);
 		this.setHeight(28);

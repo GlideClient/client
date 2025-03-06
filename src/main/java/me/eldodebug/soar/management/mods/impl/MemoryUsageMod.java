@@ -46,8 +46,8 @@ public class MemoryUsageMod extends SimpleHUDMod {
 		animation.setAnimation(((this.getUsingMemory() / 100F) * 360), 16);
 		
 		this.drawBackground(54, 60);
-		this.drawCenteredText("Memory", 54 / 2, 6, 9, Fonts.REGULAR);
-		this.drawCenteredText(this.getUsingMemory() + "%", 54 / 2, 32, 9, Fonts.REGULAR);
+		this.drawCenteredText("Memory", 54 / 2, 6, 9, getHudFont(1));
+		this.drawCenteredText(this.getUsingMemory() + "%", 54 / 2, 32, 9, getHudFont(1));
 
 		this.drawArc(27, 35.5F, 16.5F, -90, 360, 1.6F, this.getFontColor(120));
 		this.drawArc(27, 35.5F, 16.5F, -90, animation.getValue() - 90, 1.6F, this.getFontColor());

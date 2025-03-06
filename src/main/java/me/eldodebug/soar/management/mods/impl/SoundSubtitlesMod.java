@@ -131,13 +131,13 @@ public class SoundSubtitlesMod extends HUDMod {
             		animationOffsetY = 0;
             	}
             	
-            	this.drawCenteredText(subtitle.getString(), subtitleWidth / 2, animationOffsetY + 4, 9, Fonts.REGULAR, this.getFontColor(opacity));
+            	this.drawCenteredText(subtitle.getString(), subtitleWidth / 2, animationOffsetY + 4, 9, getHudFont(1), this.getFontColor(opacity));
 
 	            if (!flag) {
 	                if (d0 > 0.0D) {
-	                	this.drawText(">", subtitleWidth - this.getTextWidth("<", 9, Fonts.REGULAR) - 4.5F, animationOffsetY + 4.5F, 9, Fonts.REGULAR, this.getFontColor(opacity));
+	                	this.drawText(">", subtitleWidth - this.getTextWidth("<", 9, getHudFont(1)) - 4.5F, animationOffsetY + 4.5F, 9, getHudFont(1), this.getFontColor(opacity));
 	                } else if (d0 < 0.0D) {
-	                	this.drawText("<", 4.5F, animationOffsetY + 4.5F, 9, Fonts.REGULAR, this.getFontColor(opacity));
+	                	this.drawText("<", 4.5F, animationOffsetY + 4.5F, 9, getHudFont(1), this.getFontColor(opacity));
 	                }
 	            }
 	            

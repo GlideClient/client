@@ -10,11 +10,13 @@ import me.eldodebug.soar.utils.IOUtils;
 public class FontManager {
 
 	public void init(long nvg) {
+		loadFont(nvg, Fonts.UNIFONT);
 		loadFont(nvg, Fonts.FALLBACK);
-		loadFont(nvg, Fonts.FLUENT);
-		for(Font f : Fonts.getFonts()) {
-			loadFont(nvg, f);
-		}
+		loadFont(nvg, Fonts.REGULAR);
+		loadFont(nvg, Fonts.MEDIUM);
+		loadFont(nvg, Fonts.SEMIBOLD);
+		loadFont(nvg, Fonts.LEGACYICON);
+		loadFont(nvg, Fonts.MOJANGLES);
 	}
 	
 	private void loadFont(long nvg, Font font) {
@@ -37,9 +39,13 @@ public class FontManager {
 			throw new RuntimeException("Failed to init font " + font.getName());
 		}else {
 			font.setLoaded(true);
-			if(Fonts.FLUENT.isLoaded() && Fonts.FALLBACK.isLoaded() && font != Fonts.FLUENT && font != Fonts.FALLBACK){
-				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.FLUENT.getName());
+			if(font == Fonts.MOJANGLES && Fonts.UNIFONT.isLoaded()){
+				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.UNIFONT.getName());
+				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.REGULAR.getName());
 				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.FALLBACK.getName());
+			} else if(Fonts.FALLBACK.isLoaded()  && font != Fonts.FALLBACK){
+				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.FALLBACK.getName());
+				NanoVG.nvgAddFallbackFont(nvg, font.getName(), Fonts.UNIFONT.getName());
 			}
 
 		}

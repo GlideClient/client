@@ -12,6 +12,7 @@ public class Update {
     String updateVersionString = "something is broken lmao";
     int updateBuildID = 0;
     boolean discontinued = false;
+    boolean soar8Released = false;
 
     public void setUpdateLink(String in){
         this.updateLink = in;
@@ -39,6 +40,12 @@ public class Update {
         return discontinued;
     }
 
+    public void setSoar8Released(boolean in){
+        this.soar8Released = in;
+    }
+    public boolean getSoar8Released() {return soar8Released;}
+
+
     public void check(){
         try{
             Multithreading.runAsync(this::checkUpdates);
@@ -50,6 +57,7 @@ public class Update {
         if (g.getVersionIdentifier() < this.updateBuildID){
             g.setUpdateNeeded(true);
         }
+        g.setSoar8Released(getSoar8Released());
     }
 
     private void checkUpdates() {
@@ -59,6 +67,7 @@ public class Update {
             setVersionString(JsonUtils.getStringProperty(jsonObject, "latestversionstring", "something is broken lmao"));
             setBuildID(JsonUtils.getIntProperty(jsonObject, "latestversion", 0));
             setDiscontinued(JsonUtils.getBooleanProperty(jsonObject, "discontinued", false));
+            setSoar8Released(JsonUtils.getBooleanProperty(jsonObject, "soar8released", false));
             checkForUpdates();
         }
     }

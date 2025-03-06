@@ -1,10 +1,17 @@
 package me.eldodebug.soar.gui.modmenu;
 
 import java.awt.Color;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import eu.shoroa.contrib.render.ShBlur;
 import me.eldodebug.soar.gui.modmenu.category.impl.*;
+import me.eldodebug.soar.management.file.FileManager;
+import me.eldodebug.soar.management.language.TranslateText;
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
+import me.eldodebug.soar.management.nanovg.font.FontManager;
+import me.eldodebug.soar.utils.file.FileUtils;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.Glide;
@@ -54,6 +61,7 @@ public class GuiModMenu extends GuiScreen {
 		categories.add(new HomeCategory(this));
 		categories.add(new ModuleCategory(this));
 		categories.add(new CosmeticsCategory(this));
+		categories.add(new GamesCategory(this));
 		categories.add(new SpotifyCategory(this));
 		categories.add(new ProfileCategory(this));
 		categories.add(new ScreenshotCategory(this));
@@ -116,9 +124,16 @@ public class GuiModMenu extends GuiScreen {
 		if(introAnimation.isDone(Direction.BACKWARDS)) {
 			mc.displayGuiScreen(toEditHUD ? new GuiEditHUD(true) : null);
 		}
-		
 		nvg.drawRoundedRect(x, y, width, height, 12, palette.getBackgroundColor(ColorType.NORMAL));
-		nvg.drawRoundedRectVarying(x, y, 32, height, 12, 0, 12, 0, palette.getBackgroundColor(ColorType.DARK));
+
+		if (InternalSettingsMod.getInstance().getBlurSetting().isToggled()) {
+			ShBlur.getInstance().drawBlur(() -> nvg.drawRoundedRectVarying(x, y, 32, height, 12, 0, 12, 0, palette.getBackgroundColor(ColorType.DARK)));
+			Color colsidebar = palette.getBackgroundColor(ColorType.DARK);
+			nvg.drawRoundedRectVarying(x, y, 32, height, 12, 0, 12, 0, new Color(colsidebar.getRed(), colsidebar.getGreen(), colsidebar.getBlue(), 210));
+		} else {
+			nvg.drawRoundedRectVarying(x, y, 32, height, 12, 0, 12, 0,  palette.getBackgroundColor(ColorType.DARK));
+		}
+
 		nvg.drawGradientRoundedRect(x + 5, y + 7, 22, 22, 11, currentColor.getColor1(), currentColor.getColor2());
 		nvg.drawText(LegacyIcon.SOAR, x + 8, y + 10, Color.WHITE, 16, Fonts.LEGACYICON);
 		if(currentCategory.isShowTitle()) {
@@ -172,6 +187,12 @@ public class GuiModMenu extends GuiScreen {
 					searchBox.draw(mouseX, mouseY, partialTicks);
 				}
 				int yOff = (currentCategory.isShowTitle()) ? 31 : 0;
+				if(currentCategory.getNameKey() == TranslateText.COSMETICS.getKey()){
+					float folderButtonX = x + width - 198;
+					float folderButtonY = y + 6.5F;
+					nvg.drawRoundedRect(folderButtonX, folderButtonY, 18,18, 6, palette.getBackgroundColor(ColorType.DARK));
+					nvg.drawCenteredText(LegacyIcon.FOLDER,folderButtonX + 8.5F, folderButtonY + 9 - (nvg.getTextHeight(LegacyIcon.FOLDER, 9, Fonts.LEGACYICON)/2), palette.getFontColor(ColorType.NORMAL), 9, Fonts.LEGACYICON);
+				}
 				nvg.scissor(x + 32, y + yOff, width - 32, height - yOff);
 				nvg.translate(0, 50 - (c.getCategoryAnimation().getValue() * 50));
 				
@@ -220,6 +241,14 @@ public class GuiModMenu extends GuiScreen {
 		
 		currentCategory.mouseClicked(mouseX, mouseY, mouseButton);
 		searchBox.mouseClicked(mouseX, mouseY, mouseButton);
+
+		if(currentCategory.getNameKey() == TranslateText.COSMETICS.getKey()){
+			float folderButtonX = x + width - 198;
+			float folderButtonY = y + 6.5F;
+			if (MouseUtils.isInside(mouseX, mouseY, folderButtonX, folderButtonY, 18, 18)){
+				FileUtils.openFolderAtPath(Glide.getInstance().getFileManager().getCustomCapeDir());
+			}
+		}
 		
 		try {
 			super.mouseClicked(mouseX, mouseY, mouseButton);

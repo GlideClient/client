@@ -84,10 +84,10 @@ public class KeystrokesMod extends HUDMod {
 		this.restore();
 		
 		if(!unmarkedSetting.isToggled()) {
-			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindForward.getKeyCode()), 32 + (28 / 2), (28 / 2) - 4, 12, Fonts.REGULAR);
-			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindLeft.getKeyCode()), 0 + (28 / 2), 32 + (28 / 2) - 4, 12, Fonts.REGULAR);
-			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindBack.getKeyCode()), 32 + (28 / 2), 32 + (28 / 2) - 4, 12, Fonts.REGULAR);
-			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindRight.getKeyCode()), 64 + (28 / 2), 32 + (28 / 2) - 4, 12, Fonts.REGULAR);
+			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindForward.getKeyCode()), 32 + (28 / 2), (28 / 2) - 4, 12, getHudFont(1));
+			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindLeft.getKeyCode()), 0 + (28 / 2), 32 + (28 / 2) - 4, 12, getHudFont(1));
+			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindBack.getKeyCode()), 32 + (28 / 2), 32 + (28 / 2) - 4, 12, getHudFont(1));
+			this.drawCenteredText(Keyboard.getKeyName(mc.gameSettings.keyBindRight.getKeyCode()), 64 + (28 / 2), 32 + (28 / 2) - 4, 12, getHudFont(1));
 		}
 		
 		if(spaceSetting.isToggled()) {

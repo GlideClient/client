@@ -25,10 +25,10 @@ public class SimpleHUDMod extends HUDMod {
 		if(getText() != null) {
 			nvg.setupAndDraw(() -> {
 				
-				float bgWidth = (this.getTextWidth(this.getText(), 9, Fonts.REGULAR) + 10) + addX;
+				float bgWidth = (this.getTextWidth(this.getText(), 9, getHudFont(1)) + 10) + addX;
 				
 				this.drawBackground(bgWidth, 18);
-				this.drawText(this.getText(), 5.5F + addX, 5.5F, 9, Fonts.REGULAR);
+				this.drawText(this.getText(), 5.5F + addX, 5.5F, 9, getHudFont(1));
 				
 				if(hasIcon) {
 					this.drawText(getIcon(), 5.5F, 4F, 10.4F, Fonts.LEGACYICON);

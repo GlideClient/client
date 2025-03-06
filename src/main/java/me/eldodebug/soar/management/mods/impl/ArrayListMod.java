@@ -71,7 +71,7 @@ public class ArrayListMod extends HUDMod {
 			
 			if(m.isToggled() && !m.isHide()) {
 				
-				float nameWidth = this.getTextWidth(m.getName(), 8.5F, Fonts.REGULAR);
+				float nameWidth = this.getTextWidth(m.getName(), 8.5F, getHudFont(1));
 				
 				enabledMods.add(m);
 				
@@ -81,7 +81,7 @@ public class ArrayListMod extends HUDMod {
 			}
 		}
 		
-		enabledMods.sort((m1, m2) -> (int) this.getTextWidth(m2.getName(), 8.5F, Fonts.REGULAR) - (int) this.getTextWidth(m1.getName(), 8.5F, Fonts.REGULAR));
+		enabledMods.sort((m1, m2) -> (int) this.getTextWidth(m2.getName(), 8.5F, getHudFont(1)) - (int) this.getTextWidth(m1.getName(), 8.5F, getHudFont(1)));
 		
 		int y = 0;
 		int colorIndex = 0;
@@ -89,14 +89,14 @@ public class ArrayListMod extends HUDMod {
 		
 		for(Mod m : enabledMods) {
 			
-			float nameWidth = this.getTextWidth(m.getName(), 8.5F, Fonts.REGULAR);
+			float nameWidth = this.getTextWidth(m.getName(), 8.5F, getHudFont(1));
 			
 			if(backgroundSetting.isToggled()) {
 				this.drawRect((isRight ? (maxWidth - nameWidth) : 0), y, nameWidth + 5, 12, new Color(0, 0, 0, 100));
 			}
 			
 			this.drawText(m.getName(), 3 + (isRight ? (maxWidth - nameWidth) : 0), 
-					y + 2.5F, 8.5F, Fonts.REGULAR, currentColor.getInterpolateColor(colorIndex));
+					y + 2.5F, 8.5F, getHudFont(1), currentColor.getInterpolateColor(colorIndex));
 			
 			y += 12;
 			colorIndex-=10;

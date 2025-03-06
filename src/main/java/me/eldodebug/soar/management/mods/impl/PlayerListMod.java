@@ -35,7 +35,7 @@ public class PlayerListMod extends HUDMod {
 		int offsetY = 23;
 		
 		this.drawBackground(maxName, (index * 15) + 24.5F);
-		this.drawText("Player List", 5.5F, 6F, 10.5F, Fonts.REGULAR);
+		this.drawText("Player List", 5.5F, 6F, 10.5F, getHudFont(1));
 		this.drawRect(0, 18, maxName, 1);
 		
 		for (NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
@@ -44,12 +44,12 @@ public class PlayerListMod extends HUDMod {
 				
 				String name = playerInfo.getGameProfile().getName();
 				
-				if(this.getTextWidth(name, 9, Fonts.MEDIUM) + 26 > maxName) {
-					maxName = (float) this.getTextWidth(name, 9, Fonts.MEDIUM) + 26;
+				if(this.getTextWidth(name, 9, getHudFont(2)) + 26 > maxName) {
+					maxName = (float) this.getTextWidth(name, 9, getHudFont(2)) + 26;
 				}
 				
 				this.drawPlayerHead(playerInfo.getLocationSkin(), 5.5F, offsetY, 12, 12, 2.5F);
-				this.drawText(name, 20, offsetY + 2.5F, 9, Fonts.REGULAR);
+				this.drawText(name, 20, offsetY + 2.5F, 9, getHudFont(1));
 				
 				if(prevIndex > maxSetting.getValueInt()) {
 					prevIndex++;

@@ -6,6 +6,7 @@ import java.net.URL;
 
 import javax.sound.sampled.*;
 
+import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -49,6 +50,7 @@ public class Sound {
 	}
 
 	public static void play(String location, boolean uiSound) {
+		if(uiSound && !InternalSettingsMod.getInstance().getSoundsUISetting().isToggled()) return;
 		URL diskPath = Sound.class.getClassLoader().getResource("assets/minecraft/" + location);
 		if (diskPath != null) {
 			try {

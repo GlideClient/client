@@ -109,24 +109,24 @@ public class PotionStatusMod extends HUDMod {
                 String time = Potion.getDurationString(potioneffect);
                 
                 if(compactSetting.isToggled()) {
-                	this.drawText(name + " | " + time, 20, offsetY - 10.5F, 9, Fonts.REGULAR);
+                	this.drawText(name + " | " + time, 20, offsetY - 10.5F, 9, getHudFont(1));
                 } else {
-                	this.drawText(name, 25, offsetY - 12, 9, Fonts.REGULAR);
-                	this.drawText(time, 25, offsetY - 1, 8, Fonts.REGULAR);
+                	this.drawText(name, 25, offsetY - 12, 9, getHudFont(1));
+                	this.drawText(time, 25, offsetY - 1, 8, getHudFont(1));
                 }
                 
                 offsetY+=ySize;
                 
                 if(compactSetting.isToggled()) {
                 	
-                	float totalWidth = nvg.getTextWidth(name + " | " + time, 9, Fonts.REGULAR);
+                	float totalWidth = nvg.getTextWidth(name + " | " + time, 9, getHudFont(1));
                 	
                 	if(maxString < totalWidth || prevPotionCount != potions.size()) {
                 		maxString = (int) totalWidth - 4;
                 	}
                 } else {
-                    float levelWidth = nvg.getTextWidth(name, 9, Fonts.REGULAR);
-                    float timeWidth = nvg.getTextWidth(time, 9, Fonts.REGULAR);
+                    float levelWidth = nvg.getTextWidth(name, 9, getHudFont(1));
+                    float timeWidth = nvg.getTextWidth(time, 9, getHudFont(1));
                     
                     if(maxString < levelWidth || maxString < timeWidth || prevPotionCount != potions.size()) {
                     	
