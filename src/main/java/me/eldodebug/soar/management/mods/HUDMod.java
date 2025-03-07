@@ -48,8 +48,8 @@ public class HUDMod extends Mod {
 		this.draggable = true;
 	}
 
-	public HUDMod(TranslateText nameTranslate, TranslateText descriptionText, String alias, boolean banable) {
-		super(nameTranslate, descriptionText, ModCategory.HUD, alias, banable);
+	public HUDMod(TranslateText nameTranslate, TranslateText descriptionText, String alias, boolean bannable) {
+		super(nameTranslate, descriptionText, ModCategory.HUD, alias, bannable);
 
 		this.x = 100;
 		this.y = 100;
