@@ -141,11 +141,11 @@ public class ModuleCategory extends Category {
 				
 				nvg.drawRoundedRect(this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 40, 8, palette.getBackgroundColor(ColorType.DARK));
 				nvg.drawRoundedRect(this.getX() + 21, this.getY() + offsetY + 6, 28, 28, 6, palette.getBackgroundColor(ColorType.NORMAL));
-				if(m.isBanable()){
+				if(m.isBannable()){
 					nvg.drawText(m.getName(), this.getX() + 56, this.getY() + offsetY + 9F, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
 					nvg.drawText(m.getDescription(), this.getX() + 56 + (nvg.getTextWidth(m.getName(), 13, Fonts.MEDIUM)) + 5, this.getY() + offsetY + 12, palette.getFontColor(ColorType.NORMAL), 9, Fonts.REGULAR);
 					nvg.drawText(LegacyIcon.INFO, this.getX() + 56, this.getY() + offsetY + 23, new Color(255, 145, 0), 9, Fonts.LEGACYICON);
-					nvg.drawText("This mod may be banable on some servers", this.getX() + 57 + (nvg.getTextWidth(LegacyIcon.INFO, 9, Fonts.LEGACYICON)) , this.getY() + offsetY + 24, new Color(255, 145, 0), 9, Fonts.REGULAR);
+					nvg.drawText("This mod may be bannable on some servers", this.getX() + 57 + (nvg.getTextWidth(LegacyIcon.INFO, 9, Fonts.LEGACYICON)) , this.getY() + offsetY + 24, new Color(255, 145, 0), 9, Fonts.REGULAR);
 				} else {
 					nvg.drawText(m.getName(), this.getX() + 56, this.getY() + offsetY + 15F, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
 					nvg.drawText(m.getDescription(), this.getX() + 56 + (nvg.getTextWidth(m.getName(), 13, Fonts.MEDIUM)) + 5, this.getY() + offsetY + 17, palette.getFontColor(ColorType.NORMAL), 9, Fonts.REGULAR);
