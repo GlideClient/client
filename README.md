@@ -8,14 +8,14 @@
 
 
 ## License 
-Glide uses [GPL v3](https://github.com/GlideClient/client/blob/main/LICENSE) which is a different licence from [Soar](https://github.com/Soar-Client/Legacy-SoarClient) since some code within internal repo was incompatible with the [mit licence](https://github.com/Soar-Client/Legacy-SoarClient/blob/main/LICENSE) of the [Soar repo](https://github.com/Soar-Client/Legacy-SoarClient) because of this if you want to use code under the [mit licence](https://github.com/Soar-Client/Legacy-SoarClient/blob/main/LICENSE) you can take it from [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient), not here
+Glide uses [GPL v3](https://github.com/GlideClient/client/blob/main/LICENSE) which is a different license from [Soar](https://github.com/Soar-Client/Legacy-SoarClient), since some code within internal repo was incompatible with the [LGPL license](https://github.com/Soar-Client/Legacy-SoarClient/blob/main/LICENSE) of the [Soar repo](https://github.com/Soar-Client/Legacy-SoarClient) because of this if you want to use code under the [LGPL license](https://github.com/Soar-Client/Legacy-SoarClient/blob/main/LICENSE) you can take it from [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient), not here
 
 ## Issues
-Please either contact us on discord or make a github issues if there is any issues you need to bring to our attention
+Please either contact us on discord or make a GitHub issue if there are any issues that require our attention
 
 ## building (assuming intelij idea)
 ```
-gradlew setupdecompworkspace
+gradlew setupDecompWorkspace
 ```
 ```
 gradlew genIntellijRuns
@@ -30,7 +30,7 @@ linux (working but some issues noticed that can be fixed by using the fps limit 
 mac os (not working, it is missing lwjgl 3 and nanovg natives for mac os)
 
 ## Future
-I dont want glide to compete with [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient) so when [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient) V8 releases this project will be instantly archived 
+I don't want glide to compete with [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient) so when [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient) V8 releases this project will be instantly archived 
 
 
 
