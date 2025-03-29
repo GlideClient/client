@@ -65,12 +65,12 @@ public class MusicManager implements AutoCloseable {
     private static final class SimpleRateLimiter {
         private final long minTimeBetweenRequests;
         private long lastRequestTime;
-        
+
         SimpleRateLimiter(double requestsPerSecond) {
             this.minTimeBetweenRequests = (long)(1000.0 / requestsPerSecond);
             this.lastRequestTime = 0;
         }
-        
+
         synchronized boolean tryAcquire() {
             long now = System.currentTimeMillis();
             if (now - lastRequestTime >= minTimeBetweenRequests) {
@@ -80,7 +80,7 @@ public class MusicManager implements AutoCloseable {
             return false;
         }
     }
-    
+
     // Replace the Guava RateLimiter with our custom implementation
     private final SimpleRateLimiter rateLimiter = new SimpleRateLimiter(20.0); // 20 requests per second max
     private final Map<String, Long> lastRequestTime = new ConcurrentHashMap<>();
@@ -226,14 +226,14 @@ public class MusicManager implements AutoCloseable {
 
     // Replace search method with cached version
     public CompletableFuture<List<Track>> searchTracks(String query) {
-        return searchCache.computeIfAbsent(query, q -> 
+        return searchCache.computeIfAbsent(query, q ->
             throttleRequest("search", () -> CompletableFuture.supplyAsync(() -> {
                 try {
                     final SearchTracksRequest request = spotifyApi.searchTracks(q)
                             .limit(SEARCH_LIMIT)
                             .build();
                     List<Track> tracks = Arrays.asList(request.execute().getItems());
-                    
+
                     // Batch process album art prefetching
                     CompletableFuture.runAsync(() -> {
                         for (int i = 0; i < tracks.size(); i += BATCH_SIZE) {
@@ -247,7 +247,7 @@ public class MusicManager implements AutoCloseable {
                             }
                         }
                     });
-                    
+
                     return tracks;
                 } catch (Exception e) {
                     GlideLogger.error("Search failed", e);
@@ -260,15 +260,26 @@ public class MusicManager implements AutoCloseable {
     }
 
     private void prefetchAlbumArt(Track track) {
-        if (track != null && track.getAlbum() != null && 
-            track.getAlbum().getImages() != null && 
+        if (track != null && track.getAlbum() != null &&
+            track.getAlbum().getImages() != null &&
             track.getAlbum().getImages().length > 0) {
+
             String imageUrl = track.getAlbum().getImages()[0].getUrl();
-            albumArtCache.getCachedAlbumArtUrlAsync(track.getId(), imageUrl)
-                .exceptionally(ex -> {
-                    GlideLogger.warn("Failed to prefetch album art: " + ex.getMessage());
-                    return null;
-                });
+            if (imageUrl == null) {
+                return; // Skip tracks with null image URLs
+            }
+
+            try {
+                albumArtCache.getCachedAlbumArtUrlAsync(track.getId(), imageUrl)
+                    .exceptionally(ex -> {
+                        // Only log at debug level to avoid spam
+                        GlideLogger.warn("Failed to prefetch album art: " + ex.getMessage());
+                        return imageUrl; // Return original URL instead of null
+                    });
+            } catch (Exception e) {
+                // Catch any potential exceptions during the async operation
+                GlideLogger.warn("Error during album art prefetch: " + e.getMessage());
+            }
         }
     }
 
@@ -315,11 +326,25 @@ public class MusicManager implements AutoCloseable {
                         .device_id(deviceId)
                         .uris(JsonParser.parseString("[\"" + trackUri + "\"]").getAsJsonArray())
                         .build();
-                playbackRequest.execute();
-                MusicManager musicManager = Glide.getInstance().getMusicManager();
-                isPlaying = true;
-                updatePlaybackState();
-                Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_PLAYBACK, TranslateText.SPOTIFY_PLAYBACK_STARTED, NotificationType.SUCCESS);
+                try {
+                    playbackRequest.execute();
+                    isPlaying = true;
+                    updatePlaybackState();
+                    Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_PLAYBACK, TranslateText.SPOTIFY_PLAYBACK_STARTED, NotificationType.SUCCESS);
+                } catch (Exception e) {
+                    if (e.getMessage() != null && e.getMessage().contains("Restriction violated")) {
+                        GlideLogger.warn("Play command restricted - likely due to Spotify Premium requirement or device limitations");
+                        Glide.getInstance().getNotificationManager().post(
+                                TranslateText.SPOTIFY_PLAYBACK,
+                                TranslateText.valueOf("Playback control restricted - check Spotify Premium status or active device"),
+                                NotificationType.WARNING
+                        );
+                        // Try to fetch the current state again to update UI
+                        fetchCurrentPlaybackState();
+                    } else {
+                        throw e;
+                    }
+                }
             } catch (Exception e) {
                 handleSpotifyException("start playback", e);
             }
@@ -344,12 +369,32 @@ public class MusicManager implements AutoCloseable {
         if (isPlaying) return;
         CompletableFuture.runAsync(() -> {
             try {
-                final StartResumeUsersPlaybackRequest resumeRequest = spotifyApi.startResumeUsersPlayback().build();
+                // Check if we have an active device first
+                String deviceId = getActiveDeviceId();
+                if (deviceId == null) {
+                    Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_PLAYBACK, TranslateText.SPOTIFY_NO_ACTIVE_DEVICE, NotificationType.ERROR);
+                    return;
+                }
+
+                final StartResumeUsersPlaybackRequest resumeRequest = spotifyApi.startResumeUsersPlayback()
+                        .device_id(deviceId)
+                        .build();
                 fetchCurrentPlaybackState();
                 resumeRequest.execute();
                 isPlaying = true;
             } catch (Exception e) {
-                handleSpotifyException("resume playback", e);
+                if (e.getMessage() != null && e.getMessage().contains("Restriction violated")) {
+                    GlideLogger.warn("Resume playback restricted - likely due to Spotify Premium requirement or device limitations");
+                    Glide.getInstance().getNotificationManager().post(
+                            TranslateText.SPOTIFY_PLAYBACK,
+                            TranslateText.valueOf("Playback control restricted - check Spotify Premium status or active device"),
+                            NotificationType.WARNING
+                    );
+                    // Try to fetch the current state again to update UI
+                    fetchCurrentPlaybackState();
+                } else {
+                    handleSpotifyException("resume playback", e);
+                }
             }
         });
     }
@@ -429,11 +474,24 @@ public class MusicManager implements AutoCloseable {
     private String getActiveDeviceId() {
         try {
             final Device[] devices = spotifyApi.getUsersAvailableDevices().build().execute();
+            if (devices == null || devices.length == 0) {
+                GlideLogger.warn("No Spotify devices found");
+                return null;
+            }
+
+            // First try to find the active device
             for (Device device : devices) {
                 if (device.getIs_active()) {
                     return device.getId();
                 }
             }
+
+            // If no active device found, use the first available one
+            if (devices.length > 0) {
+                GlideLogger.info("No active device found, using first available: " + devices[0].getName());
+                return devices[0].getId();
+            }
+
             GlideLogger.warn("No active device found");
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             GlideLogger.error("Failed to get active device", e);
@@ -442,32 +500,28 @@ public class MusicManager implements AutoCloseable {
     }
 
     public String getAlbumArtUrl(Track track) {
-        if (track == null || track.getAlbum() == null || 
-            track.getAlbum().getImages() == null || 
+        if (track == null || track.getAlbum() == null ||
+            track.getAlbum().getImages() == null ||
             track.getAlbum().getImages().length == 0) {
             return null;
         }
 
         String imageUrl = track.getAlbum().getImages()[0].getUrl();
+        if (imageUrl == null) {
+            return null;  // Return early if URL is null
+        }
+
         try {
+            // Use a default fallback image path if caching fails
             return albumArtCache.getCachedAlbumArtUrlAsync(track.getId(), imageUrl)
-                   .get(100, TimeUnit.MILLISECONDS); // Short timeout to prevent UI blocking
+                   .get(800, TimeUnit.MILLISECONDS); // Increase timeout to reduce timeouts
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return imageUrl; // Return original URL on thread interruption
         } catch (Exception e) {
-            GlideLogger.warn("Failed to get album art, falling back to URL: " + e.getMessage());
+            // Only log at debug level to avoid log spam
             return imageUrl;
         }
-    }
-
-    // Remove the async version if not needed elsewhere
-    private CompletableFuture<String> getAlbumArtUrlAsync(Track track) {
-        if (track == null || track.getAlbum() == null || 
-            track.getAlbum().getImages() == null || 
-            track.getAlbum().getImages().length == 0) {
-            return CompletableFuture.completedFuture(null);
-        }
-
-        String imageUrl = track.getAlbum().getImages()[0].getUrl();
-        return albumArtCache.getCachedAlbumArtUrlAsync(track.getId(), imageUrl);
     }
 
     private String getTrackId(String trackId) {
@@ -601,7 +655,7 @@ public class MusicManager implements AutoCloseable {
     // Replace playlist fetch with cached version
     public CompletableFuture<List<PlaylistSimplified>> getUserPlaylists() {
         String cacheKey = "userPlaylists";
-        return playlistCache.computeIfAbsent(cacheKey, k -> 
+        return playlistCache.computeIfAbsent(cacheKey, k ->
             throttleRequest("playlists", () -> CompletableFuture.supplyAsync(() -> {
                 try {
                     List<PlaylistSimplified> allPlaylists = new ArrayList<>();
@@ -613,7 +667,7 @@ public class MusicManager implements AutoCloseable {
                                 .limit(PLAYLIST_LIMIT)
                                 .offset(offset)
                                 .build();
-                        
+
                         PlaylistSimplified[] batch = request.execute().getItems();
                         if (batch.length == 0) {
                             hasMore = false;
@@ -623,11 +677,11 @@ public class MusicManager implements AutoCloseable {
                             Thread.sleep(THROTTLE_DELAY);
                         }
                     }
-                    
+
                     // Prefetch playlist images in background
-                    CompletableFuture.runAsync(() -> 
+                    CompletableFuture.runAsync(() ->
                         prefetchPlaylistImages(allPlaylists));
-                    
+
                     return allPlaylists;
                 } catch (Exception e) {
                     GlideLogger.error("Failed to fetch playlists", e);
@@ -644,11 +698,11 @@ public class MusicManager implements AutoCloseable {
             for (int i = 0; i < playlists.size(); i += BATCH_SIZE) {
                 int end = Math.min(i + BATCH_SIZE, playlists.size());
                 List<PlaylistSimplified> batch = playlists.subList(i, end);
-                
+
                 batch.parallelStream()
                      .filter(p -> p != null && p.getImages() != null && p.getImages().length > 0)
                      .forEach(p -> getPlaylistImageUrl(p));
-                
+
                 Thread.sleep(THROTTLE_DELAY);
             }
         } catch (InterruptedException e) {
@@ -661,7 +715,7 @@ public class MusicManager implements AutoCloseable {
             long lastTime = lastRequestTime.getOrDefault(key, 0L);
             long now = System.currentTimeMillis();
             long timeSinceLastRequest = now - lastTime;
-            
+
             if (timeSinceLastRequest < THROTTLE_DELAY) {
                 try {
                     Thread.sleep(THROTTLE_DELAY - timeSinceLastRequest);
@@ -669,7 +723,7 @@ public class MusicManager implements AutoCloseable {
                     Thread.currentThread().interrupt();
                 }
             }
-            
+
             lastRequestTime.put(key, System.currentTimeMillis());
             return request.get().join();
         });
@@ -690,10 +744,36 @@ public class MusicManager implements AutoCloseable {
     }
 
     public String getPlaylistImageUrl(PlaylistSimplified playlist) {
-        if (playlist != null && playlist.getImages() != null && playlist.getImages().length > 0) {
-            String imageUrl = playlist.getImages()[0].getUrl();
-            return albumArtCache.getAlbumArt(imageUrl);
+        if (playlist == null || playlist.getImages() == null || playlist.getImages().length == 0) {
+            return null;
         }
-        return null;
+
+        String imageUrl = playlist.getImages()[0].getUrl();
+        if (imageUrl == null) {
+            return null;
+        }
+
+        try {
+            String cachedUrl = albumArtCache.getAlbumArt(imageUrl);
+            return cachedUrl != null ? cachedUrl : imageUrl;
+        } catch (Exception e) {
+            GlideLogger.warn("Using direct playlist image URL: " + e.getMessage());
+            return imageUrl;
+        }
+    }
+
+    // Add a helper method to safely get cached album art
+    private String safeCachedAlbumArt(String trackId, String imageUrl) {
+        if (imageUrl == null) {
+            return null;
+        }
+        
+        try {
+            String cachedUrl = albumArtCache.getCachedAlbumArtUrlAsync(trackId, imageUrl)
+                              .get(500, TimeUnit.MILLISECONDS);
+            return cachedUrl != null ? cachedUrl : imageUrl;
+        } catch (Exception e) {
+            return imageUrl;
+        }
     }
 }

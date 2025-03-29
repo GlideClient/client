@@ -32,12 +32,13 @@ import java.net.URI;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SpotifyCategory extends Category implements MusicManager.TrackInfoCallback {
     private static final long VOLUME_CHANGE_DELAY = 500;
-    private static final long SEARCH_DEBOUNCE_DELAY = 300;
+    private static final long SEARCH_DEBOUNCE_DELAY = 1300; // Increased from 300ms to 800ms
     private static final ResourceLocation PLACEHOLDER_IMAGE = new ResourceLocation("soar/music.png");
 
     private static final boolean DEBUG_HITBOXES = false; // Set to true to show hitboxes
@@ -47,6 +48,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private final CompTextBox textBox;
     private final WeakReference<GuiModMenu> parentRef;
     private final ScheduledExecutorService searchDebouncer;
+    private ScheduledFuture<?> pendingSearch; // Add a reference to track scheduled search
 
     private volatile List<Track> searchResults;
     private volatile List<PlaylistSimplified> userPlaylists;
@@ -410,7 +412,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                 if (albumArtFile.exists()) {
                     nvg.drawRoundedImage(
                         albumArtFile,
-                        this.getX() + 15,
+                        this.getX() + 4,
                         this.getY() + this.getHeight() - 43,
                         36,
                         36,
@@ -425,7 +427,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
 
             nvg.drawText(
                     nvg.getLimitText(currentTrack.getName(), 9, Fonts.MEDIUM, 100),
-                    this.getX() + 56,
+                    this.getX() + 45,
                     this.getY() + this.getHeight() - 39, // Moved up 2 pixels
                     palette.getFontColor(ColorType.DARK),
                     9,
@@ -434,7 +436,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
 
             nvg.drawText(
                     nvg.getLimitText(currentTrack.getArtists()[0].getName(), 9, Fonts.MEDIUM, 100),
-                    this.getX() + 56,
+                    this.getX() + 45,
                     this.getY() + this.getHeight() - 27, // Moved up 2 pixels
                     palette.getFontColor(ColorType.NORMAL),
                     9,
@@ -488,14 +490,26 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         );
 
         if (DEBUG_HITBOXES) {
-            // Previous track button
-            nvg.drawRect(centerX - 40, centerY - 8, 16, 16, DEBUG_COLOR);
+            nvg.drawRect(
+                centerX - 24 - 8,
+                centerY,
+                16, 16,
+                DEBUG_COLOR
+            );
             
-            // Play/Pause button
-            nvg.drawRect(centerX - 16, centerY - 8, 16, 16, DEBUG_COLOR);
-            
-            // Next track button
-            nvg.drawRect(centerX + 8, centerY - 8, 16, 16, DEBUG_COLOR);
+            nvg.drawRect(
+                centerX - 8,
+                centerY,
+                16, 16,
+                DEBUG_COLOR
+            );
+
+            nvg.drawRect(
+                centerX + 24 - 8,
+                centerY,
+                16, 16,
+                DEBUG_COLOR
+            );
         }
     }
 
@@ -570,8 +584,15 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
             return;
         }
 
-        if (isSearching.compareAndSet(false, true)) {
-            searchDebouncer.schedule(() -> {
+        // Cancel any pending search before scheduling a new one
+        if (pendingSearch != null && !pendingSearch.isDone()) {
+            pendingSearch.cancel(false);
+        }
+
+        // Only set the atomic flag when actually performing the search,
+        // not when scheduling it
+        pendingSearch = searchDebouncer.schedule(() -> {
+            if (isSearching.compareAndSet(false, true)) {
                 try {
                     List<Track> results = Glide.getInstance().getMusicManager().searchTracks(query).join();
                     searchResults = results;
@@ -586,14 +607,14 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                     GlideLogger.error("Search failed", ex);
                     Glide.getInstance().getNotificationManager().post(
                             TranslateText.MUSIC,
-                            TranslateText.SEARCH_FAILED,
+                            TranslateText.valueOf("Failed to search"),
                             NotificationType.ERROR
                     );
                 } finally {
                     isSearching.set(false);
                 }
-            }, SEARCH_DEBOUNCE_DELAY, TimeUnit.MILLISECONDS);
-        }
+            }
+        }, SEARCH_DEBOUNCE_DELAY, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -632,14 +653,20 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         float centerX = this.getX() + ((float) this.getWidth() / 2);
         float centerY = this.getY() + this.getHeight() - 32F;
 
-        // Previous track button
-        if (MouseUtils.isInside(mouseX, mouseY, centerX - 40, centerY - 8, 16, 16)) {
+        // Previous track button - center hitbox on the icon
+        if (MouseUtils.isInside(mouseX, mouseY, 
+                centerX - 24 - 8, // icon position - half hitbox width
+                centerY,      // icon position - half hitbox height
+                16, 16)) {
             musicManager.previousTrack();
             return;
         }
 
-        // Play/Pause button
-        if (MouseUtils.isInside(mouseX, mouseY, centerX - 16, centerY - 8, 16, 16)) {
+        // Play/Pause button - center hitbox on the icon
+        if (MouseUtils.isInside(mouseX, mouseY, 
+                centerX - 8,  // icon position - half hitbox width
+                centerY,      // icon position - half hitbox height
+                16, 16)) {
             if (musicManager.isPlaying()) {
                 musicManager.pause();
             } else {
@@ -648,8 +675,11 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
             return;
         }
 
-        // Next track button
-        if (MouseUtils.isInside(mouseX, mouseY, centerX + 8, centerY - 8, 16, 16)) {
+        // Next track button - center hitbox on the icon
+        if (MouseUtils.isInside(mouseX, mouseY, 
+                centerX + 24 - 8, // icon position - half hitbox width
+                centerY,      // icon position - half hitbox height
+                16, 16)) {
             musicManager.nextTrack();
             return;
         }
