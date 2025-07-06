@@ -45,7 +45,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private static final long VOLUME_CHANGE_DELAY = 500;
     private static final long SEARCH_DEBOUNCE_DELAY = 800;
     private static final ResourceLocation PLACEHOLDER_IMAGE = new ResourceLocation("soar/music.png");
-    private static final String SPOTIFY_TUTORIAL_URL = "https://www.youtube.com/watch?v=GyK7D9YZCE8";
+    private static final String SPOTIFY_TUTORIAL_URL = "https://glideclient.com/spotifytutorial";
 
     private static final boolean DEBUG_HITBOXES = false;
     private static final Color DEBUG_COLOR = new Color(255, 0, 0, 100);
@@ -1079,8 +1079,10 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
             return;
         }
 
-        volumeSlider.mouseReleased(mouseX, mouseY, mouseButton);
-        updateVolume();
+        if (!showSetupScreen) {
+            volumeSlider.mouseReleased(mouseX, mouseY, mouseButton);
+            updateVolume();
+        }
     }
 
     private void updateVolume() {
