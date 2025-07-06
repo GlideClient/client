@@ -13,6 +13,7 @@ public enum Language {
 	VIETNAMESE("vi-vn", "Tiếng Việt (Việt Nam)", new ResourceLocation("soar/flag/vn.png")), 
 	RUSSIAN("ru-ru", "русский (россия)", new ResourceLocation("soar/flag/ru.png")), 
 	PORTUGESE("pt-pt", "Português (Portugal)", new ResourceLocation("soar/flag/pt.png")), 
+	PERSIAN("fa-ir", "Fārsi (Irān)", new ResourceLocation("soar/flag/ir.png")), 
 	LOLCAT("lc-koc", "LOLCAT (Kinduim ov catos)", new ResourceLocation("soar/flag/koc.png")),
 	WOOFLANG("wo-yap", "Wooflang (Yappington)", new ResourceLocation("soar/flag/wo.png"));
 	

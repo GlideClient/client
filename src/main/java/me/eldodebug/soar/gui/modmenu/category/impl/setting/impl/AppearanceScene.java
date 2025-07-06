@@ -34,13 +34,12 @@ public class AppearanceScene extends SettingScene {
 
     @Override
     public void initGui() {
-        modTheme = new CompComboBox(75, InternalSettingsMod.getInstance().getModThemeSetting());
+        modTheme = new CompComboBox(110, InternalSettingsMod.getInstance().getModThemeSetting());
         uiBlur = new CompToggleButton(InternalSettingsMod.getInstance().getBlurSetting());
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-
         Glide instance = Glide.getInstance();
         NanoVGManager nvg = instance.getNanoVGManager();
         ColorManager colorManager = instance.getColorManager();
@@ -118,7 +117,7 @@ public class AppearanceScene extends SettingScene {
         nvg.drawText(TranslateText.UI_BLUR.getText(), this.getX() + 8, this.getY() + 11.5F + 212, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
 
 
-        modTheme.setX(this.getX() + this.getWidth() - 87);
+        modTheme.setX(this.getX() + this.getWidth() - 120);
         modTheme.setY(this.getY() + 9.5F + (91 * 2) - yMov2);
         modTheme.draw(mouseX, mouseY, partialTicks);
 

@@ -1,6 +1,8 @@
 package me.eldodebug.soar.injection.mixin.mixins.client;
 
 import eu.shoroa.contrib.render.ShBlur;
+import me.eldodebug.soar.utils.MacOSUtils;
+import net.minecraft.util.Util;
 import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -336,6 +338,18 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
             this.entityRenderer.getMapItemRenderer().clearLoadedMaps();
         }
     }
+
+	/**
+	 * Mixin setGameIcon
+	 * @reason change the game icon to a custom one
+	 */
+	@Inject(method = "setWindowIcon", at = @At("HEAD"), cancellable = true)
+	private void setGameIcon(CallbackInfo c) {
+		if(Util.getOSType() == Util.EnumOS.OSX) {
+			MacOSUtils.setDockIcon("/assets/minecraft/soar/osx.png");
+			c.cancel();
+		}
+	}
     
     @Redirect(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"))
     private void optimizedWorldSwapping() {}
