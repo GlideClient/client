@@ -23,6 +23,8 @@ import me.eldodebug.soar.management.profile.mainmenu.BackgroundManager;
 import me.eldodebug.soar.management.profile.mainmenu.impl.Background;
 import me.eldodebug.soar.management.profile.mainmenu.impl.CustomBackground;
 import me.eldodebug.soar.management.profile.mainmenu.impl.DefaultBackground;
+import me.eldodebug.soar.management.profile.mainmenu.impl.ShaderBackground;
+import me.eldodebug.soar.management.shader.ShaderBackgroundRenderer;
 import me.eldodebug.soar.utils.Multithreading;
 import me.eldodebug.soar.utils.file.FileUtils;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
@@ -115,6 +117,14 @@ public class BackgroundScene extends MainMenuScene {
 
 				nvg.drawRoundedImage(cusBackground.getImage(), acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F, 6);
 				nvg.drawText(LegacyIcon.TRASH, acX + offsetX + 100, acY + 38 + offsetY, palette.getMaterialRed((int) (cusBackground.getTrashAnimation().getValue() * 255)), 10, Fonts.LEGACYICON);
+			}
+
+			if(bg instanceof ShaderBackground) {
+				ShaderBackground shaderBackground = (ShaderBackground) bg;
+
+				// Draw a preview of the shader background
+				ShaderBackgroundRenderer.renderShaderPreview(nvg, shaderBackground.getShaderFile(), 
+					acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F);
 			}
 
 			nvg.drawRoundedRectVarying(acX + offsetX + 11, acY + offsetY + 76.5F, 102.5F, 16, 0, 0, 6, 6, this.getBackgroundColor());

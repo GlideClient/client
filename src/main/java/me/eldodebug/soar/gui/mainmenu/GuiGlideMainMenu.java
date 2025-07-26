@@ -20,6 +20,8 @@ import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.management.profile.mainmenu.impl.Background;
 import me.eldodebug.soar.management.profile.mainmenu.impl.CustomBackground;
 import me.eldodebug.soar.management.profile.mainmenu.impl.DefaultBackground;
+import me.eldodebug.soar.management.profile.mainmenu.impl.ShaderBackground;
+import me.eldodebug.soar.management.shader.ShaderBackgroundRenderer;
 import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
 import me.eldodebug.soar.utils.animation.normal.other.DecelerateAnimation;
@@ -133,6 +135,14 @@ public class GuiGlideMainMenu extends GuiScreen {
 			CustomBackground bg = (CustomBackground) currentBackground;
 			
 			nvg.drawImage(bg.getImage(), -21 + backgroundAnimations[0].getValue() / 90, backgroundAnimations[1].getValue() * -1 / 90, sr.getScaledWidth() + 21, sr.getScaledHeight() + 20);
+		}else if(currentBackground instanceof ShaderBackground) {
+			
+			ShaderBackground bg = (ShaderBackground) currentBackground;
+			
+			// Render animated shader background using our renderer
+			ShaderBackgroundRenderer.renderShaderBackground(nvg, bg.getShaderFile(), 
+				-21 + backgroundAnimations[0].getValue() / 90, backgroundAnimations[1].getValue() * -1 / 90, 
+				sr.getScaledWidth() + 21, sr.getScaledHeight() + 20);
 		}
 
 		nvg.drawText(copyright, sr.getScaledWidth() - (nvg.getTextWidth(copyright, 9, Fonts.REGULAR)) - 4, sr.getScaledHeight() - 12, new Color(255, 255, 255), 9, Fonts.REGULAR);

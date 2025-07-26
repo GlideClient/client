@@ -19,6 +19,7 @@ import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.profile.mainmenu.impl.Background;
 import me.eldodebug.soar.management.profile.mainmenu.impl.CustomBackground;
 import me.eldodebug.soar.management.profile.mainmenu.impl.DefaultBackground;
+import me.eldodebug.soar.management.profile.mainmenu.impl.ShaderBackground;
 import me.eldodebug.soar.utils.JsonUtils;
 import me.eldodebug.soar.utils.file.FileUtils;
 import net.minecraft.util.ResourceLocation;
@@ -47,6 +48,17 @@ public class BackgroundManager {
 		backgrounds.add(new DefaultBackground(1, TranslateText.NIGHT, new ResourceLocation("soar/mainmenu/background-night.png")));
 		backgrounds.add(new DefaultBackground(2, TranslateText.DOLPHIN, new ResourceLocation("soar/mainmenu/background-dolphin.png")));
 		backgrounds.add(new DefaultBackground(3, TranslateText.UNITY, new ResourceLocation("soar/mainmenu/background-unity.png")));
+		
+		// Add shader background - load from resources, not user directory
+		// This allows texture pack customization!
+		File shaderDir = new File(fileManager.getGlideDir(), "shaders");
+		if (!shaderDir.exists()) {
+			fileManager.createDir(shaderDir);
+		}
+		
+		File menuShaderFile = new File(shaderDir, "menu.fsh");
+		// The ShaderBackground will handle loading from resources with ResourceLocation
+		backgrounds.add(new ShaderBackground(4, TranslateText.SHADER, menuShaderFile));
 		backgrounds.add(new DefaultBackground(999, TranslateText.ADD, null));
 
 		ArrayList<String> removeImages = load();

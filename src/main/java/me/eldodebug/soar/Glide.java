@@ -10,6 +10,7 @@ import me.eldodebug.soar.management.remote.blacklists.BlacklistManager;
 import me.eldodebug.soar.management.remote.discord.DiscordStats;
 import me.eldodebug.soar.management.remote.news.NewsManager;
 import me.eldodebug.soar.management.remote.update.Update;
+import me.eldodebug.soar.management.shader.ShaderManager;
 import me.eldodebug.soar.ui.ClickEffects;
 import me.eldodebug.soar.utils.Sound;
 import org.apache.commons.lang3.ArrayUtils;
@@ -71,6 +72,7 @@ public class Glide {
 	private ClickEffects clickEffects;
 	private BlacklistManager blacklistManager;
 	private RestrictedMod restrictedMod;
+	private ShaderManager shaderManager;
 	
 	public Glide() {
 		name = "Glide";
@@ -121,11 +123,16 @@ public class Glide {
 
 		InternalSettingsMod.getInstance().setToggled(true);
 		clickEffects = new ClickEffects();
+		shaderManager = new ShaderManager();
+		shaderManager.init();
 		mc.updateDisplay();
 	}
 	
 	public void stop() {
 		profileManager.save();
+		if (shaderManager != null) {
+			shaderManager.cleanup();
+		}
 		Sound.play("soar/audio/close.wav", true);
 
 	}
@@ -260,4 +267,5 @@ public class Glide {
 
 	public BlacklistManager getBlacklistManager() { return blacklistManager; }
 	public RestrictedMod getRestrictedMod() { return restrictedMod; }
+	public ShaderManager getShaderManager() { return shaderManager; }
 }
