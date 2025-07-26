@@ -30,14 +30,22 @@ public class ShaderBackgroundRenderer {
 			}
 			
 			if (shaderId != -1) {
-				// End NanoVG rendering temporarily to use raw OpenGL
-				nvg.restore();
+				// Save current NanoVG state and OpenGL state
+				nvg.save();
 				
-				// Render the actual shader
+				// Push OpenGL attributes to preserve state
+				org.lwjgl.opengl.GL11.glPushAttrib(org.lwjgl.opengl.GL11.GL_ALL_ATTRIB_BITS);
+				org.lwjgl.opengl.GL11.glPushMatrix();
+				
+				// Render the actual shader with proper state isolation
 				instance.getShaderManager().renderShader(shaderId, x, y, width, height);
 				
-				// Resume NanoVG rendering
-				nvg.save();
+				// Restore OpenGL state
+				org.lwjgl.opengl.GL11.glPopMatrix();
+				org.lwjgl.opengl.GL11.glPopAttrib();
+				
+				// Restore NanoVG state
+				nvg.restore();
 				return;
 			}
 		}
