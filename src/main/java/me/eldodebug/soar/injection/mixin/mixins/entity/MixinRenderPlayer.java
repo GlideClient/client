@@ -1,12 +1,6 @@
 package me.eldodebug.soar.injection.mixin.mixins.entity;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
+import eu.shoroa.contrib.cosmetic.CosmeticLayer;
 import me.eldodebug.soar.injection.interfaces.IMixinEntityPlayer;
 import me.eldodebug.soar.injection.interfaces.IMixinRenderPlayer;
 import me.eldodebug.soar.management.event.impl.EventRenderPlayer;
@@ -23,13 +17,19 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RenderPlayer.class)
-public abstract class MixinRenderPlayer  extends RendererLivingEntity<AbstractClientPlayer> implements IMixinRenderPlayer {
+public abstract class MixinRenderPlayer extends RendererLivingEntity<AbstractClientPlayer> implements IMixinRenderPlayer {
 
     @Shadow
     private boolean smallArms;
-    
+
     private HeadLayerFeatureRenderer headLayer;
     private BodyLayerFeatureRenderer bodyLayer;
     
@@ -42,6 +42,9 @@ public abstract class MixinRenderPlayer  extends RendererLivingEntity<AbstractCl
         headLayer = new HeadLayerFeatureRenderer((RenderPlayer)(Object)this);
         bodyLayer = new BodyLayerFeatureRenderer((RenderPlayer)(Object)this);
         addLayer(new CustomCapeRenderLayer((RenderPlayer)(Object)this, getMainModel()));
+        addLayer(new CosmeticLayer());
+//        Glide.getInstance().getCosmeticManager().addLayersAndInit((RenderPlayer)(Object)this);
+//        Glide.getInstance().getCosmeticManager().getCosmetics().forEach((c) -> addLayer(c.layer));
     }
     
     @Inject(method = "setModelVisibilities", at = @At("HEAD"))

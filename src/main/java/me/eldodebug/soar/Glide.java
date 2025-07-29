@@ -1,42 +1,41 @@
 package me.eldodebug.soar;
 
-import java.io.File;
-import java.util.Arrays;
-
+import eu.shoroa.contrib.cosmetic.CosmeticManager;
 import me.eldodebug.soar.gui.mainmenu.GuiGlideMainMenu;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
-import me.eldodebug.soar.management.mods.RestrictedMod;
-import me.eldodebug.soar.management.remote.blacklists.BlacklistManager;
-import me.eldodebug.soar.management.remote.discord.DiscordStats;
-import me.eldodebug.soar.management.remote.news.NewsManager;
-import me.eldodebug.soar.management.remote.update.Update;
-import me.eldodebug.soar.ui.ClickEffects;
-import me.eldodebug.soar.utils.Sound;
-import org.apache.commons.lang3.ArrayUtils;
-
 import me.eldodebug.soar.injection.mixin.GlideTweaker;
 import me.eldodebug.soar.logger.GlideLogger;
 import me.eldodebug.soar.management.cape.CapeManager;
-import me.eldodebug.soar.management.remote.changelog.ChangelogManager;
 import me.eldodebug.soar.management.color.ColorManager;
 import me.eldodebug.soar.management.command.CommandManager;
 import me.eldodebug.soar.management.event.EventManager;
 import me.eldodebug.soar.management.file.FileManager;
 import me.eldodebug.soar.management.language.LanguageManager;
 import me.eldodebug.soar.management.mods.ModManager;
+import me.eldodebug.soar.management.mods.RestrictedMod;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.notification.NotificationManager;
 import me.eldodebug.soar.management.profile.ProfileManager;
 import me.eldodebug.soar.management.quickplay.QuickPlayManager;
+import me.eldodebug.soar.management.remote.blacklists.BlacklistManager;
+import me.eldodebug.soar.management.remote.changelog.ChangelogManager;
+import me.eldodebug.soar.management.remote.discord.DiscordStats;
+import me.eldodebug.soar.management.remote.news.NewsManager;
+import me.eldodebug.soar.management.remote.update.Update;
 import me.eldodebug.soar.management.screenshot.ScreenshotManager;
 import me.eldodebug.soar.management.security.SecurityFeatureManager;
 import me.eldodebug.soar.management.waypoint.WaypointManager;
+import me.eldodebug.soar.ui.ClickEffects;
 import me.eldodebug.soar.utils.OptifineUtils;
+import me.eldodebug.soar.utils.Sound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
-import org.lwjgl.opengl.Display;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.io.File;
+import java.util.Arrays;
 
 public class Glide {
 
@@ -51,6 +50,8 @@ public class Glide {
 	private LanguageManager languageManager;
 	private EventManager eventManager;
 	private ModManager modManager;
+	private CosmeticManager cosmeticManager;
+	private GuiGlideMainMenu mainMenu;
 	private CapeManager capeManager;
 	private ColorManager colorManager;
 	private ProfileManager profileManager;
@@ -62,9 +63,8 @@ public class Glide {
 	private ChangelogManager changelogManager;
 	private NewsManager newsManager;
 	private DiscordStats discordStats;
-    private WaypointManager waypointManager;
+	private WaypointManager waypointManager;
 	private GuiModMenu modMenu;
-	private GuiGlideMainMenu mainMenu;
 	private long launchTime;
 	private File firstLoginFile;
 	private Update update;
@@ -93,7 +93,9 @@ public class Glide {
 		languageManager = new LanguageManager();
 		eventManager = new EventManager();
 		modManager = new ModManager();
-		
+		cosmeticManager = new CosmeticManager();
+
+		cosmeticManager.init();
 		modManager.init();
 		
 		capeManager = new CapeManager();
@@ -165,6 +167,10 @@ public class Glide {
 
 	public ModManager getModManager() {
 		return modManager;
+	}
+
+	public CosmeticManager getCosmeticManager() {
+		return cosmeticManager;
 	}
 
 	public LanguageManager getLanguageManager() {

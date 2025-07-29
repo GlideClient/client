@@ -18,6 +18,17 @@ public class EarsMod extends Mod {
 		instance = this;
 	}
 
+	@Override
+	public void onEnable() {
+		super.onEnable();
+//		Glide.getInstance().getCosmeticManager().getCosmetic(EarsLayer.class).enabled = true;
+	}
+
+	@Override
+	public void onDisable() {
+		super.onDisable();
+//		Glide.getInstance().getCosmeticManager().getCosmetic(EarsLayer.class).enabled = false;
+	}
 
 	public static void drawLeft(AbstractClientPlayer entitylivingbaseIn, float partialTicks, RenderPlayer playerRenderer) {
 		playerRenderer.bindTexture(new ResourceLocation("soar/cosmetics/ears/blackcatleft.png"));
