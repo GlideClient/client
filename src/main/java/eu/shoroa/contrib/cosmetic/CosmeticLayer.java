@@ -3,7 +3,6 @@ package eu.shoroa.contrib.cosmetic;
 import me.eldodebug.soar.Glide;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
 public class CosmeticLayer implements LayerRenderer<AbstractClientPlayer> {
@@ -13,9 +12,7 @@ public class CosmeticLayer implements LayerRenderer<AbstractClientPlayer> {
             return;
         }
 
-        Glide.getInstance().getCosmeticManager().getCosmetics().stream().filter((c) -> c.enabled).forEach((c) -> {
-            c.model.render(entityPlayer, handSwing, handSwingAmount, ticks, age, headYaw, headPitch);
-        });
+        Glide.getInstance().getCosmeticManager().getCosmetics().stream().filter((c) -> c.enabled).forEach((c) -> c.model.render(entityPlayer, handSwing, handSwingAmount, ticks, age, headYaw, headPitch));
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Debug3DRenderer {
     private static final List<DebugLine> lines = new ArrayList<>();
     private static final List<DebugBox> boxes = new ArrayList<>();

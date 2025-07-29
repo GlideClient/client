@@ -6,6 +6,7 @@ import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.WorldRenderer;
 
+@SuppressWarnings("ALL")
 public class ModelBoxF extends ModelBox {
     /**
      * The (x,y,z) vertex positions and (u,v) texture coordinates for each of the 8 points on a cube
