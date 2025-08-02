@@ -3,7 +3,8 @@
 </p>
 
 ## More features, fixes and quality of life.
-### Join our discord! https://glideclient.github.io/discord
+Download now on our website! https://glideclient.com/download
+### Join our discord! https://glideclient.com/discord
 <br>
 
 
@@ -27,10 +28,7 @@ gradlew build
 ## Platform support
 windows (working well) <br>
 linux (working but some issues noticed that can be fixed by using the fps limit mod) <br>
-mac os (working in latest src)
-
-## Future
-I do not want glide to compete with [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient) so when [Soar Client](https://github.com/Soar-Client/Legacy-SoarClient) V8 releases this project will be instantly archived 
+mac os (working with some limitations)
 
 
 
