@@ -1,6 +1,7 @@
 package me.eldodebug.soar.injection.mixin.mixins.entity;
 
 import eu.shoroa.contrib.cosmetic.CosmeticLayer;
+import eu.shoroa.contrib.cosmetic.CosmeticManager;
 import me.eldodebug.soar.injection.interfaces.IMixinEntityPlayer;
 import me.eldodebug.soar.injection.interfaces.IMixinRenderPlayer;
 import me.eldodebug.soar.management.event.impl.EventRenderPlayer;
@@ -42,6 +43,7 @@ public abstract class MixinRenderPlayer extends RendererLivingEntity<AbstractCli
         headLayer = new HeadLayerFeatureRenderer((RenderPlayer)(Object)this);
         bodyLayer = new BodyLayerFeatureRenderer((RenderPlayer)(Object)this);
         addLayer(new CustomCapeRenderLayer((RenderPlayer)(Object)this, getMainModel()));
+        CosmeticManager.getInstance().setRenderPlayer((RenderPlayer)(Object)this);
         addLayer(new CosmeticLayer());
 //        Glide.getInstance().getCosmeticManager().addLayersAndInit((RenderPlayer)(Object)this);
 //        Glide.getInstance().getCosmeticManager().getCosmetics().forEach((c) -> addLayer(c.layer));

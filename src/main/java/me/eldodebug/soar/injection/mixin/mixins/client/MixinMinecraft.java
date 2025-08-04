@@ -1,18 +1,16 @@
 package me.eldodebug.soar.injection.mixin.mixins.client;
 
 import eu.shoroa.contrib.render.ShBlur;
+import eu.shoroa.contrib.util.Time;
 import me.eldodebug.soar.utils.MacOSUtils;
 import net.minecraft.util.Util;
 import org.apache.commons.lang3.SystemUtils;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -125,7 +123,28 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
     @Shadow 
     private boolean enableGLErrorChecking;
 
+	@Unique
+	long lastFrame = client$getCurrentTime();
+
+	@Unique
+	private long client$getCurrentTime() {
+		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	}
+
 	@Shadow protected abstract void resize(int width, int height);
+
+	@Inject(method = "runGameLoop", at = @At(value = "INVOKE", target = "Ljava/lang/System;nanoTime()J"))
+	public void supsec$render(CallbackInfo ci) {
+		long currentTime = client$getCurrentTime();
+		long deltaTimeMillis = currentTime - lastFrame;
+		lastFrame = currentTime;
+
+		float deltaTimeSeconds = deltaTimeMillis / 1000.0f;
+
+		if (deltaTimeSeconds > 0 && deltaTimeSeconds < 0.1f) {
+			Time.setDelta(deltaTimeSeconds);
+		}
+	}
 
 	@Inject(method = "startGame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;ingameGUI:Lnet/minecraft/client/gui/GuiIngame;", shift = At.Shift.AFTER))
     public void preStartGame(CallbackInfo ci) {

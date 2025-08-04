@@ -50,7 +50,7 @@ public class Glide {
 	private LanguageManager languageManager;
 	private EventManager eventManager;
 	private ModManager modManager;
-	private CosmeticManager cosmeticManager;
+//	private CosmeticManager cosmeticManager;
 	private GuiGlideMainMenu mainMenu;
 	private CapeManager capeManager;
 	private ColorManager colorManager;
@@ -93,9 +93,10 @@ public class Glide {
 		languageManager = new LanguageManager();
 		eventManager = new EventManager();
 		modManager = new ModManager();
-		cosmeticManager = new CosmeticManager();
+//		cosmeticManager = new CosmeticManager();
 
-		cosmeticManager.init();
+//		cosmeticManager.init();
+		CosmeticManager.getInstance().init();
 		modManager.init();
 		
 		capeManager = new CapeManager();
@@ -169,9 +170,9 @@ public class Glide {
 		return modManager;
 	}
 
-	public CosmeticManager getCosmeticManager() {
-		return cosmeticManager;
-	}
+//	public CosmeticManager getCosmeticManager() {
+//		return cosmeticManager;
+//	}
 
 	public LanguageManager getLanguageManager() {
 		return languageManager;

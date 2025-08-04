@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import eu.shoroa.contrib.cosmetic.CosmeticManager;
 import eu.shoroa.contrib.render.ShBlur;
 import me.eldodebug.soar.gui.modmenu.category.impl.*;
 import me.eldodebug.soar.management.file.FileManager;
@@ -97,7 +98,7 @@ public class GuiModMenu extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		
+		CosmeticManager.getInstance().renderFBO();
 		Glide instance = Glide.getInstance();
 		NanoVGManager nvg = instance.getNanoVGManager();
 		
