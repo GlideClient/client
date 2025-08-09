@@ -37,7 +37,7 @@ public final class CosmeticManager {
     }
 
     public void renderLayer(AbstractClientPlayer entityPlayer, float handSwing, float handSwingAmount, float ticks, float age, float headYaw, float headPitch, float scale) {
-        cosmetics.stream().filter(cosmetic -> cosmetic.isEnabled() && cosmetic.getPositionType() == PositionType.LOCAL).forEach(cosmetic -> {
+        cosmetics.stream().filter(cosmetic -> (cosmetic.isEnabled() || entityPlayer instanceof CosmeticPreviewEntity) && cosmetic.getPositionType() == PositionType.LOCAL).forEach(cosmetic -> {
             cosmetic.render(entityPlayer, handSwing, handSwingAmount, ticks, age, headYaw, headPitch, scale);
         });
     }

@@ -1,6 +1,8 @@
 package eu.shoroa.contrib.gui;
 
 import eu.shoroa.contrib.cosmetic.Cosmetic;
+import eu.shoroa.contrib.cosmetic.CosmeticPreviewEntity;
+import eu.shoroa.contrib.fake.ExampleGui;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.color.AccentColor;
 import me.eldodebug.soar.management.color.ColorManager;
@@ -14,6 +16,7 @@ import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
 import me.eldodebug.soar.utils.animation.normal.other.SmoothStepAnimation;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
+import net.minecraft.client.Minecraft;
 
 public class CompCosmetic extends Comp {
     private final Cosmetic cosmetic;
@@ -58,6 +61,10 @@ public class CompCosmetic extends Comp {
 
         if (mouseButton == 0) {
             cosmetic.toggle();
+        }
+
+        if (mouseButton == 1) {
+            Minecraft.getMinecraft().displayGuiScreen(new ExampleGui());
         }
     }
 

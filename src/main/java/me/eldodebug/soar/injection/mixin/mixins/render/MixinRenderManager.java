@@ -1,5 +1,6 @@
 package me.eldodebug.soar.injection.mixin.mixins.render;
 
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +31,9 @@ public abstract class MixinRenderManager implements IMixinRenderManager {
 	
 	@Shadow
     private double renderPosZ;
-    
+
+	@Shadow private RenderPlayer playerRenderer;
+
 	@Inject(method = "renderDebugBoundingBox", at = @At("HEAD"), cancellable = true)
 	public void onRenderHitbox(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
 		
@@ -55,5 +58,10 @@ public abstract class MixinRenderManager implements IMixinRenderManager {
 	@Override
 	public double getRenderPosZ() {
 		return this.renderPosZ;
+	}
+
+	@Override
+	public RenderPlayer getPlayerRenderer() {
+		return this.playerRenderer;
 	}
 }
