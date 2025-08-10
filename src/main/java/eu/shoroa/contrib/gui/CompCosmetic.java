@@ -40,6 +40,7 @@ public class CompCosmetic extends Comp {
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         animation.setDirection(cosmetic.isEnabled() ? Direction.FORWARDS : Direction.BACKWARDS);
+        animation.setEndPoint(1.0);
 
         Glide instance = Glide.getInstance();
         NanoVGManager nvg = instance.getNanoVGManager();
@@ -49,7 +50,7 @@ public class CompCosmetic extends Comp {
 
         nvg.drawRoundedRect(getX(), getY(), width, height, 9f, ColorUtils.interpolateColor(palette.getBackgroundColor(ColorType.DARK), accentColor.getInterpolateColor(), animation.getValue()));
         nvg.drawRoundedRect(getX() + 2f, getY() + 2f, width - 4f, height - 4f, 7f, palette.getBackgroundColor(ColorType.NORMAL));
-//        nvg.drawRoundedRect(getX() + 6f, getY() + 6f, width - 12f, height - 24f, 5f, palette.getBackgroundColor(ColorType.DARK));
+        nvg.drawRoundedRect(getX() + 6f, getY() + 6f, width - 12f, height - 24f, 5f, palette.getBackgroundColor(ColorType.DARK));
         nvg.drawRoundedImage(cosmetic.getPreviewImage(), getX() + 6f, getY() + 6f, (width - 12f), height - 24f, 5f);
         nvg.drawCenteredText(cosmetic.getName(), getX() + getWidth() / 2f, getY() + getHeight() - 15f, palette.getFontColor(ColorType.NORMAL), 10f, Fonts.REGULAR);
     }

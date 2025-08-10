@@ -11,8 +11,12 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import static java.lang.Math.PI;
 import static me.eldodebug.soar.utils.MathUtils.sin;
@@ -100,29 +104,32 @@ public class DoubleHaloCosmetic extends Cosmetic {
 
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
-            GlStateManager.disableCull();
             GlStateManager.translate(tx, ty, tz);
             GlStateManager.rotate(180f, 1f, 0f, 0f);
             GlStateManager.rotate(smoothYaw, 0f, 1f, 0f);
-            GlStateManager.translate(0f, -2.57f + .06f * ease, 0f);
+            GlStateManager.translate(0f, -2.17f + .06f * ease, 0f);
             GlStateManager.scale(haloScale, haloScale, haloScale);
             Minecraft.getMinecraft().getTextureManager().bindTexture(textureFull);
-            bone.render(constScale);
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            GL11.glCullFace(GL11.GL_NONE);
+//            bone.render(constScale);
+            renderHaloQuad(1.0f, 0, 0, 32, 32);
             GlStateManager.enableCull();
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
 
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
-            GlStateManager.disableCull();
             GlStateManager.translate(tx, ty, tz);
             GlStateManager.rotate(180f, 1f, 0f, 0f);
             GlStateManager.rotate(smoothYaw, 0f, 1f, 0f);
-            GlStateManager.translate(0f, -2.57f + .1f * ease, 0f);
+            GlStateManager.translate(0f, -2.1f + .1f * ease, 0f);
             GlStateManager.scale(haloScale, haloScale, haloScale);
             Minecraft.getMinecraft().getTextureManager().bindTexture(textureFull);
-            bone2.render(constScale);
-            GlStateManager.enableCull();
+//            bone2.render(constScale);
+            renderHaloQuad(1.0f, 0, 32, 32, 32);
+            GL11.glEnable(GL11.GL_CULL_FACE);
+            GL11.glCullFace(GL11.GL_BACK);
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
@@ -131,6 +138,23 @@ public class DoubleHaloCosmetic extends Cosmetic {
             modelRenderer.rotateAngleX = (float) -0.2618;
             modelRenderer.rotateAngleY = (float) 0.0;
             modelRenderer.rotateAngleZ = (float) 0.0;
+        }
+
+        private void renderHaloQuad(float size, int textureOffsetX, int textureOffsetY, int width, int height) {
+            Tessellator tessellator = Tessellator.getInstance();
+            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+
+            float u1 = (float) textureOffsetX / textureWidth;
+            float v1 = (float) textureOffsetY / textureHeight;
+            float u2 = (float) (textureOffsetX + width) / textureWidth;
+            float v2 = (float) (textureOffsetY + height) / textureHeight;
+
+            worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            worldrenderer.pos(-size, 0, -size).tex(u1, v1).endVertex();
+            worldrenderer.pos(-size, 0, size).tex(u1, v2).endVertex();
+            worldrenderer.pos(size, 0, size).tex(u2, v2).endVertex();
+            worldrenderer.pos(size, 0, -size).tex(u2, v1).endVertex();
+            tessellator.draw();
         }
     }
 }
