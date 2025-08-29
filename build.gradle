@@ -1,11 +1,9 @@
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             name = "forge"
-            url = "https://maven.minecraftforge.net"
-//            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
         }
         maven {
             name = 'sponge'
@@ -51,7 +49,6 @@ repositories {
         name "spongepowered"
         url "https://repo.spongepowered.org/maven/"
     }
-    jcenter()
     mavenCentral()
 }
 
