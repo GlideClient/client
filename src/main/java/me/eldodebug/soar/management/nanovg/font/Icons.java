@@ -1,7 +1,34 @@
 package me.eldodebug.soar.management.nanovg.font;
 
-public class FluentIcons {
+public class Icons {
 
+    // Gliconic
+    public static final String GLIDE = "A";
+    public static final String APPLE = "B";
+    public static final String LINUX = "C";
+    public static final String WINDOWS = "D";
+    public static final String MAC_OS = "E";
+    public static final String ARCH_LINUX = "F";
+    public static final String GITHUB = "H";
+    public static final String FIREFOX = "E";
+    public static final String SOAR = "S";
+    public static final String SPOTIFY = "a";
+    public static final String YOUTUBE_MUSIC = "b";
+    public static final String SOUNDCLOUD = "c";
+    public static final String DISCORD = "d";
+    public static final String YOUTUBE = "e";
+    public static final String BLUESKY = "f";
+    public static final String TWITTER = "g";
+    public static final String INSTAGRAM = "h";
+    public static final String FACEBOOK = "i";
+    public static final String TIKTOK = "j";
+    public static final String TWITCH = "k";
+    public static final String TEAMSPEAK = "l";
+    public static final String SUNRISE = "{";
+    public static final String SUNSET = "|";
+    public static final String TERMINAL = "}";
+
+    // Fluent
     public static final String ACCESS_TIME_24 = "\uF101";
     public static final String ACCESSIBILITY_16 = "\uF102";
     public static final String ACCESSIBILITY_20 = "\uF103";
