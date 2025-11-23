@@ -12,6 +12,7 @@ import me.eldodebug.soar.management.file.FileManager;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.nanovg.font.FontManager;
+import me.eldodebug.soar.management.nanovg.font.Icons;
 import me.eldodebug.soar.utils.file.FileUtils;
 import org.lwjgl.input.Keyboard;
 
@@ -135,7 +136,7 @@ public class GuiModMenu extends GuiScreen {
 		}
 
 		nvg.drawGradientRoundedRect(x + 5, y + 7, 22, 22, 11, currentColor.getColor1(), currentColor.getColor2());
-		nvg.drawText(LegacyIcon.SOAR, x + 8, y + 10, Color.WHITE, 16, Fonts.LEGACYICON);
+		nvg.drawText(Icons.GLIDE, x + 8, y + 10, Color.WHITE, 16, Fonts.ICON_FILLED);
 		if(currentCategory.isShowTitle()) {
 			nvg.save();
 			nvg.translate(currentCategory.getTextAnimation().getValue() * 15, 0);
