@@ -195,10 +195,8 @@ public class GuiGlideMainMenu extends GuiScreen {
 		}
 		
 		currentScene.mouseClicked(mouseX, mouseY, mouseButton);
-		try {
-			super.mouseClicked(mouseX, mouseY, mouseButton);
-		} catch (IOException e) {}
-	}
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
 	
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
@@ -211,7 +209,7 @@ public class GuiGlideMainMenu extends GuiScreen {
 	}
 	
 	@Override
-	public void handleInput() throws IOException {
+	public void handleInput() {
 			super.handleInput();
 	}
 	

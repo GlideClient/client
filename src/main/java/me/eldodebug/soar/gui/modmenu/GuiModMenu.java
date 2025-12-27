@@ -250,11 +250,9 @@ public class GuiModMenu extends GuiScreen {
 				FileUtils.openFolderAtPath(Glide.getInstance().getFileManager().getCustomCapeDir());
 			}
 		}
-		
-		try {
-			super.mouseClicked(mouseX, mouseY, mouseButton);
-		} catch (IOException e) {}
-	}
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
 	
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int mouseButton) {

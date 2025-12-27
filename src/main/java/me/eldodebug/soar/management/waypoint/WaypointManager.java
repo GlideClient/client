@@ -104,7 +104,7 @@ public class WaypointManager {
 			return "server-" + ServerUtils.getServerIP() + "-" + mc.theWorld.provider.getDimensionId();
 		}
 		
-		return "local-" + mc.getIntegratedServer().getFolderName() + "-" + mc.theWorld.provider.getDimensionId();
+		return "local-" + mc.getIntegratedServer().method_2028() + "-" + mc.theWorld.provider.getDimensionId();
 	}
 
 	public ArrayList<Waypoint> getWaypoints() {

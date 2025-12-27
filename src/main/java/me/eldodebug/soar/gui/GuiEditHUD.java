@@ -260,11 +260,9 @@ public class GuiEditHUD extends GuiScreen {
 		for(HUDMod m : mods) {
 			m.setDragging(false);
 		}
-		
-		try {
-			super.mouseClicked(mouseX, mouseY, mouseButton);
-		} catch (IOException e) {}
-	}
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
 	
 	@Override
 	public void keyTyped(char typedChar, int keyCode) {
