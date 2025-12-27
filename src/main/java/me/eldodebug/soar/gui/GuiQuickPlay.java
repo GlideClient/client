@@ -165,12 +165,10 @@ public class GuiQuickPlay extends GuiScreen {
 		int offsetX = 0;
 		int offsetY = 0;
 		int index = 1;
-		
-		try {
-			super.mouseClicked(mouseX, mouseY, mouseButton);
-		} catch (IOException e) {}
-		
-		if(currentQuickPlay == null) {
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if(currentQuickPlay == null) {
 			for(QuickPlay q : quickPlayManager.getQuickPlays()) {
 				
 				if(MouseUtils.isInside(mouseX, mouseY, x + 15 + offsetX, y + 42 + offsetY, 110, 42) && mouseButton == 0) {
