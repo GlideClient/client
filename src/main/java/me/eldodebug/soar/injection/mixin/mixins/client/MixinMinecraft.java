@@ -4,6 +4,7 @@ import eu.shoroa.contrib.animation.Animate;
 import eu.shoroa.contrib.render.Blur;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.GuiSplashScreen;
+import me.eldodebug.soar.gui.gamemenus.MenuManager;
 import me.eldodebug.soar.injection.interfaces.IMixinEntityLivingBase;
 import me.eldodebug.soar.injection.interfaces.IMixinMinecraft;
 import me.eldodebug.soar.management.event.impl.*;
@@ -320,7 +321,8 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
     @Inject(method = "displayGuiScreen", at = @At("RETURN"), cancellable = true)
     public void displayGuiScreenInject(GuiScreen guiScreenIn, CallbackInfo ci) {
     	if(guiScreenIn instanceof GuiMainMenu) {
-			displayGuiScreen(Glide.getInstance().getMainMenu());
+//			displayGuiScreen(Glide.getInstance().getMainMenu());
+			displayGuiScreen(new MenuManager());
     	}
     }
     
