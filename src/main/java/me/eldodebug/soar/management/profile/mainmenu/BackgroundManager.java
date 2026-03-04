@@ -19,6 +19,7 @@ import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.profile.mainmenu.impl.Background;
 import me.eldodebug.soar.management.profile.mainmenu.impl.CustomBackground;
 import me.eldodebug.soar.management.profile.mainmenu.impl.DefaultBackground;
+import me.eldodebug.soar.management.profile.mainmenu.impl.PanoramaBackground;
 import me.eldodebug.soar.utils.JsonUtils;
 import me.eldodebug.soar.utils.file.FileUtils;
 import net.minecraft.util.ResourceLocation;
@@ -47,6 +48,7 @@ public class BackgroundManager {
 		backgrounds.add(new DefaultBackground(1, TranslateText.NIGHT, new ResourceLocation("soar/mainmenu/background-night.png")));
 		backgrounds.add(new DefaultBackground(2, TranslateText.DOLPHIN, new ResourceLocation("soar/mainmenu/background-dolphin.png")));
 		backgrounds.add(new DefaultBackground(3, TranslateText.UNITY, new ResourceLocation("soar/mainmenu/background-unity.png")));
+		backgrounds.add(new PanoramaBackground(4, TranslateText.PANO));
 		backgrounds.add(new DefaultBackground(999, TranslateText.ADD, null));
 
 		ArrayList<String> removeImages = load();

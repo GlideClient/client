@@ -1,7 +1,7 @@
 package me.eldodebug.soar.gui.gamemenus;
 
 import me.eldodebug.soar.Glide;
-import me.eldodebug.soar.gui.gamemenus.utils.MenuBackground;
+import me.eldodebug.soar.gui.gamemenus.backgrounds.BackgroundsHandler;
 import me.eldodebug.soar.gui.gamemenus.views.BackgroundSelector;
 import me.eldodebug.soar.gui.gamemenus.views.MainMenuClassic;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
@@ -17,8 +17,7 @@ import java.util.ArrayList;
 public class MenuManager extends GuiScreen {
 
     private GlideScreen currentView;
-
-    MenuBackground menuBackground = new MenuBackground();
+    BackgroundsHandler backgroundsHandler = new BackgroundsHandler();
 
 
     private ArrayList<GlideScreen> views = new ArrayList<GlideScreen>();
@@ -26,7 +25,8 @@ public class MenuManager extends GuiScreen {
     public MenuManager() {
         Glide instance = Glide.getInstance();
 
-        menuBackground.initBackground();
+        backgroundsHandler = new BackgroundsHandler();
+
 
         addViews();
 
@@ -35,6 +35,10 @@ public class MenuManager extends GuiScreen {
         currentView = getViewByClass(BackgroundSelector.class);
     }
 
+    @Override
+    public void updateScreen() {
+        backgroundsHandler.update(width, height);
+    }
 
     @Override
     public void initGui() {
@@ -50,7 +54,7 @@ public class MenuManager extends GuiScreen {
 
         boolean isFirstLogin = instance.isFirstLogin();
 
-        menuBackground.updateParallax();
+        backgroundsHandler.draw(sr, instance, nvg, partialTicks);
 
         nvg.setupAndDraw(() -> drawNanoVG(sr, instance, nvg, mouseX, mouseY));
 
@@ -64,8 +68,6 @@ public class MenuManager extends GuiScreen {
     }
 
     private void drawNanoVG(ScaledResolution sr, Glide instance, NanoVGManager nvg, int mouseX, int mouseY) {
-
-        menuBackground.drawBackground(sr, instance, nvg);
         drawMenuBar(mouseX, mouseY, sr, nvg);
 
     }
