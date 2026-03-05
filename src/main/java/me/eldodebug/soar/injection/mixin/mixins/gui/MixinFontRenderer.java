@@ -19,27 +19,27 @@ public abstract class MixinFontRenderer {
 
     @ModifyVariable(method = "renderString", at = @At("HEAD"), ordinal = 0)
     private String renderString(String text) {
-    	
+
     	if(text == null || Glide.getInstance().getEventManager() == null) {
     		return text;
     	}
-		
+
     	EventText event = new EventText(text);
     	event.call();
-    	
+
     	return event.getOutputText();
     }
     
     @ModifyVariable(method = "getStringWidth", at = @At("HEAD"), ordinal = 0)
     private String getStringWidth(String text) {
-    	
+
     	if(text == null || Glide.getInstance().getEventManager() == null) {
     		return text;
     	}
-    	
+
     	EventText event = new EventText(text);
     	event.call();
-    	
+
     	return event.getOutputText();
     }
     

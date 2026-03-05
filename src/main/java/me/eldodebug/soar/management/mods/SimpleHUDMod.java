@@ -1,6 +1,7 @@
 package me.eldodebug.soar.management.mods;
 
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
@@ -23,20 +24,17 @@ public class SimpleHUDMod extends HUDMod {
 		float addX = hasIcon ? this.getTextWidth(getIcon(), 9.5F, Fonts.LEGACYICON) + 4 : 0;
 		
 		if(getText() != null) {
-			nvg.setupAndDraw(() -> {
-				
-				float bgWidth = (this.getTextWidth(this.getText(), 9, getHudFont(1)) + 10) + addX;
-				
-				this.drawBackground(bgWidth, 18);
-				this.drawText(this.getText(), 5.5F + addX, 5.5F, 9, getHudFont(1));
-				
-				if(hasIcon) {
-					this.drawText(getIcon(), 5.5F, 4F, 10.4F, Fonts.LEGACYICON);
-				}
-				
-				this.setWidth((int) bgWidth);
-				this.setHeight(18);
-			});
+			float bgWidth = (this.getTextWidth(this.getText(), 9, getHudFont(1)) + 10) + addX;
+
+			this.drawBackground(bgWidth, 18);
+			this.drawText(this.getText(), 5.5F + addX, 5.5F, 9, getHudFont(1));
+
+			if(hasIcon) {
+				this.drawText(getIcon(), 5.5F, 4F, 10.4F, Fonts.LEGACYICON);
+			}
+
+			this.setWidth((int) bgWidth);
+			this.setHeight(18);
 		}
 	}
 	

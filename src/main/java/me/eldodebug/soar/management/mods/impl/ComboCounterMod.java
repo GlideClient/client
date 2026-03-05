@@ -1,10 +1,7 @@
 package me.eldodebug.soar.management.mods.impl;
 
 import me.eldodebug.soar.management.event.EventTarget;
-import me.eldodebug.soar.management.event.impl.EventAttackEntity;
-import me.eldodebug.soar.management.event.impl.EventDamageEntity;
-import me.eldodebug.soar.management.event.impl.EventRender2D;
-import me.eldodebug.soar.management.event.impl.EventTick;
+import me.eldodebug.soar.management.event.impl.*;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.SimpleHUDMod;
 import me.eldodebug.soar.management.mods.settings.impl.BooleanSetting;
@@ -22,7 +19,7 @@ public class ComboCounterMod extends SimpleHUDMod {
 	}
 
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
+	public void onRender2D(EventNVG event) {
 		this.draw();
 	}
 	

@@ -1,5 +1,6 @@
 package me.eldodebug.soar.management.mods.impl;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.Glide;
@@ -30,15 +31,7 @@ public class KeystrokesMod extends HUDMod {
 	}
 	
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		nvg.setupAndDraw(() -> drawNanoVG());
-	}
-	
-	private void drawNanoVG() {
-		
+	public void onRender2D(EventNVG event) {
 		boolean openGui = mc.currentScreen != null;
 		
 		animations[0].setAnimation(!openGui && Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode()) ? 1.0F : 0.0F, 16);

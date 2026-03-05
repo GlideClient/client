@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.opengl.GL11;
 
 import me.eldodebug.soar.management.event.EventTarget;
@@ -39,7 +40,7 @@ public class TNTTimerMod extends SimpleHUDMod {
 	}
 
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
+	public void onRender2D(EventNVG event) {
 		
 		Option option = typeSetting.getOption();
 		

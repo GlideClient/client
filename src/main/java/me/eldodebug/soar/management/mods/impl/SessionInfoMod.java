@@ -5,6 +5,7 @@ import java.util.Arrays;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.event.EventTarget;
 import me.eldodebug.soar.management.event.impl.EventJoinServer;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventReceivePacket;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
@@ -28,15 +29,7 @@ public class SessionInfoMod extends HUDMod {
 	}
 
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		nvg.setupAndDraw(() -> drawNanoVG());
-	}
-	
-	private void drawNanoVG() {
-		
+	public void onRender2D(EventNVG event) {
 		String time;
 		
 		if(mc.isSingleplayer()) {

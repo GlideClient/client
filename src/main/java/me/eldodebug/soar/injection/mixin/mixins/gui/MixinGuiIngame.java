@@ -1,6 +1,7 @@
 package me.eldodebug.soar.injection.mixin.mixins.gui;
 
 import eu.shoroa.contrib.render.Blur;
+import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.GuiEditHUD;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
 import me.eldodebug.soar.injection.interfaces.IMixinGuiIngame;
@@ -78,11 +79,11 @@ public abstract class MixinGuiIngame implements IMixinGuiIngame {
 		new EventRenderDamageTint(partialTicks).call();
 		
 		if(!(mc.currentScreen instanceof GuiEditHUD)) {
+			Glide.getInstance().getNanoVGManager().setupAndDraw(() -> new EventNVG(partialTicks).call());
 			new EventRender2D(partialTicks).call();
-			
-			if(!(mc.currentScreen instanceof GuiModMenu)) {
-				new EventRenderNotification().call();
-			}
+		}
+		if(!(mc.currentScreen instanceof GuiModMenu)) {
+			new EventRenderNotification().call();
 		}
 	}
 	

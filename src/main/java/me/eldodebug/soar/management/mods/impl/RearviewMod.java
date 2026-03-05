@@ -2,12 +2,7 @@ package me.eldodebug.soar.management.mods.impl;
 
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.event.EventTarget;
-import me.eldodebug.soar.management.event.impl.EventFireOverlay;
-import me.eldodebug.soar.management.event.impl.EventHurtCamera;
-import me.eldodebug.soar.management.event.impl.EventRender2D;
-import me.eldodebug.soar.management.event.impl.EventRenderPumpkinOverlay;
-import me.eldodebug.soar.management.event.impl.EventRenderTick;
-import me.eldodebug.soar.management.event.impl.EventWaterOverlay;
+import me.eldodebug.soar.management.event.impl.*;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
 import me.eldodebug.soar.management.mods.impl.rearview.RearviewCamera;
@@ -43,23 +38,15 @@ public class RearviewMod extends HUDMod {
 	}
 	
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		nvg.setupAndDraw(() -> drawNanoVG(nvg));
-	}
-	
-	private void drawNanoVG(NanoVGManager nvg) {
-		
+	public void onRender2D(EventNVG event) {
 		int width = (int) (rearviewWidthSetting.getValueInt() * this.getScale());
 		int height = (int) (rearviewHeightSetting.getValueInt() * this.getScale());
 		
 		rearviewCamera.setFov(fovSetting.getValueFloat());
 		rearviewCamera.setLockCamera(lockCameraSetting.isToggled());
 		
-		nvg.drawShadow(this.getX(), this.getY(), width, height, 6 * this.getScale());
-		nvg.drawRoundedImage(rearviewCamera.getTexture(), this.getX(), this.getY() + height, width, -height, 6 * this.getScale(), alphaSetting.getValueFloat());
+		event.renderer().drawShadow(this.getX(), this.getY(), width, height, 6 * this.getScale());
+		event.renderer().drawRoundedImage(rearviewCamera.getTexture(), this.getX(), this.getY() + height, width, -height, 6 * this.getScale(), alphaSetting.getValueFloat());
 		
 		this.setWidth((int) (width / this.getScale()));
 		this.setHeight((int) (height / this.getScale()));

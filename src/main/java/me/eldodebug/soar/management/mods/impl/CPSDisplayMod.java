@@ -2,6 +2,7 @@ package me.eldodebug.soar.management.mods.impl;
 
 import java.util.ArrayList;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.input.Mouse;
 
 import me.eldodebug.soar.management.event.EventTarget;
@@ -26,7 +27,7 @@ public class CPSDisplayMod extends SimpleHUDMod {
 	}
 	
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
+	public void onRender2D(EventNVG event) {
 		this.draw();
 	}
 	

@@ -2,6 +2,7 @@ package me.eldodebug.soar.management.mods.impl;
 
 import java.awt.Color;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.opengl.GL11;
 
 import me.eldodebug.soar.Glide;
@@ -40,17 +41,18 @@ public class MinimapMod extends HUDMod {
 	public void setup() {
 		chunkAtlas = new ChunkAtlas(10);
 	}
-	
+
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
+	public void onRenderNVG(EventNVG event) {
 		int width = widthSetting.getValueInt();
 		int height = heightSetting.getValueInt();
-		
-		nvg.setupAndDraw(() -> {
-			nvg.drawShadow(this.getX(), this.getY(), width * this.getScale(), height * this.getScale(), 6 * this.getScale());
-		});
+		event.renderer().drawShadow(this.getX(), this.getY(), width * this.getScale(), height * this.getScale(), 6 * this.getScale());
+	}
+
+	@EventTarget
+	public void onRender2D(EventRender2D event) {
+		int width = widthSetting.getValueInt();
+		int height = heightSetting.getValueInt();
 		
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
