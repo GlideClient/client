@@ -2,6 +2,7 @@ package me.eldodebug.soar.management.mods.impl;
 
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.event.EventTarget;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
@@ -19,14 +20,9 @@ public class InventoryDisplayMod extends HUDMod {
 	
 	@EventTarget
 	public void onRender2D(EventRender2D event) {
-		
 		int startX = this.getX() + 6;
 		int startY = this.getY() + 22;
         int index = 0;
-        
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		nvg.setupAndDraw(() -> drawNanoVG());
 		
 		GlUtils.startScale(this.getX(), this.getY(), this.getScale());
 		
@@ -60,8 +56,9 @@ public class InventoryDisplayMod extends HUDMod {
 		
 		GlUtils.stopScale();
 	}
-	
-	private void drawNanoVG() {
+
+	@EventTarget
+	private void drawNanoVG(EventNVG event) {
 		
 		this.drawBackground(188, 82);
 		this.drawText("Inventory", 5.5F, 6F, 10.5F, getHudFont(1));

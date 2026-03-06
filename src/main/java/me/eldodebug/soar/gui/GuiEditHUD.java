@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import eu.shoroa.contrib.render.Blur;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -211,8 +212,10 @@ public class GuiEditHUD extends GuiScreen {
 				
 				nvg.drawOutlineRoundedRect(m.getX() - 2, m.getY() - 2, m.getWidth() + 4, m.getHeight() + 4, 6.5F * m.getScale(), 2, palette.getBackgroundColor(ColorType.DARK, (int) (m.getAnimation().getValue() * 255)));
 			}
+
+			new EventNVG(partialTicks).call();
 		});
-		
+
 		new EventRender2D(partialTicks).call();
 		new EventRenderNotification().call();
 	}

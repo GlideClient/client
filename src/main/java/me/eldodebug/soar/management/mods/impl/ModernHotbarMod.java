@@ -7,6 +7,7 @@ import java.util.Arrays;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.color.AccentColor;
 import me.eldodebug.soar.management.event.EventTarget;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.event.impl.EventRenderExpBar;
 import me.eldodebug.soar.management.event.impl.EventRenderTooltip;
@@ -45,14 +46,15 @@ public class ModernHotbarMod extends HUDMod {
 	}
 
 	@EventTarget
+	public void onRenderNVG(EventNVG event) {
+		drawNanoVG(event.renderer());
+	}
+
+	@EventTarget
 	public void onRender2D(EventRender2D event) {
-		
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
 		ScaledResolution sr = new ScaledResolution(mc);
 		Option option = designSetting.getOption();
 		if(this.isEditing()){return;}
-		
-		nvg.setupAndDraw(() -> drawNanoVG(nvg));
 		
         if (mc.getRenderViewEntity() instanceof EntityPlayer) {
         	

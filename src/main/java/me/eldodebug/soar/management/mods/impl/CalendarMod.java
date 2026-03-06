@@ -5,6 +5,7 @@ import java.util.Calendar;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.color.AccentColor;
 import me.eldodebug.soar.management.event.EventTarget;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
@@ -20,15 +21,7 @@ public class CalendarMod extends HUDMod {
 	}
 
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		nvg.setupAndDraw(this::drawNanoVG);
-	}
-	
-	private void drawNanoVG() {
-		
+	public void onRender2D(EventNVG event) {
 		Calendar calendar = Calendar.getInstance();
 		
 		AccentColor currentColor = Glide.getInstance().getColorManager().getCurrentColor();

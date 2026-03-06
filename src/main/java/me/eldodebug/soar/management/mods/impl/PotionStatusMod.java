@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.event.EventTarget;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.event.impl.EventUpdate;
 import me.eldodebug.soar.management.language.TranslateText;
@@ -41,14 +42,14 @@ public class PotionStatusMod extends HUDMod {
 			potions = mc.thePlayer.getActivePotionEffects();
 		}
 	}
-	
+
+	@EventTarget
+	public void onRenderNVG(EventNVG event) {
+		drawNanoVG(event.renderer());
+	}
+
 	@EventTarget
 	public void onRender2D(EventRender2D event) {
-		
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		nvg.setupAndDraw(() -> drawNanoVG(nvg));
-		
 		if (!potions.isEmpty()) {
 			
 			int ySize = compactSetting.isToggled() ? 22 : 23;

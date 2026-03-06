@@ -1,6 +1,7 @@
 package me.eldodebug.soar.management.mods.impl;
 
 import me.eldodebug.soar.management.event.EventTarget;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
@@ -39,11 +40,10 @@ public class BlockInfoMod extends HUDMod {
 		introAnimation = new EaseBackIn(320, 1.0F, 2.0F);
 		introAnimation.setDirection(Direction.BACKWARDS);
 	}
-	
+
 	@EventTarget
 	public void onRender2D(EventRender2D event) {
-
-		screenAnimation.wrap(() -> drawBlock(), () -> drawNanoVG(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 2 - introAnimation.getValueFloat(), introAnimation.getValueFloat());
+		screenAnimation.wrap(this::drawBlock, this::drawNanoVG, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 2 - introAnimation.getValueFloat(), introAnimation.getValueFloat());
 		
 		this.setWidth(80);
 		this.setHeight(80);

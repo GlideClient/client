@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.management.event.EventTarget;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
@@ -31,15 +32,8 @@ public class ImageDisplayMod extends HUDMod {
 	}
 
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
+	public void onRender2D(EventNVG event) {
 		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		nvg.setupAndDraw(() -> drawNanoVG());
-	}
-	
-	private void drawNanoVG() {
-		
 		if(imageSetting.getImage() != null && prevImage != imageSetting.getImage()) {
 			
 			prevImage = imageSetting.getImage();

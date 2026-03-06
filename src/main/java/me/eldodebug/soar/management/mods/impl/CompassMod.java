@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
@@ -34,20 +35,24 @@ public class CompassMod extends SimpleHUDMod {
 	public CompassMod() {
 		super(TranslateText.COMPASS, TranslateText.COMPASS_DESCRIPTION);
 	}
-	
+
+	@EventTarget
+	public void onRenderNVG(EventNVG event) {
+		Option design = designSetting.getOption();
+		if(design.getTranslate().equals(TranslateText.SIMPLE)) {
+			this.draw();
+		} else {
+			this.drawBackground(widthSetting.getValueInt(), 29);
+		}
+	}
+
 	@EventTarget
 	public void onRender2D(EventRender2D event) {
 		
 		Option design = designSetting.getOption();
-		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
 		
-		if(design.getTranslate().equals(TranslateText.SIMPLE)) {
-			this.draw();
-		}else {
-			nvg.setupAndDraw(() -> {
-				this.drawBackground(widthSetting.getValueInt(), 29);
-			});
-			stencil.wrap(() -> drawNanoVG(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 6 * this.getScale());
+		if(design.getTranslate().equals(TranslateText.FANCY)) {
+			stencil.wrap(this::drawNanoVG, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 6 * this.getScale());
 		}
 	}
 	

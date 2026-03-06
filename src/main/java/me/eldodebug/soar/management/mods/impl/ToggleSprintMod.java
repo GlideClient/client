@@ -1,5 +1,6 @@
 package me.eldodebug.soar.management.mods.impl;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.management.event.EventTarget;
@@ -31,7 +32,7 @@ public class ToggleSprintMod extends SimpleHUDMod {
 	}
 
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
+	public void onRender2D(EventNVG event) {
 		
 		if(hudSetting.isToggled()) {
 			this.draw();

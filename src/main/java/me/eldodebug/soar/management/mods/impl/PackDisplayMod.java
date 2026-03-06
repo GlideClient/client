@@ -6,6 +6,7 @@ import java.util.List;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.injection.interfaces.IMixinMinecraft;
 import me.eldodebug.soar.management.event.EventTarget;
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.event.impl.EventSwitchTexture;
 import me.eldodebug.soar.management.language.TranslateText;
@@ -40,16 +41,12 @@ public class PackDisplayMod extends HUDMod {
 	}
 	
 	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
-		Glide instance = Glide.getInstance();
-		NanoVGManager nvg = instance.getNanoVGManager();
-		
+	public void onRender2D(EventNVG event) {
 		if(pack == null) {
 			pack = this.getCurrentPack();
 		}
-		
-		nvg.setupAndDraw(() -> drawNanoVG());
+
+		drawNanoVG();
 	}
 	
 	private void drawNanoVG() {

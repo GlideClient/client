@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
@@ -35,24 +36,23 @@ public class ClockMod extends SimpleHUDMod {
 		super(TranslateText.CLOCK, TranslateText.CLOCK_DESCRIPTION);
 	}
 
-	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		
-		if(modeSetting.getOption().getTranslate().equals(TranslateText.SIMPLE)) {
-			this.draw();
-		}else {
-			Glide.getInstance().getNanoVGManager().setupAndDraw(this::drawNanoVG);
-		}
-	}
-	
 	@Override
 	public String getText() {
 		return df.format(Calendar.getInstance().getTime());
 	}
-	
+
 	@Override
 	public String getIcon() {
 		return iconSetting.isToggled() ? LegacyIcon.CLOCK : null;
+	}
+
+	@EventTarget
+	public void onRenderNVG(EventNVG event) {
+		if(modeSetting.getOption().getTranslate().equals(TranslateText.FANCY)) {
+			this.drawNanoVG();
+		} else {
+			this.draw();
+		}
 	}
 	
 	private void drawNanoVG() {
