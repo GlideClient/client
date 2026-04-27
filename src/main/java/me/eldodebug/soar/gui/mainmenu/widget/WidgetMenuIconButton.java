@@ -35,7 +35,7 @@ public class WidgetMenuIconButton extends WidgetButtonBase {
 
         Blur.drawBlur(getBounds(), 4.5F);
         renderer.drawRoundedRect(getBounds(), 4.5F, COLOR.toARGB());
-        renderer.drawBlurredText(icon, getX() + getWidth() / 2f, getY() + getHeight() / 2f, MathUtils.interpolateARGB(0xFF000000, hoverColor.toARGB(), hoverAnimation.getLinearValue()), 12f, 16F, NanoVG.NVG_ALIGN_CENTER | NanoVG.NVG_ALIGN_MIDDLE, iconFont);
+        renderer.drawBlurredText(icon, getX() + getWidth() / 2f, getY() + getHeight() / 2f, MathUtils.interpolateARGB(0xB2000000, hoverColor.toARGB(), hoverAnimation.getLinearValue()), 12f, 16F, NanoVG.NVG_ALIGN_CENTER | NanoVG.NVG_ALIGN_MIDDLE, iconFont);
         renderer.drawCenteredText(icon, getX() + getWidth() / 2f, getY() + getHeight() / 2f, TEXT.toARGB(), 16F, iconFont);
     }
 }

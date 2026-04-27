@@ -11,7 +11,7 @@ public class FemaleGenderMod extends Mod {
 
 	public FemaleGenderMod() {
 		super(TranslateText.FEMALE_GENDER, TranslateText.FEMALE_GENDER_DESCRIPTION, ModCategory.PLAYER, "boobs");
-
+		// invalid
 		instance = this;
 	}
 

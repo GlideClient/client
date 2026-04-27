@@ -317,12 +317,19 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
     	new GuiSplashScreen().draw();
     	ci.cancel();
     }
-    
-    @Inject(method = "displayGuiScreen", at = @At("RETURN"), cancellable = true)
+
+	/**
+	 * @reason use custom glide menus
+	 */
+	@Inject(method = "displayGuiScreen", at = @At("RETURN"))
     public void displayGuiScreenInject(GuiScreen guiScreenIn, CallbackInfo ci) {
     	if(guiScreenIn instanceof GuiMainMenu) {
-			displayGuiScreen(Glide.getInstance().getMainMenu());
-//			displayGuiScreen(new MenuManager());
+			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+				displayGuiScreen(Glide.getInstance().getMainMenu());
+			} else {
+				displayGuiScreen(new MenuManager());
+			}
+//			displayGuiScreen(Glide.getInstance().getMainMenu());
     	}
     }
     

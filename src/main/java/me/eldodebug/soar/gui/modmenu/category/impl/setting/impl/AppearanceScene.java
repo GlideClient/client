@@ -114,7 +114,7 @@ public class AppearanceScene extends SettingScene {
 
             c.getAnimation().setAnimation(c.equals(currentColor) ? 1.0F : 0.0F, 16);
 
-            nvg.drawCenteredText(LegacyIcon.CHECK, this.getX() + offsetX + 12 + (32 / 2f), this.getY() + 101 - yMov2, new Color(255, 255, 255, (int) (c.getAnimation().getValue() * 255)), 16, Fonts.LEGACYICON);
+            nvg.drawCenteredText(LegacyIcon.CHECK, this.getX() + offsetX + 12 + (32 / 2f), this.getY() + 108 - yMov2, new Color(255, 255, 255, (int) (c.getAnimation().getValue() * 255)), 16, Fonts.LEGACYICON);
 
             offsetX += 40F;
             Index2++;

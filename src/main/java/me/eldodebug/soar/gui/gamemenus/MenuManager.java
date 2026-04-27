@@ -1,8 +1,10 @@
 package me.eldodebug.soar.gui.gamemenus;
 
+import eu.shoroa.contrib.render.Blur;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.gamemenus.backgrounds.BackgroundsHandler;
 import me.eldodebug.soar.gui.gamemenus.views.BackgroundSelector;
+import me.eldodebug.soar.gui.gamemenus.views.BackgroundSelector2;
 import me.eldodebug.soar.gui.gamemenus.views.MainMenuClassic;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
@@ -36,17 +38,14 @@ public class MenuManager extends GuiScreen {
     }
 
     @Override
-    public void updateScreen() {
-        backgroundsHandler.update(width, height);
-    }
-
-    @Override
     public void initGui() {
         currentView.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+
+        backgroundsHandler.update(width, height);
 
         ScaledResolution sr = new ScaledResolution(mc);
         Glide instance = Glide.getInstance();
@@ -55,6 +54,8 @@ public class MenuManager extends GuiScreen {
         boolean isFirstLogin = instance.isFirstLogin();
 
         backgroundsHandler.draw(sr, instance, nvg, partialTicks);
+
+        Blur.render(5f);
 
         nvg.setupAndDraw(() -> drawNanoVG(sr, instance, nvg, mouseX, mouseY));
 

@@ -778,6 +778,7 @@ public class NanoVGManager {
         drawRoundedImage(texture, x, y, width, height, radius, 1.0F);
     }
 
+
     public void drawPlayerHead(ResourceLocation location, float x, float y, float width, float height, float radius, float alpha) {
 
         if (location == null || mc.getTextureManager().getTexture(location) == null) {
