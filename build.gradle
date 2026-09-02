@@ -1,36 +1,37 @@
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
-        maven {
-            name = "forge"
-            url = "https://maven.minecraftforge.net"
-//            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = 'sponge'
-            url = 'https://repo.spongepowered.org/maven'
-        }
-        maven {
-            url = 'https://jitpack.io'
-        }
+        gradlePluginPortal()
+        maven { name = "forge"; url = "https://maven.minecraftforge.net" }
+        maven { name = "sponge"; url = "https://repo.spongepowered.org/maven" }
+        maven { name = "jitpack"; url = "https://jitpack.io" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'com.github.glideclient:ForgeGradle:2.1-SNAPSHOT'
+        classpath "com.github.glideclient:MixinGradle:0.6-SNAPSHOT"
+        classpath "com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:6.1.0"
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.tweaker-client'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 
+System.setProperty("forgegradle.extraction.enabled", "false")
+
 version = "Release"
-group= "me.eldodebug"
+group = "me.eldodebug"
 archivesBaseName = "GlideClient"
 
-sourceCompatibility = targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
 
 minecraft {
     version = "1.8.9"
@@ -39,74 +40,112 @@ minecraft {
     mappings = "stable_22"
     clientJvmArgs = ["-XX:-DisableExplicitGC"]
     makeObfSourceJar = false
+
+    runClient {
+        // apple silicone support, will be added to the forge gradle fork soon so deprecation soon
+        def osName = System.getProperty("os.name").toLowerCase()
+        def osArch = System.getProperty("os.arch").toLowerCase()
+        if (osName.contains("mac") && (osArch.contains("arm") || osArch.contains("aarch64"))) {
+            println "[INFO] Trying to patch LWJGL 2 to support Apple ARM64"
+            def bodgePath = file("mac/arm64/natives").absolutePath
+            println "[INFO] Apple Silicon Natives path ${bodgePath}"
+            jvmArgs "-Djava.library.path=${bodgePath}"
+            println "[INFO] LWJGL 2 perhaps patched to work with Apple Silicon, good luck..."
+        }
+    }
 }
 
 repositories {
-    maven {
-        name "jitpack"
-        url "https://jitpack.io"
-    }
-
-    maven {
-        name "spongepowered"
-        url "https://repo.spongepowered.org/maven/"
-    }
-    jcenter()
     mavenCentral()
+    maven {
+        name = "minecraft-libraries"
+        url = "https://libraries.minecraft.net"
+    }
+    maven {
+        name = "jitpack"
+        url = "https://jitpack.io"
+    }
+    maven {
+        name = "spongepowered"
+        url = "https://repo.spongepowered.org/maven/"
+    }
 }
 
 configurations {
     embed
-    compile.extendsFrom(embed)
+    implementation.extendsFrom(embed)
+    annotationProcessor.extendsFrom(embed)
+
+    runtimeOnly { // runClient fails without this
+        canBeResolved = true
+    }
 }
 
 dependencies {
+    annotationProcessor('org.spongepowered:mixin:0.7.11-SNAPSHOT')
+
+    // mixins
     embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
         exclude module: 'gson'
         exclude module: 'commons-io'
     }
+
+    // LWJGL 3 nanovg
     embed(files('libs/lwjgl-soar.jar'))
     embed(files('libs/lwjgl-soar-natives.jar'))
+
+    // Hardware info
+    embed('com.github.oshi:oshi-core:6.9.0') {
+        exclude module: 'slf4j-api'
+    }
 }
 
 mixin {
-    defaultObfuscationEnv = "notch"
-    add sourceSets.main, "mixins.soar.refmap.json"
+    // add both serge and notch to the refmap
+    defaultObfuscationEnv = "searge"
+    add sourceSets.main, "mixins.meowsoftly.refmap.json"
+    // experimental, it should make it work on both forge and as a client however forge is not gonna be supported if it breaks as glide was never intended to support it, but may aswell remove the barrier if possible
 }
 
-processResources {
-    inputs.files "src/main/resources"
-    outputs.dir "build/classes/main"
-    copy {
-        from("src/main/resources")
-        into("build/classes/main")
+// fix fucky Shadow + FG issues
+afterEvaluate {
+    tasks.named("runClient").configure {
+        classpath = configurations.embed + classpath 
     }
 }
 
-jar {
-    dependsOn configurations.compile
-    from {
-        configurations.embed.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
-}
+tasks.named("processResources", ProcessResources).configure {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    inputs.property "version", project.version
 
-jar {
-    manifest.attributes(
-            "MixinConfigs": 'mixins.soar.json',
-            "TweakClass": 'me.eldodebug.soar.injection.mixin.GlideTweaker',
-            "TweakOrder": 0,
-            "Manifest-Version": 1.0,
-            'FMLAT': 'soar_at.cfg'
-    )
-
-    configurations.embed.each { dep ->
-        from(project.zipTree(dep)) {
-            exclude 'META-INF', 'META-INF/**'
-        }
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*'
     }
 }
+
+shadowJar {
+    configurations = [project.configurations.embed]
+
+    // Shading oshi under com.glideclient as requested
+    relocate 'oshi', 'com.glideclient.libs.oshi'
+
+    archiveClassifier.set('')
+
+    manifest {
+        attributes(
+                "MixinConfigs": 'mixins.soar.json',
+                "TweakClass": 'me.eldodebug.soar.injection.mixin.GlideTweaker',
+                "TweakOrder": 0,
+                "Manifest-Version": 1.0,
+                'FMLAT': 'soar_at.cfg'
+        )
+    }
+}
+
+reobf {
+    shadowJar {}
+}
+
+build.dependsOn shadowJar
