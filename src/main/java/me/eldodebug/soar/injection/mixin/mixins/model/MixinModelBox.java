@@ -28,10 +28,14 @@ public class MixinModelBox {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 		}
     }
-	
+
 	private void draw(WorldRenderer renderer, float scale) {
-        for (int i = 0; i < this.quadList.length; ++i) {
-            this.quadList[i].draw(renderer, scale);
-        }
+		if (this.quadList == null) return;
+
+		for (int i = 0; i < this.quadList.length; ++i) {
+			if (this.quadList[i] != null) {
+				this.quadList[i].draw(renderer, scale);
+			}
+		}
 	}
 }

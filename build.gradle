@@ -105,7 +105,7 @@ dependencies {
 mixin {
     // add both serge and notch to the refmap
     defaultObfuscationEnv = "searge"
-    add sourceSets.main, "mixins.meowsoftly.refmap.json"
+    add sourceSets.main, "mixins.soar.refmap.json"
     // experimental, it should make it work on both forge and as a client however forge is not gonna be supported if it breaks as glide was never intended to support it, but may aswell remove the barrier if possible
 }
 
@@ -128,7 +128,6 @@ tasks.named("processResources", ProcessResources).configure {
 shadowJar {
     configurations = [project.configurations.embed]
 
-    // Shading oshi under com.glideclient as requested
     relocate 'oshi', 'com.glideclient.libs.oshi'
 
     archiveClassifier.set('')
