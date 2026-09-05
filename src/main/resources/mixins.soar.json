@@ -6,7 +6,6 @@
     "audio.MixinSoundManager",
     "block.MixinBlockFluidRenderer",
     "block.MixinBlockGlass",
-    "block.MixinBlockPos",
     "block.MixinBlockRedstoneTorch",
     "block.MixinBlockStainedGlass",
     "block.MixinPropertyBool",

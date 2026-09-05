@@ -9,8 +9,11 @@ import net.minecraft.block.properties.PropertyInteger;
 @Mixin(PropertyInteger.class)
 public class MixinPropertyInteger {
 
+    /**
+     * @reason Redirects hashCode lookup to use the cached hashcode from ICachedHashcode interface.
+     */
     @Overwrite
     public int hashCode() {
-        return ((ICachedHashcode)((Object)this)).getCachedHashcode();
+        return ((ICachedHashcode) (Object) this).getCachedHashcode();
     }
 }

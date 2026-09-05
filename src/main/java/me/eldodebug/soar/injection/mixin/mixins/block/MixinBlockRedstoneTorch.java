@@ -18,9 +18,12 @@ public class MixinBlockRedstoneTorch {
 
 	@Shadow
     private static Map<World, List<?>> toggles;
-	
+
+    /**
+     *  prevent world memory leaks.
+     */
     @Inject(method = "<clinit>", at = @At(value="TAIL"))
-    private static void fixMemorry(CallbackInfo ci) {
-    	toggles = new WeakHashMap<World, List<?>>();
+    private static void fixMemory(CallbackInfo ci) {
+    	toggles = new WeakHashMap<>();
     }
 }
