@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 
 import eu.shoroa.contrib.render.Blur;
+import me.eldodebug.soar.management.profile.mainmenu.impl.PanoramaBackground;
+import me.eldodebug.soar.utils.Sound;
 import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
 import me.eldodebug.soar.utils.animation.normal.easing.EaseInOutCirc;
@@ -71,7 +73,7 @@ public class BackgroundScene extends MainMenuScene {
 		scroll.onScroll();
 		scroll.onAnimation();
 
-		Blur.drawBlur(acX, acY, acWidth, acHeight, 8f);
+		Blur.drawBlurMod(acX, acY, acWidth, acHeight, 8f);
 		nvg.drawRoundedRect(acX, acY, acWidth, acHeight, 8, this.getBackgroundColor());
 		nvg.drawCenteredText(TranslateText.SELECT_BACKGROUND.getText(), acX + (acWidth / 2), acY + 15, Color.WHITE, 14, Fonts.SEMIBOLD);
 
@@ -109,6 +111,12 @@ public class BackgroundScene extends MainMenuScene {
 					nvg.drawRoundedImage(defBackground.getImage(), acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F, 6);
 				}
 			}
+
+            if(bg instanceof PanoramaBackground) {
+                PanoramaBackground defBackground = (PanoramaBackground) bg;
+                nvg.drawRoundedImage(defBackground.getImage(), acX + 11 + offsetX, acY + 35 + offsetY, 102.5F, 57.5F, 6);
+
+            }
 
 			if(bg instanceof CustomBackground) {
 				CustomBackground cusBackground = (CustomBackground) bg;
@@ -174,12 +182,19 @@ public class BackgroundScene extends MainMenuScene {
 								try {
 									FileUtils.copyFile(file, destFile);
 									backgroundManager.addCustomBackground(destFile);
-								} catch (IOException e) {
+								} catch (IOException ignored) {
 								}
 							}
 						});
 					} else {
-						backgroundManager.setCurrentBackground(bg);
+                        if (bg instanceof PanoramaBackground) {
+                            try{
+                                Sound.play("soar/audio/error.wav", false);
+                            } catch (Exception ignored) {}
+                        } else {
+                            backgroundManager.setCurrentBackground(bg);
+                        }
+
 					}
 				}
 

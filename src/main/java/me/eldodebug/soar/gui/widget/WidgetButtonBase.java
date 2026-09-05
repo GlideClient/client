@@ -7,7 +7,7 @@ import me.eldodebug.soar.management.nanovg.NanoVGManager;
 public abstract class WidgetButtonBase extends Widget {
     private Runnable onClick;
 
-    private boolean wasClicked = false;
+    public boolean wasClicked = false;
     protected boolean isHovered = false;
     /**
      * 0 = left click,

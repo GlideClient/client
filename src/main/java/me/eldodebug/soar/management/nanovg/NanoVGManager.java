@@ -518,6 +518,24 @@ public class NanoVGManager {
         NanoVG.nvgFontBlur(nvg, 0f);
     }
 
+    public void drawTextWithShadow(String text, float x, float y, int color, float blurRadius, float size, Font font) {
+        save();
+        fontBlur(blurRadius);
+        drawText(text, x, y, 0x62000000, size, font);
+        fontBlur(0);
+        restore();
+        drawText(text, x, y, color, size, font);
+    }
+
+    public void drawCenteredTextWithShadow(String text, float x, float y, int color, float blurRadius, float size, Font font) {
+        save();
+        fontBlur(blurRadius);
+        drawCenteredText(text, x, y, 0x62000000, size, font);
+        fontBlur(0);
+        restore();
+        drawCenteredText(text, x, y, color, size, font);
+    }
+
     public void drawTextGlowing(String text, float x, float y, Color color, float blurRadius, float size, Font font) {
         drawTextGlowing(text, x, y, color.getRGB(), blurRadius, size, font);
     }

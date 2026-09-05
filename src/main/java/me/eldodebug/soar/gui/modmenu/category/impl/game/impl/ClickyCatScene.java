@@ -66,13 +66,13 @@ public class ClickyCatScene extends GameScene {
 		} else {
 			// menus
 			if (showTitle){
-				nvg.drawCenteredText("Welcome to Clicky Cat!", getX() + (getWidth()/2F), getY() + (getHeight()/2F) - 20, palette.getFontColor(ColorType.NORMAL), 15, Fonts.SEMIBOLD);
-				nvg.drawCenteredText("CLICK to start!", getX() + (getWidth()/2F), getY() + (getHeight()/2F)- 2, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
+				nvg.drawCenteredText("Welcome to Clicky Cat!", getX() + (getWidth()/2F), getY() + (getHeight()/2F) - 12, palette.getFontColor(ColorType.NORMAL), 15, Fonts.SEMIBOLD);
+				nvg.drawCenteredText("CLICK to start!", getX() + (getWidth()/2F), getY() + (getHeight()/2F), palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
 			} else if (gameFinished) {
-				nvg.drawCenteredText("Game Finished!", getX() + (getWidth()/2F), getY() + (getHeight()/2F) - 20, new Color(255, 31, 57), 15, Fonts.SEMIBOLD);
-				nvg.drawCenteredText("Your average is " + (int)(lastAverage) + " MS", getX() + (getWidth()/2F), getY() + (getHeight()/2F) - 2, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
+				nvg.drawCenteredText("Game Finished!", getX() + (getWidth()/2F), getY() + (getHeight()/2F) - 12, new Color(255, 31, 57), 15, Fonts.SEMIBOLD);
+				nvg.drawCenteredText("Your average is " + (int)(lastAverage) + " MS", getX() + (getWidth()/2F), getY() + (getHeight()/2F), palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
 				if ((System.currentTimeMillis() - gameFinishedTime) > 400) {
-					nvg.drawCenteredText("Click to play again!", getX() + (getWidth()/2F), getY() + (getHeight()) - 20, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
+					nvg.drawCenteredText("Click to play again!", getX() + (getWidth()/2F), getY() + (getHeight()) - 16, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
 				}
 			}
 		}
@@ -139,7 +139,7 @@ public class ClickyCatScene extends GameScene {
 	}
 
 	public int getCatQuantity(){
-		return (int)(10 + (random.nextFloat() * 30));
+		return (int)(5 + (random.nextFloat() * 15));
 	}
 
 	private void drawCat(NanoVGManager nvg, float x, float y){

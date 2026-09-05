@@ -5,6 +5,7 @@ import java.awt.Desktop;
 import java.net.URL;
 
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
 import me.eldodebug.soar.gui.modmenu.category.Category;
 import me.eldodebug.soar.management.remote.changelog.Changelog;
@@ -144,7 +145,7 @@ public class HomeCategory extends Category {
 		int discordStartY = this.getY() + 179;
 			if(MouseUtils.isInside(mouseX, mouseY, discordStartX + 174 - 60, discordStartY + 60, 52, 18)) {
 				try {
-					Desktop.getDesktop().browse(new URL("https://glideclient.github.io/discord").toURI());
+					Desktop.getDesktop().browse(new URL(GlideMeta.SITE + "/discord").toURI());
 				} catch (Exception e) {}}
 	}
 }

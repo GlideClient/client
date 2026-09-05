@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.logger.GlideLogger;
 import net.minecraft.client.Minecraft;
 
@@ -53,7 +54,7 @@ public class FileManager {
 		File versionDir = new File(cacheDir, "version");
 		
 		createDir(versionDir);
-		createFile(new File(versionDir, Glide.getInstance().getVersionIdentifier() + ".tmp"));
+		createFile(new File(versionDir, GlideMeta.VERSION_IDENTIFIER + ".tmp"));
 	}
 	
 	public void createDir(File file) {

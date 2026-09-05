@@ -197,8 +197,7 @@ public class HUDMod extends Mod {
 		float x = this.x + (addX * scale);
 		float y = this.y + (addY * scale);
 
-//		if (isBlur) ShBlur.getInstance().drawBlur(x,y,lastWidth,lastHeight,radius);
-		if (isBlur) Blur.drawBlur(x,y,lastWidth,lastHeight,radius);
+		if (isBlur && !(mc.currentScreen instanceof GuiEditHUD)) Blur.drawBlurMod(x,y,lastWidth,lastHeight,radius);
 
 		if(isNormal || isVanilla || isShadow || isDark || isLight || isModern) {
 			nvg.drawShadow(x, y, lastWidth, lastHeight, radius - 0.75F);

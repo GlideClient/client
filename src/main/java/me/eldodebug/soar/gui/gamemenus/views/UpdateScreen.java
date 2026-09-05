@@ -1,37 +1,63 @@
-package me.eldodebug.soar.gui.mainmenu.impl;
-
-import java.awt.*;
-import java.net.URI;
-
-import eu.shoroa.contrib.render.Blur;
-import me.eldodebug.soar.GlideMeta;
-import me.eldodebug.soar.gui.mainmenu.GuiGlideMainMenu;
-import me.eldodebug.soar.management.remote.update.Update;
-import me.eldodebug.soar.utils.mouse.MouseUtils;
-import org.lwjgl.input.Keyboard;
+package me.eldodebug.soar.gui.gamemenus.views;
 
 import me.eldodebug.soar.Glide;
-import me.eldodebug.soar.gui.mainmenu.MainMenuScene;
+import me.eldodebug.soar.GlideMeta;
+import me.eldodebug.soar.gui.gamemenus.GlideScreen;
+import me.eldodebug.soar.gui.gamemenus.MenuManager;
+import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
+import me.eldodebug.soar.management.remote.changelog.Changelog;
+import me.eldodebug.soar.management.remote.update.Update;
 import net.minecraft.client.gui.ScaledResolution;
 
-public class UpdateScene extends MainMenuScene {
+import java.awt.*;
 
-	public UpdateScene(GuiGlideMainMenu parent) {
-		super(parent);
-	}
+public class UpdateScreen extends GlideScreen {
 
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		
-		ScaledResolution sr = new ScaledResolution(mc);
-		
-		Glide instance = Glide.getInstance();
-		NanoVGManager nvg = instance.getNanoVGManager();
-		
-		nvg.setupAndDraw(() -> drawNanoVG(mouseX, mouseY, sr, instance, nvg));
-	}
+    int startX = 15, startY = 35;
+    Update u;
+
+    public UpdateScreen(MenuManager manager) {
+        super(manager, "Update Available");
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        Glide instance = Glide.getInstance();
+        u = instance.getUpdateInstance();
+        NanoVGManager nvg = instance.getNanoVGManager();
+        nvg.setupAndDraw(() -> drawNanoVG(nvg, instance, mouseX, mouseY));
+    }
+
+    private void drawNanoVG(NanoVGManager nvg, Glide glideInstance, int mouseX, int mouseY) {
+        ScaledResolution sr = new ScaledResolution(mc);
+        float posY = startY;
+        nvg.drawTextWithShadow("Ready to update?", startX, posY, 0xBBFFFFFF, 5, 16, Fonts.MEDIUM);
+        posY += nvg.getTextHeight("Ready to update?", 16, Fonts.MEDIUM) + 4;
+        nvg.drawTextWithShadow("A new version of GlideClient is now available!", startX, posY, 0xBBFFFFFF, 5, 12, Fonts.REGULAR);
+        posY += nvg.getTextHeight("A new version of GlideClient is now available!", 12, Fonts.REGULAR) + 4;
+        nvg.drawTextWithShadow(String.format("%s (%s) -> %s (%s)",GlideMeta.VERSION_NUMBER, GlideMeta.VERSION_IDENTIFIER, u.getVersionString(), u.getBuildID()), startX, posY, 0xBBFFFFFF, 5, 8, Fonts.REGULAR);
+        posY += 15;
+        try {
+            for(Changelog c : u.updateChangelog.getChangelogs()) {
+                float tbSize = nvg.getTextBoxHeight(c.getText(), 8, Fonts.MEDIUM, 250);
+                nvg.drawRoundedRect(startX, posY, 13, 13, 7F, c.getType().getColor());
+                nvg.drawCenteredTextWithShadow(c.getType().getText(), startX + 6.5F, posY + 6.5F, 0xFFFFFFFF, 5, 7, Fonts.LEGACYICON);
+                nvg.drawTextBox(c.getText(), (float) startX + 17F, posY + 4, 250, Color.WHITE, 8F, Fonts.MEDIUM);
+                posY += (tbSize + 12);
+            }
+        } catch (Exception ignored) {}
+
+    }
+
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {}
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY, int mouseButton) {}
+
+    /*
 
 	private void drawNanoVG(int mouseX, int mouseY, ScaledResolution sr, Glide instance, NanoVGManager nvg) {
 		nvg.drawRect(0,0, sr.getScaledWidth(), sr.getScaledHeight(), new Color(0,0,0, 100));
@@ -57,7 +83,7 @@ public class UpdateScene extends MainMenuScene {
 		instance.setUpdateNeeded(false);
 		this.setCurrentScene(this.getSceneByClass(MainScene.class));
 	}
-	
+
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		if (mouseButton == 0) {
@@ -75,11 +101,5 @@ public class UpdateScene extends MainMenuScene {
 			}
 		}
 	}
-
-	@Override
-	public void keyTyped(char typedChar, int keyCode) {
-		if (keyCode == Keyboard.KEY_ESCAPE) {
-			exitGui();
-		}
-	}
+     */
 }

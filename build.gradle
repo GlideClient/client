@@ -39,6 +39,19 @@ minecraft {
     mappings = "stable_22"
     clientJvmArgs = ["-XX:-DisableExplicitGC"]
     makeObfSourceJar = false
+
+    // mac arm64 support
+    runClient {
+        def osName = System.getProperty("os.name").toLowerCase()
+        def osArch = System.getProperty("os.arch").toLowerCase()
+        if (osName.contains("mac") && (osArch.contains("arm") || osArch.contains("aarch64"))) {
+            println "[INFO] Trying to path LWJGL 2 to support Apple ARM64 "
+            def bodgePath = file("libs/mac/arm64/natives").absolutePath // absolute clown more like
+            println "[INFO] Apple Silicone Natives path ${bodgePath}"
+            jvmArgs "-Djava.library.path=${bodgePath}"
+            println "[INFO] LWJGL 2 perhaps patched to work with Apple Silicone, good luck..."
+        }
+    }
 }
 
 repositories {

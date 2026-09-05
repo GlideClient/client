@@ -71,9 +71,8 @@ public class GuiEditHUD extends GuiScreen {
 		if(introAnimation.isDone(Direction.BACKWARDS)) {
 			mc.displayGuiScreen(null);
 		}
-		if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) {
-			BlurUtils.drawBlurScreen((float) (Math.min(introAnimation.getValue(), 1) * 20) + 1F);
-		}
+
+        Blur.drawScreen(nvg, sr, introAnimation.getValueFloat() * 5);
 		
 		nvg.setupAndDraw(() -> {
 
@@ -91,7 +90,7 @@ public class GuiEditHUD extends GuiScreen {
 			nvg.drawRect(0, halfScreenHeight, sr.getScaledWidth(), 0.5F, palette.getBackgroundColor(ColorType.DARK));
 			nvg.drawRect(halfScreenWidth, 0, 0.5F, sr.getScaledHeight(), palette.getBackgroundColor(ColorType.DARK));
 			// todo add more splashers
-			nvg.drawCenteredText("You can resize elements by scrolling over them. Use shift for more control.", sr.getScaledWidth() / 2F, sr.getScaledHeight() - 15, new Color(255,255,255, 200), 8F, Fonts.REGULAR);
+			nvg.drawCenteredText("You can resize elements by scrolling over them. Use shift for more control.", sr.getScaledWidth() / 2F, sr.getScaledHeight() - 24, new Color(255,255,255, 200), 8F, Fonts.REGULAR);
 
 			for(HUDMod m : mods) {
 				

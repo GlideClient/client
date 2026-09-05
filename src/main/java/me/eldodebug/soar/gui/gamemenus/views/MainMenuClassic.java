@@ -1,16 +1,15 @@
 package me.eldodebug.soar.gui.gamemenus.views;
 
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.gui.gamemenus.GlideScreen;
 import me.eldodebug.soar.gui.gamemenus.MenuManager;
 import me.eldodebug.soar.gui.gamemenus.elements.ElementButton;
-import me.eldodebug.soar.gui.mainmenu.widget.WidgetPlayButton;
+import me.eldodebug.soar.gui.gamemenus.ViewMenuButton;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
 import me.eldodebug.soar.management.nanovg.font.Icons;
-import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
-import me.eldodebug.soar.utils.mouse.MouseUtils;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiSelectWorld;
@@ -23,7 +22,17 @@ public class MainMenuClassic extends GlideScreen {
     private ElementButton buttonSingleplayer, buttonMultiplayer, buttonSettings;
 
     public MainMenuClassic(MenuManager manager) {
-        super(manager, "Main Menu");
+        super(manager, "");
+
+        addMenuAction(new ViewMenuButton(Icons.POWER_24, Color.WHITE, ViewMenuButton.Direction.IN,  () -> {
+            System.exit(0);
+        }));
+
+        addMenuAction(new ViewMenuButton(Icons.IMAGE_EDIT_20, Color.WHITE, ViewMenuButton.Direction.IN, () -> {
+            setCurrentView(getViewByClass(BackgroundSelector.class));
+        }));
+
+
 
         buttonSettings = new ElementButton(TranslateText.SETTINGS, 0, 0, 180, 20, () -> mc.displayGuiScreen(new GuiOptions(this.getMenuManager(), mc.gameSettings)));
         buttonMultiplayer = new ElementButton(TranslateText.MULTIPLAYER, 0, 0, 180, 20, () -> mc.displayGuiScreen(new GuiMultiplayer(this.getMenuManager())));
@@ -56,7 +65,7 @@ public class MainMenuClassic extends GlideScreen {
 
         String copyright = "Copyright Mojang AB. Do not distribute!";
         nvg.drawText(copyright, sr.getScaledWidth() - (nvg.getTextWidth(copyright, 9, Fonts.REGULAR)) - 4, sr.getScaledHeight() - 12, new Color(255, 255, 255), 9, Fonts.REGULAR);
-		nvg.drawText("Glide Client v" + glideInstance.getVersion(), 4, sr.getScaledHeight() - 12, new Color(255, 255, 255), 9, Fonts.REGULAR);
+		nvg.drawText("GlideClient v" + GlideMeta.VERSION_NUMBER, 4, sr.getScaledHeight() - 12, new Color(255, 255, 255), 9, Fonts.REGULAR);
     }
 
     @Override

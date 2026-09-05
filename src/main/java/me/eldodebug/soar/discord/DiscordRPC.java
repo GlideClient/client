@@ -3,6 +3,7 @@ package me.eldodebug.soar.discord;
 import java.time.OffsetDateTime;
 
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.discord.ipc.IPCClient;
 import me.eldodebug.soar.discord.ipc.IPCListener;
 import me.eldodebug.soar.discord.ipc.entities.RichPresence;
@@ -21,7 +22,7 @@ public class DiscordRPC {
 				
 				RichPresence.Builder builder = new RichPresence.Builder();
 				
-				builder.setState("Playing Glide Client v" + Glide.getInstance().getVersion())
+				builder.setState(String.format("Playing %s v %s", GlideMeta.CLIENT_NAME, GlideMeta.VERSION_NUMBER))
 						.setStartTimestamp(OffsetDateTime.now())
 						.setLargeImage("icon");
 				

@@ -8,6 +8,7 @@ import java.util.logging.LogManager;
 import me.eldodebug.soar.management.mods.impl.*;
 import me.eldodebug.soar.management.mods.settings.Setting;
 import me.eldodebug.soar.utils.Sound;
+import net.minecraft.util.Util;
 
 public class ModManager {
 
@@ -24,7 +25,7 @@ public class ModManager {
 		mods.add(new BlockInfoMod());
 		mods.add(new BlockOverlayMod());
 		mods.add(new BloodParticlesMod());
-		mods.add(new BorderlessFullscreenMod());
+        mods.add(new BorderlessFullscreenMod());
 		mods.add(new BossHealthMod());
 		mods.add(new BowZoomMod());
 		mods.add(new BreadcrumbsMod());
@@ -48,7 +49,7 @@ public class ModManager {
 		mods.add(new DamageTiltMod());
 		mods.add(new DamageTintMod());
 		mods.add(new DayCounterMod());
-		mods.add(new DiscordRPCMod());
+        mods.add(new DiscordRPCMod());
 		mods.add(new EarsMod());
 		mods.add(new EntityCullingMod());
 		mods.add(new FarCameraMod());
@@ -106,7 +107,7 @@ public class ModManager {
 		mods.add(new PotionStatusMod());
 		mods.add(new ProjectileTrailMod());
 		mods.add(new QuickSwitchMod());
-		mods.add(new RawInputMod());
+        mods.add(new RawInputMod());
 		mods.add(new ReachCirclesMod());
 		mods.add(new ReachDisplayMod());
 		mods.add(new RearviewMod());

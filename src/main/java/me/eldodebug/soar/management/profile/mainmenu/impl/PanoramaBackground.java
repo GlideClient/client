@@ -6,10 +6,12 @@ import net.minecraft.util.ResourceLocation;
 public class PanoramaBackground extends Background {
 
 	private TranslateText nameTranslate;
+    private ResourceLocation image;
 
-	public PanoramaBackground(int id, TranslateText nameTranslate) {
+	public PanoramaBackground(int id, TranslateText nameTranslate, ResourceLocation image) {
 		super(id, nameTranslate.getText());
 		this.nameTranslate = nameTranslate;
+        this.image = image;
 	}
 	
 	@Override
@@ -21,4 +23,9 @@ public class PanoramaBackground extends Background {
 		return nameTranslate.getKey();
 	}
 
+    public TranslateText getNameTranslate() {
+        return nameTranslate;
+    }
+
+    public ResourceLocation getImage() { return image; }
 }

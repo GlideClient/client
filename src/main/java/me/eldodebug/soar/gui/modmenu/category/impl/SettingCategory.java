@@ -3,6 +3,7 @@ package me.eldodebug.soar.gui.modmenu.category.impl;
 import java.awt.*;
 import java.util.ArrayList;
 
+import me.eldodebug.soar.gui.modmenu.category.impl.setting.impl.AboutScene;
 import me.eldodebug.soar.gui.modmenu.category.impl.setting.impl.GeneralScene;
 import org.lwjgl.input.Keyboard;
 
@@ -36,6 +37,7 @@ public class SettingCategory extends Category {
 		scenes.add(new AppearanceScene(this));
 		scenes.add(new LanguageScene(this));
 		scenes.add(new GeneralScene(this));
+        scenes.add(new AboutScene(this));
 	}
 	
 	@Override
@@ -75,8 +77,7 @@ public class SettingCategory extends Category {
 		for(SettingScene scene : scenes) {
 			
 			nvg.drawRoundedRect(this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 40, 8, palette.getBackgroundColor(ColorType.DARK));
-			//nvg.drawRoundedRect(this.getX() + 15, this.getY() + offsetY + 19.5F, this.getWidth() - 30, 1F, 0, new Color(255, 200, 10));
-			nvg.drawText(scene.getIcon(), this.getX() + 26, this.getY() + offsetY + 13F, palette.getFontColor(ColorType.DARK), 14, Fonts.LEGACYICON);
+			nvg.drawText(scene.getIcon(), this.getX() + 26, this.getY() + offsetY + 13F, palette.getFontColor(ColorType.DARK), 14, Fonts.ICON_OUTLINE);
 			nvg.drawText(scene.getName(), this.getX() + 47, this.getY() + offsetY + 9F, palette.getFontColor(ColorType.DARK), 12.5F, Fonts.MEDIUM);
 			nvg.drawText(scene.getDescription(), this.getX() + 47, this.getY() + offsetY + 23, palette.getFontColor(ColorType.NORMAL), 7.5F, Fonts.REGULAR);
 			nvg.drawText(LegacyIcon.CHEVRON_RIGHT, this.getX() + this.getWidth() - 32, this.getY() + offsetY + 15, palette.getFontColor(ColorType.NORMAL), 10, Fonts.LEGACYICON);

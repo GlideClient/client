@@ -19,6 +19,10 @@ public class DefaultBackground extends Background {
 		return nameTranslate.getText();
 	}
 
+    public TranslateText getNameTranslate() {
+        return nameTranslate;
+    }
+
 	public String getNameKey() {
 		return nameTranslate.getKey();
 	}

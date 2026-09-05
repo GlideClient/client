@@ -29,7 +29,7 @@ public class OptifineUtils {
 			} catch (IllegalArgumentException | IllegalAccessException e) {}
 		}
 		
-		mc.gameSettings.useVbo = true;
+		//mc.gameSettings.useVbo = true;
 		mc.gameSettings.fboEnable = true;
     }
 }

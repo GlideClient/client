@@ -2,17 +2,19 @@ package me.eldodebug.soar.management.remote.update;
 
 import com.google.gson.JsonObject;
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.utils.JsonUtils;
 import me.eldodebug.soar.utils.Multithreading;
 import me.eldodebug.soar.utils.network.HttpUtils;
 
 public class Update {
 
-    String updateLink = "https://glideclient.github.io/";
+    String updateLink = GlideMeta.API;
     String updateVersionString = "something is broken lmao";
     int updateBuildID = 0;
     boolean discontinued = false;
-    boolean soar8Released = false;
+
+    public UpdateChangelog updateChangelog;
 
     public void setUpdateLink(String in){
         this.updateLink = in;
@@ -40,11 +42,6 @@ public class Update {
         return discontinued;
     }
 
-    public void setSoar8Released(boolean in){
-        this.soar8Released = in;
-    }
-    public boolean getSoar8Released() {return soar8Released;}
-
 
     public void check(){
         try{
@@ -54,20 +51,19 @@ public class Update {
 
     public void checkForUpdates(){
         Glide g = Glide.getInstance();
-        if (g.getVersionIdentifier() < this.updateBuildID){
+        if (GlideMeta.VERSION_IDENTIFIER < this.updateBuildID){
             g.setUpdateNeeded(true);
+            updateChangelog = new UpdateChangelog(g);
         }
-        g.setSoar8Released(getSoar8Released());
     }
 
     private void checkUpdates() {
-        JsonObject jsonObject = HttpUtils.readJson("https://glideclient.github.io/data/meta/client.json", null);
+        JsonObject jsonObject = HttpUtils.readJson(GlideMeta.API + "/data/meta/client.json", null);
         if (jsonObject != null) {
-            setUpdateLink(JsonUtils.getStringProperty(jsonObject, "updatelink", "https://glideclient.github.io/"));
+            setUpdateLink(JsonUtils.getStringProperty(jsonObject, "updatelink", GlideMeta.API));
             setVersionString(JsonUtils.getStringProperty(jsonObject, "latestversionstring", "something is broken lmao"));
             setBuildID(JsonUtils.getIntProperty(jsonObject, "latestversion", 0));
             setDiscontinued(JsonUtils.getBooleanProperty(jsonObject, "discontinued", false));
-            setSoar8Released(JsonUtils.getBooleanProperty(jsonObject, "soar8released", false));
             checkForUpdates();
         }
     }

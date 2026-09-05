@@ -11,6 +11,7 @@ import me.eldodebug.soar.management.language.LanguageManager;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
+import me.eldodebug.soar.management.nanovg.font.Icons;
 import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
@@ -19,7 +20,7 @@ import me.eldodebug.soar.utils.mouse.Scroll;
 public class LanguageScene extends SettingScene {
 
 	public LanguageScene(SettingCategory parent) {
-		super(parent, TranslateText.LANGUAGE, TranslateText.LANGUAGE_DESCRIPTION, LegacyIcon.GLOBE);
+		super(parent, TranslateText.LANGUAGE, TranslateText.LANGUAGE_DESCRIPTION, Icons.GLOBE_20);
 	}
 
 	private Scroll languageScroll = new Scroll();
