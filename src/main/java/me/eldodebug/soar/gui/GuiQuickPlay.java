@@ -2,6 +2,7 @@ package me.eldodebug.soar.gui;
 
 import java.io.IOException;
 
+import eu.shoroa.contrib.render.Blur;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.Glide;
@@ -26,8 +27,10 @@ import net.minecraft.client.gui.ScaledResolution;
 public class GuiQuickPlay extends GuiScreen {
 
 	private Scroll scroll = new Scroll();
-	
-	private Animation introAnimation;
+
+    ScaledResolution sr;
+
+    private Animation introAnimation;
 	private ScreenAnimation screenAnimation = new ScreenAnimation();
 	private Animation sceneChangeAnimation;
 	
@@ -37,7 +40,7 @@ public class GuiQuickPlay extends GuiScreen {
 	@Override
 	public void initGui() {
 		
-		ScaledResolution sr = new ScaledResolution(mc);
+		sr = new ScaledResolution(mc);
 		
 		int addX = 190;
 		int addY = 110;
@@ -57,8 +60,8 @@ public class GuiQuickPlay extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		
 		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
-		
-		BlurUtils.drawBlurScreen(20);
+
+        Blur.drawScreen(nvg, sr, introAnimation.getValueFloat() * 5);
 		
 		screenAnimation.wrap(() -> {
 			nvg.drawShadow(x, y, width, height, 12);
@@ -89,8 +92,7 @@ public class GuiQuickPlay extends GuiScreen {
 		}
 		
 		nvg.drawRoundedRect(x, y, width, height, 12, palette.getBackgroundColor(ColorType.NORMAL));
-		nvg.drawCenteredText("Choose a " + (currentQuickPlay != null ? "Mode" : "Game"), x + (width / 2), y + 10, palette.getFontColor(ColorType.DARK), 15, Fonts.MEDIUM);
-		//nvg.drawRect(x, y + 28, width, 1, palette.getBackgroundColor(ColorType.DARK));
+		nvg.drawCenteredText("Choose a " + (currentQuickPlay != null ? "Mode" : "Game"), x + (width / 2), y + 16, palette.getFontColor(ColorType.DARK), 15, Fonts.MEDIUM);
 		
 		nvg.save();
 		nvg.translate((float) -(600 - (sceneChangeAnimation.getValue() * 600)), 0);
@@ -132,12 +134,12 @@ public class GuiQuickPlay extends GuiScreen {
 			nvg.translate(0, scroll.getValue());
 			
 			nvg.drawRoundedImage(currentQuickPlay.getIcon(), x + (width / 2) - (46 / 2), y + 30 + 10, 46, 46, 6);
-			nvg.drawCenteredText(currentQuickPlay.getName(), x + (width / 2), y + 94, palette.getFontColor(ColorType.DARK), 12, Fonts.MEDIUM);
+			nvg.drawCenteredText(currentQuickPlay.getName(), x + (width / 2), y + 100, palette.getFontColor(ColorType.DARK), 12, Fonts.MEDIUM);
 			
 			for(QuickPlayCommand c : currentQuickPlay.getCommands()) {
 				
 				nvg.drawRoundedRect(x + 15 + offsetX, y + 80 + 32 + offsetY, 110, 20, 6, palette.getBackgroundColor(ColorType.DARK));
-				nvg.drawCenteredText(c.getName(), x + 15 + offsetX + (110 / 2), y + 80 + 38.5F + offsetY, palette.getFontColor(ColorType.NORMAL), 9, Fonts.REGULAR);
+				nvg.drawCenteredText(c.getName(), x + 15 + offsetX + (110 / 2), y + 80 + 43F + offsetY, palette.getFontColor(ColorType.NORMAL), 9, Fonts.REGULAR);
 				
 				offsetX+=120;
 				
@@ -211,20 +213,28 @@ public class GuiQuickPlay extends GuiScreen {
 				index++;
 			}
 		}
+
+        if (!MouseUtils.isInside(mouseX, mouseY, x, y, width, height)){
+            handleExit();
+        }
+
 	}
 	
 	@Override
 	public void keyTyped(char typedChar, int keyCode) {
 		
 		if(keyCode == Keyboard.KEY_ESCAPE) {
-			
-			if(currentQuickPlay != null) {
-				sceneChangeAnimation.setDirection(Direction.FORWARDS);
-			} else {
-				introAnimation.setDirection(Direction.BACKWARDS);
-			}
+            handleExit();
 		}
 	}
+
+    private void handleExit(){
+        if(currentQuickPlay != null) {
+            sceneChangeAnimation.setDirection(Direction.FORWARDS);
+        } else {
+            introAnimation.setDirection(Direction.BACKWARDS);
+        }
+    }
 	
 	@Override
     public boolean doesGuiPauseGame() {

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import eu.shoroa.contrib.render.Blur;
-import me.eldodebug.soar.gui.mainmenu.impl.DiscontinuedSoar8;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.gui.mainmenu.impl.UpdateScene;
 import me.eldodebug.soar.gui.mainmenu.impl.welcome.*;
 import me.eldodebug.soar.gui.mainmenu.widget.WidgetMenuIconButton;
@@ -28,7 +28,6 @@ import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
 import me.eldodebug.soar.utils.animation.normal.other.DecelerateAnimation;
 import me.eldodebug.soar.utils.animation.simple.SimpleAnimation;
-import me.eldodebug.soar.utils.mouse.MouseUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.nanovg.NanoVG;
@@ -75,14 +74,12 @@ public class GuiGlideMainMenu extends GuiScreen {
         scenes.add(new AccentColorSelectScene(this));
         scenes.add(new LastMessageScene(this));
         scenes.add(new UpdateScene(this));
-        scenes.add(new DiscontinuedSoar8(this));
 
         if (instance.isFirstLogin()) {
+            mc.gameSettings.useVbo = true;
             currentScene = getSceneByClass(WelcomeMessageScene.class);
         } else {
-            if (instance.getSoar8Released()) {
-                currentScene = getSceneByClass(DiscontinuedSoar8.class);
-            } else if (instance.getUpdateNeeded()) {
+            if (instance.getUpdateNeeded()) {
                 currentScene = getSceneByClass(UpdateScene.class);
             } else {
                 currentScene = getSceneByClass(MainScene.class);
@@ -167,8 +164,8 @@ public class GuiGlideMainMenu extends GuiScreen {
         String copyright = "Copyright Mojang AB. Do not distribute!";
         nvg.drawBlurredText(copyright, sr.getScaledWidth() - (nvg.getTextWidth(copyright, 9, Fonts.REGULAR)) - 4, sr.getScaledHeight() - 12, Color.BLACK, 4f, 9, NanoVG.NVG_ALIGN_LEFT | NanoVG.NVG_ALIGN_TOP, Fonts.REGULAR);
         nvg.drawText(copyright, sr.getScaledWidth() - (nvg.getTextWidth(copyright, 9, Fonts.REGULAR)) - 4, sr.getScaledHeight() - 12, Color.WHITE, 9, Fonts.REGULAR);
-        nvg.drawBlurredText("Glide Client v" + instance.getVersion(), 4, sr.getScaledHeight() - 12, Color.BLACK, 4f, 9, NanoVG.NVG_ALIGN_LEFT | NanoVG.NVG_ALIGN_TOP, Fonts.REGULAR);
-        nvg.drawText("Glide Client v" + instance.getVersion(), 4, sr.getScaledHeight() - 12, Color.WHITE, 9, Fonts.REGULAR);
+        nvg.drawBlurredText("GlideClient v" + GlideMeta.VERSION_NUMBER, 4, sr.getScaledHeight() - 12, Color.BLACK, 4f, 9, NanoVG.NVG_ALIGN_LEFT | NanoVG.NVG_ALIGN_TOP, Fonts.REGULAR);
+        nvg.drawText("GlideClient v" + GlideMeta.VERSION_NUMBER, 4, sr.getScaledHeight() - 12, Color.WHITE, 9, Fonts.REGULAR);
     }
 
     private void drawButtons(int mouseX, int mouseY, ScaledResolution sr, NanoVGManager nvg) {

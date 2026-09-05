@@ -2,6 +2,7 @@ package me.eldodebug.soar.gui;
 
 import java.awt.Color;
 
+import me.eldodebug.soar.management.nanovg.font.Icons;
 import org.lwjgl.opengl.GL11;
 
 import me.eldodebug.soar.Glide;
@@ -64,7 +65,7 @@ public class GuiSplashScreen {
 	        
 			nvg.setupAndDraw(() -> {
 				nvg.drawRect(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), Color.BLACK);
-				nvg.drawCenteredText(LegacyIcon.SOAR, sr.getScaledWidth() / 2, (sr.getScaledHeight() / 2) - 1, new Color(255, 255, 255, (int) (fadeAnimation.getValue() * 255)), 130, Fonts.LEGACYICON);
+				nvg.drawCenteredTextWithShadow(Icons.GLIDE, sr.getScaledWidth() / 2f, (sr.getScaledHeight() / 2f), new Color(255, 255, 255, (int) (fadeAnimation.getValue() * 255)).getRGB(), 0, 130, Fonts.ICON_OUTLINE);
 			});
 			
 	        framebuffer.unbindFramebuffer();

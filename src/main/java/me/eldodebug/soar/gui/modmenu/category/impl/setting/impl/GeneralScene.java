@@ -10,6 +10,7 @@ import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
+import me.eldodebug.soar.management.nanovg.font.Icons;
 import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.ui.comp.Comp;
 import me.eldodebug.soar.ui.comp.impl.CompKeybind;
@@ -23,7 +24,7 @@ public class GeneralScene extends SettingScene {
 	private CompToggleButton mcFontSetting;
 
 	public GeneralScene(SettingCategory parent) {
-		super(parent, TranslateText.GENERAL, TranslateText.GENERAL_DESCRIPTION, LegacyIcon.LIST);
+		super(parent, TranslateText.GENERAL, TranslateText.GENERAL_DESCRIPTION, Icons.TEXT_BULLET_LIST_LTR_20);
 	}
 
 	@Override

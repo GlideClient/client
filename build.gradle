@@ -41,16 +41,16 @@ minecraft {
     clientJvmArgs = ["-XX:-DisableExplicitGC"]
     makeObfSourceJar = false
 
+    // mac arm64 support
     runClient {
-        // apple silicone support, will be added to the forge gradle fork soon so deprecation soon
         def osName = System.getProperty("os.name").toLowerCase()
         def osArch = System.getProperty("os.arch").toLowerCase()
         if (osName.contains("mac") && (osArch.contains("arm") || osArch.contains("aarch64"))) {
-            println "[INFO] Trying to patch LWJGL 2 to support Apple ARM64"
-            def bodgePath = file("mac/arm64/natives").absolutePath
-            println "[INFO] Apple Silicon Natives path ${bodgePath}"
+            println "[INFO] Trying to path LWJGL 2 to support Apple ARM64 "
+            def bodgePath = file("libs/mac/arm64/natives").absolutePath // absolute clown more like
+            println "[INFO] Apple Silicone Natives path ${bodgePath}"
             jvmArgs "-Djava.library.path=${bodgePath}"
-            println "[INFO] LWJGL 2 perhaps patched to work with Apple Silicon, good luck..."
+            println "[INFO] LWJGL 2 perhaps patched to work with Apple Silicone, good luck..."
         }
     }
 }

@@ -6,9 +6,9 @@ import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
 import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
+import me.eldodebug.soar.utils.MathUtils;
 import me.eldodebug.soar.utils.animation.normal.Animation;
 import me.eldodebug.soar.utils.animation.normal.Direction;
-import me.eldodebug.soar.utils.animation.normal.easing.EaseInOutCirc;
 import me.eldodebug.soar.utils.animation.normal.easing.EaseLiner;
 import me.eldodebug.soar.utils.buffer.ScreenAnimation;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
@@ -23,14 +23,14 @@ import java.awt.*;
 
 
 public class GuiGameMenu extends GuiScreen {
-
+    ScaledResolution sr;
     private Animation introAnimation;
     private final ScreenAnimation screenAnimation = new ScreenAnimation();
     private int x, y, width, height, centre, scaledWidth, scaledHeight;
 
     @Override
     public void initGui() {
-        ScaledResolution sr = new ScaledResolution(mc);
+        sr = new ScaledResolution(mc);
         scaledWidth = sr.getScaledWidth();
         scaledHeight = sr.getScaledHeight();
         centre = scaledWidth / 2;
@@ -45,10 +45,8 @@ public class GuiGameMenu extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        BlurUtils.drawBlurScreen(20);
         NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
         Gui.drawRect(0, 0, mc.displayWidth, mc.displayHeight, 0x8C000000);
-        Blur.render(10f);
         screenAnimation.wrap(() -> drawNanoVG(nvg), x, y, width, height, 2 - introAnimation.getValueFloat(), Math.min(introAnimation.getValueFloat(), 1), false);
         if(introAnimation.isDone(Direction.BACKWARDS)) {
                this.mc.displayGuiScreen(null);
@@ -58,6 +56,7 @@ public class GuiGameMenu extends GuiScreen {
     }
 
     private void drawNanoVG(NanoVGManager nvg) {
+        Blur.drawScreen(nvg, sr, introAnimation.getValueFloat() * 5);
         nvg.drawText(LegacyIcon.ARROW_LEFT, x, y + 5, new Color(255,255,255, 140),11, Fonts.LEGACYICON);
         nvg.drawCenteredText( I18n.format("menu.game"), centre, y + 5+6.5f,  new Color(255,255,255, 200), 13, Fonts.SEMIBOLD);
 
@@ -81,7 +80,7 @@ public class GuiGameMenu extends GuiScreen {
     }
 
     private void drawButton(NanoVGManager nvg, String s, String i, Float offset){
-        Blur.drawBlur(x, y + offset, width , 22, 6);
+        Blur.drawBlurRounded(x, y + offset, width , 22, 6);
         nvg.drawRoundedRect(x, y + offset, width , 22, 6, new Color(230, 230, 230, 80));
         float startX = (nvg.getTextWidth(s, 9.5F, Fonts.MEDIUM) + 14) /2;
         nvg.drawText(i, centre - startX, y + offset + 6.5F, Color.WHITE, 9.5F, Fonts.LEGACYICON);

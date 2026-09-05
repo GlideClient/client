@@ -66,7 +66,7 @@ public class ThemeSelectScene extends MainMenuScene {
 		int offsetX = 0;
 		int index = 1;
 
-		Blur.drawBlur(x, y, width, height, 8);
+		Blur.drawBlurMod(x, y, width, height, 8);
 		nvg.drawRoundedRect(x, y, width, height, 8, this.getBackgroundColor());
 		nvg.drawCenteredText("Choose a theme", x + (width / 2), y + 14, Color.WHITE, 16, Fonts.MEDIUM);
 		nvg.drawRect(x, y + 27, width, 1, Color.WHITE);

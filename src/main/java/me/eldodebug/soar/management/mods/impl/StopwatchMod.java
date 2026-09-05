@@ -2,6 +2,7 @@ package me.eldodebug.soar.management.mods.impl;
 
 import java.text.DecimalFormat;
 
+import me.eldodebug.soar.management.event.impl.EventNVG;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.management.event.EventTarget;
@@ -30,10 +31,15 @@ public class StopwatchMod extends SimpleHUDMod {
 		super(TranslateText.STOPWATCH, TranslateText.STOPWATCH_DESCRIPTION);
 	}
 	
-	@EventTarget
-	public void onRender2D(EventRender2D event) {
-		this.draw();
-	}
+//	@EventTarget
+//	public void onRender2D(EventRender2D event) {
+//		this.draw();
+//	}
+
+    @EventTarget
+    public void onRenderNVG(EventNVG event) {
+        this.draw();
+    }
 	
 	@EventTarget
 	public void onTick(EventTick event) {

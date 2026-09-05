@@ -48,7 +48,9 @@ public class BackgroundManager {
 		backgrounds.add(new DefaultBackground(1, TranslateText.NIGHT, new ResourceLocation("soar/mainmenu/background-night.png")));
 		backgrounds.add(new DefaultBackground(2, TranslateText.DOLPHIN, new ResourceLocation("soar/mainmenu/background-dolphin.png")));
 		backgrounds.add(new DefaultBackground(3, TranslateText.UNITY, new ResourceLocation("soar/mainmenu/background-unity.png")));
-		backgrounds.add(new PanoramaBackground(4, TranslateText.PANO));
+		backgrounds.add(new PanoramaBackground(4, TranslateText.PANO, new ResourceLocation("soar/mainmenu/pano-thumb.png")));
+        backgrounds.add(new DefaultBackground(5, TranslateText.SHIMMER, new ResourceLocation("soar/mainmenu/shimmer.png")));
+        backgrounds.add(new DefaultBackground(6, TranslateText.NORTHEN_WISPERS, new ResourceLocation("soar/mainmenu/background-northenwispers.png")));
 		backgrounds.add(new DefaultBackground(999, TranslateText.ADD, null));
 
 		ArrayList<String> removeImages = load();

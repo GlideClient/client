@@ -43,9 +43,8 @@ public class Glide {
 
 	private static Glide instance = new Glide();
 	private Minecraft mc = Minecraft.getMinecraft();
-	private boolean updateNeeded, soar8Released;
-	private String name, version;
-	private int verIdentifier;
+	private boolean updateNeeded;
+    public boolean started = false;
 	
 	private NanoVGManager nanoVGManager;
 	private FileManager fileManager;
@@ -72,12 +71,6 @@ public class Glide {
 	private ClickEffects clickEffects;
 	private BlacklistManager blacklistManager;
 	private RestrictedMod restrictedMod;
-	
-	public Glide() {
-		name = "Glide";
-		version = "7.2";
-		verIdentifier = 7201;
-	}
 	
 	public void start() {
 		try {
@@ -152,14 +145,6 @@ public class Glide {
 	public static Glide getInstance() {
 		return instance;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getVersion() {return version;}
-
-	public int getVersionIdentifier() {return verIdentifier;}
 
 	public FileManager getFileManager() {
 		return fileManager;
@@ -254,9 +239,6 @@ public class Glide {
 
 	public void setUpdateNeeded(boolean in) {updateNeeded = in;}
 	public boolean getUpdateNeeded() {return updateNeeded;}
-
-	public void setSoar8Released(boolean in) {soar8Released = in;}
-	public boolean getSoar8Released() {return soar8Released;}
 
 	public ClickEffects getClickEffects() {return clickEffects;}
 

@@ -5,8 +5,6 @@ import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.mainmenu.GuiGlideMainMenu;
 import me.eldodebug.soar.gui.mainmenu.MainMenuScene;
 import me.eldodebug.soar.management.color.AccentColor;
-import me.eldodebug.soar.management.color.Theme;
-import me.eldodebug.soar.management.color.palette.ColorType;
 import me.eldodebug.soar.management.language.Language;
 import me.eldodebug.soar.management.language.LanguageManager;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
@@ -70,7 +68,7 @@ public class LanguageSelectScene extends MainMenuScene {
 		int offsetX = 0;
 		int index = 1;
 
-		Blur.drawBlur(x, y, width, height, 8);
+		Blur.drawBlurMod(x, y, width, height, 8);
 		nvg.drawRoundedRect(x, y, width, height, 8, this.getBackgroundColor());
 		nvg.drawCenteredText("Choose a Language", x + (width / 2), y + 14, Color.WHITE, 16, Fonts.MEDIUM);
 		nvg.drawRect(x, y + 27, width, 1, Color.WHITE);

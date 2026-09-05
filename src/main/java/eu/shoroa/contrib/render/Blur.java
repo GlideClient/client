@@ -12,6 +12,7 @@ import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.mods.settings.impl.ComboSetting;
 import me.eldodebug.soar.management.mods.settings.impl.combo.Option;
+import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.types.Rect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -156,7 +157,7 @@ public class Blur {
         GL11.glPopAttrib();
     }
 
-    public static void drawBlur(float x, float y, float w, float h, float radius) {
+    public static void drawBlurMod(float x, float y, float w, float h, float radius) {
         if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) return;
         long ctx = Glide.getInstance().getNanoVGManager().getContext();
         ScaledResolution sr = new ScaledResolution(mc);
@@ -181,8 +182,8 @@ public class Blur {
         paint.free();
     }
 
-    public static void drawBlur(Rect rect, float radius) {
-        drawBlur(rect.x, rect.y, rect.width, rect.height, radius);
+    public static void drawBlurMod(Rect rect, float radius) {
+        drawBlurRounded(rect.x, rect.y, rect.width, rect.height, radius);
     }
 
     public static void drawBlur(Runnable r) {
@@ -198,5 +199,47 @@ public class Blur {
         NanoVG.nvgClosePath(ctx);
 
         paint.free();
+    }
+
+    public static void drawBlurRounded(float x, float y, float w, float h, float radius) {
+        if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) return;
+        long ctx = Glide.getInstance().getNanoVGManager().getContext();
+        ScaledResolution sr = new ScaledResolution(mc);
+        NVGPaint paint = NVGPaint.calloc();
+
+        NanoVG.nvgBeginPath(ctx);
+        NanoVG.nvgRoundedRect(ctx, x, y, w, h, radius);
+        NanoVG.nvgImagePattern(ctx, 0f, 0f, sr.getScaledWidth(), sr.getScaledHeight(), 0f, nvgImage, 1f, paint);
+        NanoVG.nvgFillPaint(ctx, paint);
+        NanoVG.nvgFill(ctx);
+        NanoVG.nvgClosePath(ctx);
+
+        paint.free();
+    }
+
+    public static void drawBlurRect(float x, float y, float w, float h) {
+        if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) return;
+        long ctx = Glide.getInstance().getNanoVGManager().getContext();
+        ScaledResolution sr = new ScaledResolution(mc);
+        NVGPaint paint = NVGPaint.calloc();
+
+        NanoVG.nvgBeginPath(ctx);
+        NanoVG.nvgRect(ctx, x, y, w, h);
+        NanoVG.nvgImagePattern(ctx, 0f, 0f, sr.getScaledWidth(), sr.getScaledHeight(), 0f, nvgImage, 1f, paint);
+        NanoVG.nvgFillPaint(ctx, paint);
+        NanoVG.nvgFill(ctx);
+        NanoVG.nvgClosePath(ctx);
+
+        paint.free();
+    }
+
+    public static void drawScreen(NanoVGManager nvg, ScaledResolution sr, float blurRadius) {
+        if (!InternalSettingsMod.getInstance().getBlurSetting().isToggled()) return;
+
+        render(blurRadius);
+
+        nvg.setupAndDraw(() -> {
+            drawBlurRect(0, 0, sr.getScaledWidth(), sr.getScaledHeight());
+        });
     }
 }

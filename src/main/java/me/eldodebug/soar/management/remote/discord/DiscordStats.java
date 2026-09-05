@@ -2,6 +2,7 @@ package me.eldodebug.soar.management.remote.discord;
 
 import com.google.gson.JsonObject;
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.utils.JsonUtils;
 import me.eldodebug.soar.utils.Multithreading;
 import me.eldodebug.soar.utils.network.HttpUtils;
@@ -30,7 +31,7 @@ public class DiscordStats {
     }
     public void checkDiscordValues(){
         DiscordStats discordStats = Glide.getInstance().getDiscordStats();
-        JsonObject jsonObject = HttpUtils.readJson("https://discord.com/api/v9/invites/42PXqKvwxq?with_counts=true", null);
+        JsonObject jsonObject = HttpUtils.readJson(GlideMeta.DISCORD_SERVER_MEMBER_COUNT_API, null);
 
         if(jsonObject != null) {
             discordStats.setMemberCount(JsonUtils.getIntProperty(jsonObject, "approximate_member_count", -1));

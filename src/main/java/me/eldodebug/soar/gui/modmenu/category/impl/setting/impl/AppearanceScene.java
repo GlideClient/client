@@ -14,6 +14,7 @@ import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.impl.InternalSettingsMod;
 import me.eldodebug.soar.management.nanovg.NanoVGManager;
 import me.eldodebug.soar.management.nanovg.font.Fonts;
+import me.eldodebug.soar.management.nanovg.font.Icons;
 import me.eldodebug.soar.management.nanovg.font.LegacyIcon;
 import me.eldodebug.soar.ui.comp.impl.CompComboBox;
 import me.eldodebug.soar.ui.comp.impl.CompSlider;
@@ -32,7 +33,7 @@ public class AppearanceScene extends SettingScene {
     private CompSlider blurStrength;
 
     public AppearanceScene(SettingCategory parent) {
-        super(parent, TranslateText.APPEARANCE, TranslateText.APPEARANCE_DESCRIPTION, LegacyIcon.MONITOR);
+        super(parent, TranslateText.APPEARANCE, TranslateText.APPEARANCE_DESCRIPTION, Icons.DESKTOP_20);
     }
 
     @Override
@@ -157,26 +158,24 @@ public class AppearanceScene extends SettingScene {
         Glide instance = Glide.getInstance();
         ColorManager colorManager = instance.getColorManager();
 
-        float offsetX = themeScroll.getValue();
+        float yScrollOff = sceneScroll.getValue();
+
+        float themeOffsetX = themeScroll.getValue();
 
         for (Theme t : Theme.values()) {
-
-            if (MouseUtils.isInside(mouseX, mouseY, this.getX() + offsetX + 12, this.getY() + 28, 36, 36) && mouseButton == 0) {
+            if (MouseUtils.isInside(mouseX, mouseY, this.getX() + themeOffsetX + 12, this.getY() + 28 + yScrollOff, 36, 36) && mouseButton == 0) {
                 colorManager.setTheme(t);
             }
-
-            offsetX += 46;
+            themeOffsetX += 46;
         }
 
-        offsetX = accentScroll.getValue();
+        float accentOffsetX = accentScroll.getValue();
 
         for (AccentColor c : colorManager.getColors()) {
-
-            if (MouseUtils.isInside(mouseX, mouseY, this.getX() + offsetX + 12, this.getY() + 28 + 91 - 26F, 32, 32) && mouseButton == 0) {
+            if (MouseUtils.isInside(mouseX, mouseY, this.getX() + accentOffsetX + 12, this.getY() + 93 + yScrollOff, 32, 32) && mouseButton == 0) {
                 colorManager.setCurrentColor(c);
             }
-
-            offsetX += 40F;
+            accentOffsetX += 40F;
         }
 
         modTheme.mouseClicked(mouseX, mouseY, mouseButton);

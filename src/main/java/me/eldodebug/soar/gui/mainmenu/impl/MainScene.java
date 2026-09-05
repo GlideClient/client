@@ -33,10 +33,7 @@ public class MainScene extends MainMenuScene {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         Glide instance = Glide.getInstance();
-        if (instance.getSoar8Released()) {
-            instance.setSoar8Released(false);
-            this.setCurrentScene(this.getSceneByClass(DiscontinuedSoar8.class));
-        } else if (instance.getUpdateNeeded()) {
+        if (instance.getUpdateNeeded()) {
             instance.setUpdateNeeded(false);
             this.setCurrentScene(this.getSceneByClass(UpdateScene.class));
         }

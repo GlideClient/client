@@ -3,6 +3,7 @@ package me.eldodebug.soar.injection.mixin.mixins.client;
 import eu.shoroa.contrib.animation.Animate;
 import eu.shoroa.contrib.render.Blur;
 import me.eldodebug.soar.Glide;
+import me.eldodebug.soar.GlideMeta;
 import me.eldodebug.soar.gui.GuiSplashScreen;
 import me.eldodebug.soar.gui.gamemenus.MenuManager;
 import me.eldodebug.soar.injection.interfaces.IMixinEntityLivingBase;
@@ -246,7 +247,7 @@ public abstract class MixinMinecraft implements IMixinMinecraft {
     
 	@Redirect(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V"))
 	public void overrideTitle(String title) {
-		Display.setTitle("Glide Client v" + Glide.getInstance().getVersion() + " (" + Glide.getInstance().getVersionIdentifier() + ") for " + title);
+        Display.setTitle(String.format("%sClient v%s (%s) for %s", GlideMeta.CLIENT_NAME, GlideMeta.VERSION_NUMBER, GlideMeta.VERSION_IDENTIFIER, title));
 	}
 	
     @Inject(method = "updateFramebufferSize", at = @At("HEAD"))

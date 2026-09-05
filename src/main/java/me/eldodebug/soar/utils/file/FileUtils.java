@@ -11,6 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.minecraft.util.Util;
 import org.apache.http.HttpEntity;
@@ -94,21 +95,39 @@ public class FileUtils {
         }
     }
     
-	public static File selectImageFile() {
-        
+//	public static File selectImageFile() {
+//
+//        JFileChooser fileChooser = new JFileChooser();
+//
+//        fileChooser.setFileFilter(new PngFileFilter());
+//        fileChooser.setAcceptAllFileFilterUsed(false);
+//
+//        int result = fileChooser.showOpenDialog(null);
+//
+//        if(result == JFileChooser.APPROVE_OPTION) {
+//        	return fileChooser.getSelectedFile();
+//        }
+//
+//        return null;
+//	}
+
+    public static File selectImageFile() {
         JFileChooser fileChooser = new JFileChooser();
-        
-        fileChooser.setFileFilter(new PngFileFilter());
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Image Files (*.png, *.jpg, *.jpeg)", "png", "jpg", "jpeg");
+
+        fileChooser.setFileFilter(filter);
         fileChooser.setAcceptAllFileFilterUsed(false);
 
         int result = fileChooser.showOpenDialog(null);
-        
+
         if(result == JFileChooser.APPROVE_OPTION) {
-        	return fileChooser.getSelectedFile();
+            return fileChooser.getSelectedFile();
         }
-        
+
         return null;
-	}
+    }
 	
 	public static File selectSoundFile() {
         

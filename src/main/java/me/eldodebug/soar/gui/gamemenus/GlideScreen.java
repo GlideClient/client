@@ -1,9 +1,11 @@
 package me.eldodebug.soar.gui.gamemenus;
 
+import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.utils.animation.simple.SimpleAnimation;
 import net.minecraft.client.Minecraft;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GlideScreen {
 
@@ -12,9 +14,23 @@ public class GlideScreen {
     private SimpleAnimation animation = new SimpleAnimation();
     private String menuName = "";
 
+    private final ArrayList<ViewMenuButton> viewMenuButtons = new ArrayList<>();
+
     public GlideScreen(MenuManager manager, String menuName) {
         this.menuManager = manager;
         this.menuName = menuName;
+    }
+
+    protected void addMenuAction(ViewMenuButton action) {
+        this.viewMenuButtons.add(action);
+    }
+
+    protected void resetMenuAction() {
+        this.viewMenuButtons.clear();
+    }
+
+    public ArrayList<ViewMenuButton> getMenuActions() {
+        return viewMenuButtons;
     }
 
     public void initScene() {}
@@ -57,5 +73,9 @@ public class GlideScreen {
 
     public String getMenuName(){
         return this.menuName;
+    }
+
+    public void setMenu(Glide instance){
+        menuManager.setView(instance);
     }
 }

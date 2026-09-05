@@ -3,6 +3,8 @@ package me.eldodebug.soar.gui;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import eu.shoroa.contrib.render.Blur;
+import me.eldodebug.soar.utils.mouse.Scroll;
 import org.lwjgl.input.Keyboard;
 
 import me.eldodebug.soar.Glide;
@@ -28,9 +30,15 @@ public class GuiWaypoint extends GuiScreen {
 
 	private Animation introAnimation;
 	private ScreenAnimation screenAnimation = new ScreenAnimation();
-	
-	private int x, y, width, height;
+
+    ScaledResolution sr;
+
+    private int x, y, width, height;
 	private CompTextBox textBox = new CompTextBox();
+    Color noColour = new Color(0, 0, 0, 0);
+    private Scroll scroll = new Scroll();
+
+    int waypointCount = 0;
 
 	private Waypoint removeWaypoint;
 	
@@ -51,7 +59,7 @@ public class GuiWaypoint extends GuiScreen {
 	@Override
 	public void initGui() {
 		
-		ScaledResolution sr = new ScaledResolution(mc);
+		sr = new ScaledResolution(mc);
 		
 		int addX = 160;
 		int addY = 80;
@@ -67,9 +75,6 @@ public class GuiWaypoint extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		
-		BlurUtils.drawBlurScreen(20);
-		
 		screenAnimation.wrap(() -> drawNanoVG(mouseX, mouseY, partialTicks), x, y, width, height, 2 - introAnimation.getValueFloat(), Math.min(introAnimation.getValueFloat(), 1), false);
 	}
 	
@@ -80,6 +85,8 @@ public class GuiWaypoint extends GuiScreen {
 		WaypointManager waypointManager = instance.getWaypointManager();
 		ColorManager colorManager = instance.getColorManager();
 		ColorPalette palette = colorManager.getPalette();
+
+        Blur.drawScreen(nvg, sr, introAnimation.getValueFloat() * 5);
 		
 		int offsetX = 0;
 		int offsetY = 0;
@@ -91,29 +98,49 @@ public class GuiWaypoint extends GuiScreen {
 		
 		nvg.drawShadow(x, y, width, height, 10);
 		nvg.drawRoundedRect(x, y, width, height, 10, palette.getBackgroundColor(ColorType.NORMAL));
-		nvg.drawText("Waypoint", x + 8, y + 8, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
-		//nvg.drawRect(x, y + 24, width, 1, palette.getBackgroundColor(ColorType.DARK));
-		
+
+        // scrollable waypoint bs
+        nvg.save();
+        nvg.scissor(x + 10, y + 16, 170, height - 16);
+        nvg.translate(0, scroll.getValue());
 		for(Waypoint waypoint : waypointManager.getWaypoints()) {
 			
 			if(waypoint.getWorld().equals(waypointManager.getWorld())) {
 				
-				nvg.drawRoundedRect(x + 10, y + 35 + offsetY, 170, 28, 6, palette.getBackgroundColor(ColorType.DARK));
-				nvg.drawRoundedRect(x + 16, y + 14 + offsetY + 26, 18, 18, 4, waypoint.getColor());
-				nvg.drawText(waypoint.getName(), x + 40, y + 45.5F + offsetY, palette.getFontColor(ColorType.DARK), 9.5F, Fonts.REGULAR);
+				nvg.drawRoundedRect(x + 10, y + 25 + offsetY, 170, 28, 6, palette.getBackgroundColor(ColorType.DARK));
+				nvg.drawRoundedRect(x + 16, y + 4 + offsetY + 26, 18, 18, 4, waypoint.getColor());
+				nvg.drawText(waypoint.getName(), x + 40, y + 35.5F + offsetY, palette.getFontColor(ColorType.DARK), 9.5F, Fonts.REGULAR);
 				
-				nvg.drawText(LegacyIcon.TRASH, x + 162, y + 44 + offsetY, palette.getMaterialRed(), 11, Fonts.LEGACYICON);
+				nvg.drawText(LegacyIcon.TRASH, x + 162, y + 34 + offsetY, palette.getMaterialRed(), 11, Fonts.LEGACYICON);
 				
 				offsetY+=38;
 				index++;
 			}
 		}
-		
-		nvg.drawRoundedRect(x + width - 130, y + 25 + 10, 120, height - 35 - 10, 6, palette.getBackgroundColor(ColorType.DARK));
-		nvg.drawCenteredText("Create a waypoint", x + width - 130 + (120 / 2), y + 25 + 18, palette.getFontColor(ColorType.DARK), 10.5F, Fonts.MEDIUM);
+
+        waypointCount = index;
+
+        nvg.restore();
+
+        // gradient overlay to make the scissoring less aids
+        nvg.drawVerticalGradientRect(x + 10, y + 16, 170, 12,  palette.getBackgroundColor(ColorType.NORMAL), noColour); //top
+        nvg.drawVerticalGradientRect(x + 10,  y + height - 8, 170, 8, noColour, palette.getBackgroundColor(ColorType.NORMAL)); // bottom
+
+        // header
+        nvg.drawText("Waypoint", x + 8, y + 8, palette.getFontColor(ColorType.DARK), 13, Fonts.MEDIUM);
+        nvg.drawText(waypointCount + " waypoints", x + width - 8 - nvg.getTextWidth(waypointCount + " waypoints", 8, Fonts.MEDIUM), y + 10, palette.getFontColor(ColorType.NORMAL), 8, Fonts.MEDIUM);
+
+        // scroll
+        if (MouseUtils.isInside(mouseX, mouseY, x + 10, y + 24, 170, height - 36)) scroll.onScroll();
+        scroll.onAnimation();
+        scroll.setMaxScroll(Math.max(0, (index * 38) - (height - 45)));
+
+        // add items
+		nvg.drawRoundedRect(x + width - 130, y + 25, 120, height - 35, 6, palette.getBackgroundColor(ColorType.DARK));
+		nvg.drawCenteredText("Create a waypoint", x + width - 130 + (120 / 2), y + 25 + 12, palette.getFontColor(ColorType.DARK), 10.5F, Fonts.MEDIUM);
 		
 		textBox.setDefaultText("Name");
-		textBox.setPosition(x + width - 120, y + 25 + 34, 100, 18);
+		textBox.setPosition(x + width - 120, y + 25 + 24, 100, 18);
 		textBox.draw(mouseX, mouseY, partialTicks);
 		
 		offsetX = 0;
@@ -122,10 +149,10 @@ public class GuiWaypoint extends GuiScreen {
 		
 		for(Color c : colors) {
 			
-			nvg.drawRoundedRect(x + width - 120 + offsetX, y + 84 + offsetY, 13, 13, 2, c);
+			nvg.drawRoundedRect(x + width - 120 + offsetX, y + 74 + offsetY, 13, 13, 2, c);
 			
 			if(currentColor.equals(c)) {
-				nvg.drawText(LegacyIcon.CHECK, x + width - 118 + offsetX, y + 86.5F + offsetY, Color.WHITE, 9, Fonts.LEGACYICON);
+				nvg.drawText(LegacyIcon.CHECK, x + width - 118 + offsetX, y + 76.5F + offsetY, Color.WHITE, 9, Fonts.LEGACYICON);
 			}
 			
 			offsetX+=17;
@@ -136,16 +163,16 @@ public class GuiWaypoint extends GuiScreen {
 				offsetX=0;
 			}
 		}
-		
+
 		nvg.drawRoundedRect(x + width - 85, y + height - 34, 65, 18, 6, palette.getBackgroundColor(ColorType.NORMAL));
-		nvg.drawCenteredText("Save", x + width - 85 + (65 / 2), y + height - 29, palette.getFontColor(ColorType.DARK), 9, Fonts.REGULAR);
-		
+		nvg.drawCenteredText("Save", x + width - 85 + (65 / 2), y + height - 25, palette.getFontColor(ColorType.DARK), 9, Fonts.REGULAR);
+
 		if(removeWaypoint != null) {
 			waypointManager.getWaypoints().remove(removeWaypoint);
 			removeWaypoint = null;
 			waypointManager.save();
 		}
-	}
+    }
 	
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
@@ -156,12 +183,13 @@ public class GuiWaypoint extends GuiScreen {
 		int offsetX = 0;
 		int offsetY = 0;
 		int index = 0;
+        float scrollY = scroll.getValue();
 		
 		for(Waypoint waypoint : waypointManager.getWaypoints()) {
 			
 			if(waypoint.getWorld().equals(waypointManager.getWorld())) {
 				
-				if(MouseUtils.isInside(mouseX, mouseY, x + 160, y + 41 + offsetY, 16, 16) && mouseButton == 0) {
+				if(MouseUtils.isInside(mouseX, mouseY, x + 160, y + 31 + offsetY + scrollY, 16, 16) && mouseButton == 0) {
 					removeWaypoint = waypoint;
 				}
 				
@@ -176,7 +204,7 @@ public class GuiWaypoint extends GuiScreen {
 		
 		for(Color c : colors) {
 			
-			if(MouseUtils.isInside(mouseX, mouseY, x + width - 120 + offsetX, y + 84 + offsetY, 13, 13) && mouseButton == 0) {
+			if(MouseUtils.isInside(mouseX, mouseY, x + width - 120 + offsetX, y + 74 + offsetY, 13, 13) && mouseButton == 0) {
 				currentColor = c;
 			}
 			
@@ -196,6 +224,10 @@ public class GuiWaypoint extends GuiScreen {
 		}
 		
 		textBox.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (!MouseUtils.isInside(mouseX, mouseY, x, y, width, height)){
+            introAnimation.setDirection(Direction.BACKWARDS);
+        }
 	}
 	
 	@Override

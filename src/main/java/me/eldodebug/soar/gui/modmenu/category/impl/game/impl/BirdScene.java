@@ -69,17 +69,17 @@ public class BirdScene extends GameScene {
 			if (!isPlayerDead) { detectCollisions(); }
 		} else {
 			if(isPlayerDead) {
-				nvg.drawCenteredText("You Died!", x + (width/2), y +(height/2) - 20, new Color(255, 31, 57), 15, Fonts.SEMIBOLD);
-				nvg.drawCenteredText("Your score is " + score, x + (width/2), y +(height/2)- 2, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
+				nvg.drawCenteredText("You Died!", x + (width/2), y +(height/2) - 14, new Color(255, 31, 57), 15, Fonts.SEMIBOLD);
+				nvg.drawCenteredText("Your score is " + score, x + (width/2), y +(height/2), palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
 				if (System.currentTimeMillis() - deathTime >= 400) {
-					nvg.drawCenteredText("Press SPACE or CLICK to start!", x + (width/2), y +(height) - 20, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
+					nvg.drawCenteredText("Press SPACE or CLICK to start!", x + (width/2), y +(height) - 16, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
 				}
 				if (shouldStart) {
 					startGame();
 				}
 			} else {
-				nvg.drawCenteredText("Welcome to Bird!", x + (width/2), y +(height/2) - 20, palette.getFontColor(ColorType.NORMAL), 15, Fonts.SEMIBOLD);
-				nvg.drawCenteredText("Press SPACE or CLICK to start!", x + (width/2), y +(height/2)- 2, palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
+				nvg.drawCenteredText("Welcome to Bird!", x + (width/2), y +(height/2) - 14, palette.getFontColor(ColorType.NORMAL), 15, Fonts.SEMIBOLD);
+				nvg.drawCenteredText("Press SPACE or CLICK to start!", x + (width/2), y +(height/2), palette.getFontColor(ColorType.DARK), 8, Fonts.MEDIUM);
 				if (shouldStart) {
 					startGame();
 				}

@@ -39,6 +39,8 @@ import net.minecraft.client.gui.ScaledResolution;
 
 public class GuiModMenu extends GuiScreen {
 
+    ScaledResolution sr;
+
 	private Animation introAnimation;
 	private int x, y, width, height;
 	
@@ -71,7 +73,7 @@ public class GuiModMenu extends GuiScreen {
 	@Override
 	public void initGui() {
 		
-		ScaledResolution sr = new ScaledResolution(mc);
+        sr = new ScaledResolution(mc);
 		
 		int addX = 225;
 		int addY = 140;
@@ -98,8 +100,7 @@ public class GuiModMenu extends GuiScreen {
 		
 		Glide instance = Glide.getInstance();
 		NanoVGManager nvg = instance.getNanoVGManager();
-		
-		if(InternalSettingsMod.getInstance().getBlurSetting().isToggled()) BlurUtils.drawBlurScreen((float) (Math.min(introAnimation.getValue(), 1) * 20) + 1F);
+        Blur.drawScreen(nvg, sr, introAnimation.getValueFloat() * 5);
 		screenAnimation.wrap(() -> {
 			nvg.drawShadow(x, y, width, height, 12);
 		}, 2 - introAnimation.getValueFloat(), Math.min(introAnimation.getValueFloat(), 1));
