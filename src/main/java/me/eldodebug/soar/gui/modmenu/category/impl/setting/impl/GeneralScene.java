@@ -24,7 +24,7 @@ public class GeneralScene extends SettingScene {
 	private CompToggleButton mcFontSetting;
 
 	public GeneralScene(SettingCategory parent) {
-		super(parent, TranslateText.GENERAL, TranslateText.GENERAL_DESCRIPTION, Icons.TEXT_BULLET_LIST_LTR_20);
+		super(parent, TranslateText.GENERAL, TranslateText.GENERAL_DESCRIPTION, Icons.TEXT_BULLET_LIST_LTR_20, true);
 	}
 
 	@Override

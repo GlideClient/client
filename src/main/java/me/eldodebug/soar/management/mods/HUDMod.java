@@ -185,7 +185,7 @@ public class HUDMod extends Mod {
 		}else if(isOutline || isOutlineGlow) {
 			if(isOutline) {
 				nvg.drawShadow(x - 2, y - 2, lastWidth + 4, lastHeight + 4, radius + 2);
-			}else if(isOutlineGlow) {
+			}else {
 				nvg.drawGradientShadow(x - 2, y - 2, lastWidth + 4, lastHeight + 4, radius + 2, currentColor.getColor1(), currentColor.getColor2());
 			}
 		}

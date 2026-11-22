@@ -1,11 +1,9 @@
 package me.eldodebug.soar.management.mods.impl;
 
 import me.eldodebug.soar.management.event.EventTarget;
-import me.eldodebug.soar.management.event.impl.EventNVG;
 import me.eldodebug.soar.management.event.impl.EventRender2D;
 import me.eldodebug.soar.management.language.TranslateText;
 import me.eldodebug.soar.management.mods.HUDMod;
-import me.eldodebug.soar.management.nanovg.font.Fonts;
 import me.eldodebug.soar.management.nanovg.font.Icons;
 import me.eldodebug.soar.utils.GlUtils;
 import me.eldodebug.soar.utils.animation.normal.Animation;
@@ -20,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import org.lwjgl.opengl.GL11;
 
 public class BlockInfoMod extends HUDMod {
 
@@ -49,19 +48,19 @@ public class BlockInfoMod extends HUDMod {
 		this.setWidth(80);
 		this.setHeight(80);
 	}
-	
+
 	private void drawBlock() {
-		
-		if(block != null && !block.equals(Blocks.portal) && !block.equals(Blocks.end_portal)) {
-			GlUtils.startScale(this.getX(), this.getY(), this.getWidth(), this.getHeight(), 2F * this.getScale());
-			RenderHelper.enableGUIStandardItemLighting();
-			GlStateManager.enableColorMaterial();
-            GlStateManager.colorMask(true, true, true, false);
-			mc.getRenderItem().renderItemAndEffectIntoGUI(new ItemStack(block), this.getX() + (this.getWidth() / 2) - 8, this.getY() + (this.getHeight() / 2) - 8);
-			RenderHelper.disableStandardItemLighting();
-            GlStateManager.colorMask(true, true, true, true);
-			GlUtils.stopScale();
-		}
+		if (block == null || block.equals(Blocks.portal) || block.equals(Blocks.end_portal)) {return;}
+		boolean depth = GL11.glGetBoolean(GL11.GL_DEPTH_TEST);
+		GlStateManager.enableDepth();
+		GlStateManager.depthMask(true);
+		GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
+		RenderHelper.enableGUIStandardItemLighting();
+		GlUtils.startScale(this.getX(), this.getY(), this.getWidth(), this.getHeight(), 2F * this.getScale());
+		mc.getRenderItem().renderItemAndEffectIntoGUI(new ItemStack(block), this.getX() + (this.getWidth() / 2) - 8, this.getY() + (this.getHeight() / 2) - 8);
+		GlUtils.stopScale();
+		RenderHelper.disableStandardItemLighting();
+		if (!depth) GlStateManager.disableDepth();
 	}
 	
 	private void drawNanoVG() {

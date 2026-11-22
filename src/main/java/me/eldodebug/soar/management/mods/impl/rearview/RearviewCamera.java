@@ -33,7 +33,7 @@ public class RearviewCamera {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, mirrorTex);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, 800, 600, 0, GL11.GL_RGBA,
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB8, 800, 600, 0, GL11.GL_RGB,
                 GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, mirrorDepth);
@@ -63,6 +63,7 @@ public class RearviewCamera {
         boolean blendWasEnabled = GL11.glGetBoolean(GL11.GL_BLEND);
         boolean depthWasEnabled = GL11.glGetBoolean(GL11.GL_DEPTH_TEST);
         boolean lightingWasEnabled = GL11.glGetBoolean(GL11.GL_LIGHTING);
+        int prevFBO = GL11.glGetInteger(ARBFramebufferObject.GL_DRAW_FRAMEBUFFER_BINDING);
         IntBuffer viewportBuffer = BufferUtils.createIntBuffer(16);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
 
@@ -115,6 +116,7 @@ public class RearviewCamera {
             mc.entityRenderer.renderWorld(((IMixinMinecraft)mc).getTimer().renderPartialTicks, System.nanoTime());
             mc.entityRenderer.setupOverlayRendering();
 
+
             if (limit != 0) {
                 renderEndNanoTime = endTime;
             }
@@ -141,7 +143,7 @@ public class RearviewCamera {
             GL11.glViewport(viewportBuffer.get(0), viewportBuffer.get(1), viewportBuffer.get(2), viewportBuffer.get(3));
 
             recording = false;
-            switchFromFB();
+            switchFromFB(prevFBO);
         }
     }
 
@@ -166,8 +168,8 @@ public class RearviewCamera {
         }
     }
 
-    private void switchFromFB() {
-        OpenGlHelper.glBindFramebuffer(ARBFramebufferObject.GL_DRAW_FRAMEBUFFER, 0);
+    private void switchFromFB(int prevFBO) {
+        OpenGlHelper.glBindFramebuffer(ARBFramebufferObject.GL_DRAW_FRAMEBUFFER, prevFBO);
     }
 
     public int getTexture() {

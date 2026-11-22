@@ -22,7 +22,7 @@ public class AboutScene extends SettingScene {
 
 
 	public AboutScene(SettingCategory parent) {
-		super(parent, TranslateText.ABOUT, TranslateText.ABOUT_DESCRIPTION, Icons.INFO_20);
+		super(parent, TranslateText.ABOUT, TranslateText.ABOUT_DESCRIPTION, Icons.INFO_20, true);
 	}
 
 	@Override

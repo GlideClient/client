@@ -23,7 +23,7 @@ import me.eldodebug.soar.utils.ColorUtils;
 import me.eldodebug.soar.utils.mouse.MouseUtils;
 import me.eldodebug.soar.utils.mouse.Scroll;
 
-public class AppearanceScene extends SettingScene {
+public class DesignScene extends SettingScene {
 
     private Scroll themeScroll = new Scroll();
     private Scroll accentScroll = new Scroll();
@@ -32,8 +32,8 @@ public class AppearanceScene extends SettingScene {
     private CompToggleButton uiBlur;
     private CompSlider blurStrength;
 
-    public AppearanceScene(SettingCategory parent) {
-        super(parent, TranslateText.APPEARANCE, TranslateText.APPEARANCE_DESCRIPTION, Icons.DESKTOP_20);
+    public DesignScene(SettingCategory parent) {
+        super(parent, TranslateText.APPEARANCE, TranslateText.APPEARANCE_DESCRIPTION, Icons.DESKTOP_20, true);
     }
 
     @Override

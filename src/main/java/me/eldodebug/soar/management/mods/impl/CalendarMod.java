@@ -20,7 +20,7 @@ public class CalendarMod extends HUDMod {
 	public CalendarMod() {
 		super(Icons.CALENDAR_LTR_24, TranslateText.CALENDAR, TranslateText.CALENDAR_DESCRIPTION, "", false);
 	}
-	
+
 	@EventTarget
 	public void onRender2D(EventNVG event) {
 		Calendar calendar = Calendar.getInstance();

@@ -8,12 +8,14 @@ public class SettingScene {
 	private SettingCategory parent;
 	private String icon;
 	private TranslateText nameTranslate, descriptionTranslate;
+	private boolean show = true;
 	
-	public SettingScene(SettingCategory parent, TranslateText nameTranslate, TranslateText descriptionTranslate, String icon) {
+	public SettingScene(SettingCategory parent, TranslateText nameTranslate, TranslateText descriptionTranslate, String icon, boolean show) {
 		this.parent = parent;
 		this.nameTranslate = nameTranslate;
 		this.descriptionTranslate = descriptionTranslate;
 		this.icon = icon;
+		this.show = show;
 	}
 
 	public void initGui() {}
@@ -37,7 +39,11 @@ public class SettingScene {
 	public String getDescription() {
 		return descriptionTranslate.getText();
 	}
-	
+
+	public boolean shouldShow() {
+		return show;
+	}
+
 	public int getX() {
 		return parent.getSceneX();
 	}

@@ -20,7 +20,7 @@ import me.eldodebug.soar.utils.mouse.Scroll;
 public class LanguageScene extends SettingScene {
 
 	public LanguageScene(SettingCategory parent) {
-		super(parent, TranslateText.LANGUAGE, TranslateText.LANGUAGE_DESCRIPTION, Icons.GLOBE_20);
+		super(parent, TranslateText.LANGUAGE, TranslateText.LANGUAGE_DESCRIPTION, Icons.GLOBE_20, true);
 	}
 
 	private Scroll languageScroll = new Scroll();

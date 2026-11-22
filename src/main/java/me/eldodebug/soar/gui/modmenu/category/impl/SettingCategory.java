@@ -1,6 +1,5 @@
 package me.eldodebug.soar.gui.modmenu.category.impl;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import me.eldodebug.soar.gui.modmenu.category.impl.setting.impl.AboutScene;
@@ -11,7 +10,7 @@ import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
 import me.eldodebug.soar.gui.modmenu.category.Category;
 import me.eldodebug.soar.gui.modmenu.category.impl.setting.SettingScene;
-import me.eldodebug.soar.gui.modmenu.category.impl.setting.impl.AppearanceScene;
+import me.eldodebug.soar.gui.modmenu.category.impl.setting.impl.DesignScene;
 import me.eldodebug.soar.gui.modmenu.category.impl.setting.impl.LanguageScene;
 import me.eldodebug.soar.management.color.palette.ColorPalette;
 import me.eldodebug.soar.management.color.palette.ColorType;
@@ -34,7 +33,7 @@ public class SettingCategory extends Category {
 	public SettingCategory(GuiModMenu parent) {
 		super(parent, TranslateText.SETTINGS, LegacyIcon.SETTINGS, false, false);
 		
-		scenes.add(new AppearanceScene(this));
+		scenes.add(new DesignScene(this));
 		scenes.add(new LanguageScene(this));
 		scenes.add(new GeneralScene(this));
         scenes.add(new AboutScene(this));
@@ -75,6 +74,8 @@ public class SettingCategory extends Category {
 		nvg.translate((float) -(600 - (sceneAnimation.getValue() * 600)), 0);
 		
 		for(SettingScene scene : scenes) {
+
+			if (!scene.shouldShow()) continue;
 			
 			nvg.drawRoundedRect(this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 40, 8, palette.getBackgroundColor(ColorType.DARK));
 			nvg.drawText(scene.getIcon(), this.getX() + 26, this.getY() + offsetY + 13F, palette.getFontColor(ColorType.DARK), 14, Fonts.ICON_OUTLINE);
@@ -103,6 +104,8 @@ public class SettingCategory extends Category {
 		float offsetY = 15;
 		
 		for(SettingScene scene : scenes) {
+
+			if (!scene.shouldShow()) continue;
 			
 			if(MouseUtils.isInside(mouseX, mouseY, this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 40) && mouseButton == 0 && currentScene == null) {
 				currentScene = scene;
